@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.RegisterFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/registerButton"
+                android:layout_width="256dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/register"
+                app:backgroundTint="#2E7D32"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/confirmPasswordText" />
+
+            <EditText
+                android:id="@+id/passwordText"
+                android:layout_width="256dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="32dp"
+                android:ems="10"
+                android:inputType="textPassword"
+                app:layout_constraintStart_toStartOf="@+id/emailText"
+                app:layout_constraintTop_toBottomOf="@+id/emailText" />
+
+            <EditText
+                android:id="@+id/confirmPasswordText"
+                android:layout_width="256dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="32dp"
+                android:ems="10"
+                android:inputType="textPassword"
+                app:layout_constraintStart_toStartOf="@+id/emailText"
+                app:layout_constraintTop_toBottomOf="@+id/passwordText" />
+
+            <EditText
+                android:id="@+id/emailText"
+                android:layout_width="256dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="48dp"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                app:layout_constraintStart_toStartOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="256dp"
+                android:layout_height="256dp"
+                android:layout_marginTop="48dp"
+                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/emailLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/email"
+                app:layout_constraintBottom_toTopOf="@+id/emailText"
+                app:layout_constraintStart_toStartOf="@+id/emailText" />
+
+            <TextView
+                android:id="@+id/passwordLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password"
+                app:layout_constraintBottom_toTopOf="@+id/passwordText"
+                app:layout_constraintStart_toStartOf="@+id/passwordText" />
+
+            <TextView
+                android:id="@+id/confirmPasswordLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirm Password"
+                app:layout_constraintBottom_toTopOf="@+id/confirmPasswordText"
+                app:layout_constraintStart_toStartOf="@+id/confirmPasswordText" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
