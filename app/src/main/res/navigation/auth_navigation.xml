@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.flyingjetski.budgeteer.ui.LoginFragment"
+        android:name="com.flyingjetski.budgeteer.ui.auth.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -19,12 +19,12 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.flyingjetski.budgeteer.ui.RegisterFragment"
+        android:name="com.flyingjetski.budgeteer.ui.auth.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" />
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.flyingjetski.budgeteer.ui.ForgotPasswordFragment"
+        android:name="com.flyingjetski.budgeteer.ui.auth.ForgotPasswordFragment"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" >
         <action

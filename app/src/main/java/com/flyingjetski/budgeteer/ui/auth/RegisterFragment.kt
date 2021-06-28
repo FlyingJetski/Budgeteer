@@ -1,4 +1,4 @@
-package com.flyingjetski.budgeteer.ui
+package com.flyingjetski.budgeteer.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -22,7 +22,7 @@ class RegisterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         binding.registerButton.setOnClickListener{
@@ -57,20 +57,7 @@ class RegisterFragment : Fragment() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
                     val user = User(AuthActivity().auth.uid.toString(), email, password)
-                    AuthActivity().db.collection("Users").add(user)
-                        .addOnCompleteListener(requireActivity()) { task ->
-                        if (task.isSuccessful) {
-                            Toast.makeText(this.context, "Registered successfully.",
-                                Toast.LENGTH_SHORT).show()
-                            startActivity(Intent(this.context, MainActivity::class.java))
-                            requireActivity().finish()
-                            updateUI()
-                        } else {
-                            Toast.makeText(this.context, "Register failed, please try again.",
-                                Toast.LENGTH_SHORT).show()
-                            updateUI()
-                        }
-                    }
+                    User.insertUser(this, user)
                 } else {
                     // If sign in fails, display a message to the user.
                     Toast.makeText(this.context, "Authentication failed.",

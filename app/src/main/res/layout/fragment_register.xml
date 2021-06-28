@@ -3,14 +3,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.RegisterFragment">
+    tools:context=".ui.auth.RegisterFragment">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/registerButton"
@@ -31,7 +31,8 @@
                 android:ems="10"
                 android:inputType="textPassword"
                 app:layout_constraintStart_toStartOf="@+id/emailText"
-                app:layout_constraintTop_toBottomOf="@+id/emailText" />
+                app:layout_constraintTop_toBottomOf="@+id/emailText"
+                android:autofillHints="@string/password" />
 
             <EditText
                 android:id="@+id/confirmPasswordText"
@@ -41,7 +42,8 @@
                 android:ems="10"
                 android:inputType="textPassword"
                 app:layout_constraintStart_toStartOf="@+id/emailText"
-                app:layout_constraintTop_toBottomOf="@+id/passwordText" />
+                app:layout_constraintTop_toBottomOf="@+id/passwordText"
+                android:autofillHints="@string/confirm_password" />
 
             <EditText
                 android:id="@+id/emailText"
@@ -51,7 +53,8 @@
                 android:ems="10"
                 android:inputType="textEmailAddress"
                 app:layout_constraintStart_toStartOf="@+id/imageView"
-                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                app:layout_constraintTop_toBottomOf="@+id/imageView"
+                android:autofillHints="@string/email" />
 
             <ImageView
                 android:id="@+id/imageView"
@@ -61,7 +64,8 @@
                 android:src="@drawable/ic_launcher_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/budgeteer_logo" />
 
             <TextView
                 android:id="@+id/emailLabel"
@@ -83,7 +87,7 @@
                 android:id="@+id/confirmPasswordLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Confirm Password"
+                android:text="@string/confirm_password"
                 app:layout_constraintBottom_toTopOf="@+id/confirmPasswordText"
                 app:layout_constraintStart_toStartOf="@+id/confirmPasswordText" />
 

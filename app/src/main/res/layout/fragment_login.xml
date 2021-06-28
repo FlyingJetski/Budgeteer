@@ -3,14 +3,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.LoginFragment">
+    tools:context=".ui.auth.LoginFragment">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/loginButton"
@@ -31,18 +31,19 @@
                 app:layout_constraintStart_toStartOf="@+id/passwordText"
                 app:layout_constraintTop_toBottomOf="@+id/passwordText" />
 
-                <Button
-                    android:id="@+id/forgotPasswordButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/forgot_password"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                    android:textColor="#000000"
-                    android:textSize="12sp"
-                    app:backgroundTint="#FFFFFF"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+            <Button
+                android:id="@+id/forgotPasswordButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:text="@string/forgot_password"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                app:backgroundTint="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/registerButton" />
 
             <EditText
                 android:id="@+id/passwordText"
@@ -52,7 +53,8 @@
                 android:ems="10"
                 android:inputType="textPassword"
                 app:layout_constraintStart_toStartOf="@+id/emailText"
-                app:layout_constraintTop_toBottomOf="@+id/emailText" />
+                app:layout_constraintTop_toBottomOf="@+id/emailText"
+                android:autofillHints="@string/password" />
 
                 <EditText
                     android:id="@+id/emailText"
@@ -62,7 +64,8 @@
                     android:ems="10"
                     android:inputType="textEmailAddress"
                     app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                    app:layout_constraintTop_toBottomOf="@+id/imageView"
+                    android:autofillHints="@string/email" />
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -72,7 +75,8 @@
                     android:src="@drawable/ic_launcher_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:contentDescription="@string/budgeteer_logo" />
 
             <TextView
                     android:id="@+id/emailLabel"

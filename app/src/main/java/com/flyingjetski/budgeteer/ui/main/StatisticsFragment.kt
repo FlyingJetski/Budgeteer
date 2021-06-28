@@ -1,4 +1,4 @@
-package com.flyingjetski.budgeteer.ui
+package com.flyingjetski.budgeteer.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,20 +7,19 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.R
-import com.flyingjetski.budgeteer.databinding.FragmentHomeBinding
 import com.flyingjetski.budgeteer.databinding.FragmentStatisticsBinding
 
-class HomeFragment : Fragment() {
+class StatisticsFragment : Fragment() {
 
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentStatisticsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_statistics, container, false)
         return binding.root
     }
 

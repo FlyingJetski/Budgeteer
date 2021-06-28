@@ -1,4 +1,4 @@
-package com.flyingjetski.budgeteer.ui
+package com.flyingjetski.budgeteer.ui.main
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +18,7 @@ class SourcesFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_sources, container, false)
         return binding.root

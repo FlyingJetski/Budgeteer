@@ -1,4 +1,4 @@
-package com.flyingjetski.budgeteer.ui
+package com.flyingjetski.budgeteer.ui.auth
 
 import android.os.Bundle
 import android.util.Patterns
@@ -20,7 +20,7 @@ class ForgotPasswordFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_forgot_password, container, false)
         binding.forgotPasswordButton.setOnClickListener{

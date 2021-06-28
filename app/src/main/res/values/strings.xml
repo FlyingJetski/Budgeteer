@@ -21,5 +21,10 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="logout">logout</string>
+    <string name="logout">Logout</string>
+    <string name="personalization">Personalization</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="about">About</string>
+    <string name="budgeteer_logo">Budgeteer Logo</string>
+    <string name="confirm_password">Confirm Password</string>
 </resources>
