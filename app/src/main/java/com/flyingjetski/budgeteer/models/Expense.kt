@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
+import java.util.*
 
 class Expense(
+    date     : Date,
     source   : Source,
     currency : Currency,
     category : ExpenseCategory,
@@ -15,6 +17,7 @@ class Expense(
     details  : String,
     feedback : Feedback,
 ) {
+    val date     = date
     val source   = source
     val currency = currency
     val category = category
@@ -23,7 +26,7 @@ class Expense(
     val details  = details
     val feedback = feedback
 
-    constructor(): this(Source(), Currency.MYR, ExpenseCategory(), "", 0.0, "", Feedback.NEUTRAL)
+    constructor(): this(Date(), Source(), Currency.MYR, ExpenseCategory(), "", 0.0, "", Feedback.NEUTRAL)
 
     companion object {
         fun insertExpense(fragment: Fragment, expense: Expense) {

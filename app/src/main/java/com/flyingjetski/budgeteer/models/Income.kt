@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.FrequencyType
+import java.util.*
 
 class Income(
+    id          : String?,
+    date        : Date,
     destination : Source,
     currency    : Currency,
     category    : IncomeCategory,
@@ -14,6 +17,8 @@ class Income(
     amount      : Double,
     details     : String,
 ) {
+    val id          = id
+    val date        = date
     val destination = destination
     val currency    = currency
     val category    = category
@@ -21,7 +26,7 @@ class Income(
     val amount      = amount
     val details     = details
 
-    constructor(): this(Source(), Currency.MYR, IncomeCategory(), "", 0.0, "")
+    constructor(): this(null, Date(), Source(), Currency.MYR, IncomeCategory(), "", 0.0, "")
 
     companion object {
         fun insertIncome(fragment: Fragment, income: Income) {

@@ -9,14 +9,15 @@ import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.SourceType
 
 class Wallet(
+    id       : String?,
     icon     : String,
     label    : String,
     currency : Currency,
     isMain   : Boolean,
-): Source(icon, label, SourceType.WALLET, currency) {
+): Source(id, icon, label, SourceType.WALLET, currency) {
     val isMain   = isMain
 
-    constructor(): this("", "", Currency.MYR, false)
+    constructor(): this(null, "", "", Currency.MYR, false)
 
     companion object {
         fun insertWallet(fragment: Fragment, source: Wallet) {

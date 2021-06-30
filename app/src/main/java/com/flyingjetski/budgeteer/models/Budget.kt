@@ -17,7 +17,7 @@ class Budget(
     startDate   : Date,
     duration    : Date,
     isRecurring : Boolean,
-): Source(icon, label, SourceType.BUDGET, currency) {
+): Source(null, icon, label, SourceType.BUDGET, currency) {
     val isActive    = isActive
     val amount      = amount
     val startDate   = startDate

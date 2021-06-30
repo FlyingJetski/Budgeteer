@@ -7,7 +7,7 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.MainActivity
 
 class User(
-    id       : String,
+    id       : String?,
     email    : String,
     password : String,
 ) {
@@ -15,7 +15,7 @@ class User(
     val email    = email
     val password = password
 
-    constructor(): this("", "", "")
+    constructor(): this(null, "", "")
 
     companion object {
         fun insertUser(fragment: Fragment, user: User) {

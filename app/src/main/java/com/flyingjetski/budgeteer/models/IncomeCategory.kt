@@ -6,11 +6,12 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.models.enums.CategoryType
 
 class IncomeCategory(
+    id    : String?,
     icon  : String,
     label : String,
 ): Category(icon, label, CategoryType.INCOME) {
 
-    constructor(): this("", "")
+    constructor(): this(null, "", "")
 
     companion object {
         fun insertIncomeCategory(fragment: Fragment, category: IncomeCategory) {
