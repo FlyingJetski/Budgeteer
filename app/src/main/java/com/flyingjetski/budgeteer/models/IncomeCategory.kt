@@ -9,7 +9,7 @@ class IncomeCategory(
     id    : String?,
     icon  : String,
     label : String,
-): Category(icon, label, CategoryType.INCOME) {
+): Category(null, icon, label, CategoryType.INCOME) {
 
     constructor(): this(null, "", "")
 

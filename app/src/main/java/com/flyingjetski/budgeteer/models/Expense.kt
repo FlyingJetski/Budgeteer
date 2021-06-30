@@ -8,25 +8,29 @@ import com.flyingjetski.budgeteer.models.enums.Feedback
 import java.util.*
 
 class Expense(
-    date     : Date,
-    source   : Source,
-    currency : Currency,
-    category : ExpenseCategory,
-    label    : String,
-    amount   : Double,
-    details  : String,
-    feedback : Feedback,
+    id         : String?,
+    date       : Date,
+    source     : Source,
+    currency   : Currency,
+    categoryId : String,
+    category   : ExpenseCategory,
+    label      : String,
+    amount     : Double,
+    details    : String,
+    feedback   : Feedback,
 ) {
-    val date     = date
-    val source   = source
-    val currency = currency
-    val category = category
-    val label    = label
-    val amount   = amount
-    val details  = details
-    val feedback = feedback
+    val id         = id
+    val date       = date
+    val source     = source
+    val currency   = currency
+    val categoryId = categoryId
+    val category   = category
+    val label      = label
+    val amount     = amount
+    val details    = details
+    val feedback   = feedback
 
-    constructor(): this(Date(), Source(), Currency.MYR, ExpenseCategory(), "", 0.0, "", Feedback.NEUTRAL)
+    constructor(): this(null, Date(), Source(), Currency.MYR, "", ExpenseCategory(), "", 0.0, "", Feedback.NEUTRAL)
 
     companion object {
         fun insertExpense(fragment: Fragment, expense: Expense) {

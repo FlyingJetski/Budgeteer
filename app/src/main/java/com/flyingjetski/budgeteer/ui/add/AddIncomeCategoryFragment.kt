@@ -19,7 +19,7 @@ class AddIncomeCategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.activity_add, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_expense_category, container, false)
         return binding.root
     }
 

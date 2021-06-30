@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.flyingjetski.budgeteer.databinding.ActivityAddBinding
 import com.flyingjetski.budgeteer.databinding.ActivityAuthBinding
 import com.flyingjetski.budgeteer.databinding.ActivityMainBinding
@@ -18,25 +20,13 @@ class AddActivity: AppCompatActivity() {
 
         @Suppress("UNUSED_VARIABLE")
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add)
-//        val navController = this.findNavController(R.id.add_navigation)
-//        NavigationUI.setupActionBarWithNavController(this, navController)
+//        binding = ActivityAddBinding.inflate(layoutInflater)
+        val navController = findNavController(R.id.add_navigation)
+        NavigationUI.setupActionBarWithNavController(this, navController)
 
         // showing the back button in action bar
 //        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-//
-//        binding.addExpenseButton.setOnClickListener{
-//            supportFragmentManager.beginTransaction().add(R.id.add_navigation, AddExpenseFragment())
-//        }
-    }
 
-//    override fun onContextItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            android.R.id.home -> {
-//                finish()
-//                return true
-//            }
-//        }
-//        return super.onContextItemSelected(item)
-//    }
+    }
 
 }

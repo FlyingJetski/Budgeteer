@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import com.flyingjetski.budgeteer.databinding.ActivityAuthBinding
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 

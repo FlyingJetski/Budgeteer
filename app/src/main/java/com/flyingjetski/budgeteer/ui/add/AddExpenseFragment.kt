@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.R
+import com.flyingjetski.budgeteer.databinding.FragmentAddExpenseBinding
 import com.flyingjetski.budgeteer.databinding.FragmentHomeBinding
 
 class AddExpenseFragment : Fragment() {
 
-    private lateinit var binding: FragmentHomeBinding
+    private lateinit var binding: FragmentAddExpenseBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,7 +20,7 @@ class AddExpenseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.activity_add, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_expense, container, false)
         return binding.root
     }
 
