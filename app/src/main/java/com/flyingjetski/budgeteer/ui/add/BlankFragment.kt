@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentAddExpenseBinding
 import com.flyingjetski.budgeteer.databinding.FragmentBlankBinding
 import com.flyingjetski.budgeteer.databinding.FragmentHomeBinding
+import com.flyingjetski.budgeteer.ui.auth.LoginFragmentDirections
 
 class BlankFragment : Fragment() {
 
@@ -28,8 +30,8 @@ class BlankFragment : Fragment() {
         binding.addExpenseCategoryButton.setOnClickListener{
             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.content, AddExpenseCategoryFragment()).commit()
         }
-        binding.viewExpenseCategoryButton.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.content, ViewExpenseCategoryFragment()).commit()
+        binding.viewExpenseCategoryButton.setOnClickListener{ view: View ->
+            Navigation.findNavController(view).navigate(BlankFragmentDirections.actionBlankFragmentToViewExpenseCategoryFragment())
         }
         return binding.root
     }

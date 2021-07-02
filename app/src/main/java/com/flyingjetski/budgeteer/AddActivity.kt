@@ -20,7 +20,6 @@ class AddActivity: AppCompatActivity() {
 
         @Suppress("UNUSED_VARIABLE")
         binding = DataBindingUtil.setContentView(this, R.layout.activity_add)
-//        binding = ActivityAddBinding.inflate(layoutInflater)
         val navController = findNavController(R.id.add_navigation)
         NavigationUI.setupActionBarWithNavController(this, navController)
 

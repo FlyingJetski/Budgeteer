@@ -48,7 +48,10 @@
     <fragment
         android:id="@+id/editExpenseCategoryFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditExpenseCategoryFragment"
-        android:label="EditExpenseCategoryFragment" />
+        android:label="EditExpenseCategoryFragment" >
+        <argument android:name="expenseCategoryId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/editIncomeFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditIncomeFragment"
@@ -68,9 +71,17 @@
     <fragment
         android:id="@+id/blankFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.BlankFragment"
-        android:label="fragment_blank" />
+        android:label="fragment_blank" >
+        <action
+            android:id="@+id/action_blankFragment_to_viewExpenseCategoryFragment"
+            app:destination="@id/viewExpenseCategoryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/viewExpenseCategoryFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.ViewExpenseCategoryFragment"
-        android:label="ViewExpenseCategoryFragment" />
+        android:label="ViewExpenseCategoryFragment" >
+        <action
+            android:id="@+id/action_viewExpenseCategoryFragment_to_editExpenseCategoryFragment"
+            app:destination="@id/editExpenseCategoryFragment" />
+    </fragment>
 </navigation>

@@ -24,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         navView = binding.navView
         previousItem = navView.selectedItemId
         setContentView(binding.root)
-
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
         navView.setOnNavigationItemSelectedListener { item ->
@@ -106,6 +105,8 @@ class MainActivity : AppCompatActivity() {
         val currentUser = AuthActivity().auth.currentUser
         if(currentUser == null){
             startActivity(Intent(this, AuthActivity::class.java))
+        } else {
+            Log.d("LOGON", "${AuthActivity().auth.uid}")
         }
     }
     // [END on_start_check_user]

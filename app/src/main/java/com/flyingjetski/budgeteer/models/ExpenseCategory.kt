@@ -9,57 +9,51 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.models.enums.CategoryType
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.toObject
 
 class ExpenseCategory(
-    id    : String?,
-    icon  : String,
+    uid   : String?,
+    icon  : Int,
     label : String,
-): Category(null, icon, label, CategoryType.EXPENSE) {
+): Category(uid, icon, label, CategoryType.EXPENSE) {
 
-    constructor(): this(null, "", "")
+    constructor(): this(null, 0, "")
 
     companion object {
-        fun insertExpenseCategory(fragment: Fragment, category: ExpenseCategory) {
+        fun insertExpenseCategory(category: ExpenseCategory) {
             AuthActivity().db.collection("Categories").add(category)
-                .addOnCompleteListener(fragment.requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(fragment.context, "Added successfully.",
-                            Toast.LENGTH_SHORT).show()
-                        fragment.requireActivity().finish()
-                    } else {
-                        Toast.makeText(fragment.context, "Addition failed, please try again.",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
         }
 
-        fun getExpenseCategoryById(fragment: Fragment, id: String) {
-            var category = ExpenseCategory()
+        fun updateExpenseCategoryById(id: String, icon: Int?, label: String?) {
+            val data = HashMap<String, Any>()
+            if (icon != null && icon != 0) {
+                data["icon"] = icon.toInt()
+            }
+            if (label != null && label != "") {
+                data["label"] = label.toString()
+            }
             AuthActivity().db.collection("Categories")
-                .document(AuthActivity().auth.uid.toString()).set(category)
+                .document(id).update(data)
         }
 
-        fun getExpenseCategory(fragment: Fragment, listView: ListView): List<ExpenseCategory> {
-            var categories = mutableListOf<ExpenseCategory>()
-            val result = AuthActivity().db.collection("Categories").get()
-                .addOnCompleteListener{
-                    if (it.isSuccessful) {
-                        val documentSnapshot = it.result
-                        if (documentSnapshot?.isEmpty == false) {
-                            categories = documentSnapshot.toObjects(ExpenseCategory::class.java)
-                            listView.adapter = ArrayAdapter(
-                                fragment.requireContext(),
-                                R.layout.simple_list_item_1,
-                                categories
-                            )
-                        }
-                    } else {
-                        Toast.makeText(fragment.context, "Failed retrieving data.",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
-            return categories
+        fun deleteExpenseCategoryById(id: String) {
+            AuthActivity().db.collection("Categories")
+                .document(id).delete()
+        }
+
+        fun getExpenseCategoryById(id: String): Task<DocumentSnapshot> {
+            return AuthActivity().db.collection("Categories")
+                .document(id).get()
+        }
+
+        fun getExpenseCategory(): Query {
+            return AuthActivity().db.collection("Categories")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
         }
 
         override fun toString(): String {
