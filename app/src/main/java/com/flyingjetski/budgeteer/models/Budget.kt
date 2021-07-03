@@ -9,22 +9,23 @@ import com.flyingjetski.budgeteer.models.enums.SourceType
 import java.util.*
 
 class Budget(
+    uid         : String?,
     isActive    : Boolean,
-    icon        : String,
+    icon        : Int,
     label       : String,
     currency    : Currency,
     amount      : Double,
     startDate   : Date,
     duration    : Date,
     isRecurring : Boolean,
-): Source(null, icon, label, SourceType.BUDGET, currency) {
+): Source(uid, icon, label, SourceType.BUDGET, currency) {
     val isActive    = isActive
     val amount      = amount
     val startDate   = startDate
     val duration    = duration
     val isRecurring = isRecurring
 
-    constructor(): this(false, "", "", Currency.MYR, 0.0, Date(), Date(), false)
+    constructor(): this(null, false, 0, "", Currency.MYR, 0.0, Date(), Date(), false)
 
     companion object {
         fun insertBudget(fragment: Fragment, source: Budget) {

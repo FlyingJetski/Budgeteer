@@ -12,7 +12,7 @@ class Income(
     date        : Date,
     destination : Source,
     currency    : Currency,
-    category    : IncomeCategory,
+    category    : IncomeCategory?,
     label       : String,
     amount      : Double,
     details     : String,

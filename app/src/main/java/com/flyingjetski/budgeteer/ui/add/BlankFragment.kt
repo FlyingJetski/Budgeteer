@@ -25,13 +25,16 @@ class BlankFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_blank, container, false)
         binding.addExpenseButton.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.content, AddExpenseFragment()).commit()
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddExpenseFragment())
         }
         binding.addExpenseCategoryButton.setOnClickListener{
-            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.content, AddExpenseCategoryFragment()).commit()
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddExpenseCategoryFragment())
         }
-        binding.viewExpenseCategoryButton.setOnClickListener{ view: View ->
-            Navigation.findNavController(view).navigate(BlankFragmentDirections.actionBlankFragmentToViewExpenseCategoryFragment())
+        binding.viewExpenseCategoryButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewExpenseCategoryFragment())
+        }
+        binding.addWalletButton.setOnClickListener {
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddWalletFragment())
         }
         return binding.root
     }

@@ -9,21 +9,21 @@ import com.flyingjetski.budgeteer.models.enums.SourceType
 import java.util.*
 
 class Saving(
-    id       : String?,
+    uid      : String?,
     isActive : Boolean,
-    icon     : String,
+    icon     : Int,
     label    : String,
     currency : Currency,
     target   : Double,
     deadline : Date,
     autoSave : AutoSave,
-): Source(id, icon, label, SourceType.SAVING, currency) {
+): Source(uid, icon, label, SourceType.SAVING, currency) {
     val isActive = isActive
     val target   = target
     val deadline = deadline
     val autoSave = autoSave
 
-    constructor(): this(null, false, "", "", Currency.MYR, 0.0, Date(), AutoSave(Date(), 0.0, 0, FrequencyType.MONTH))
+    constructor(): this(null, false, 0, "", Currency.MYR, 0.0, Date(), AutoSave(Date(), 0.0, 0, FrequencyType.MONTH))
 
     companion object {
         fun insertSaving(fragment: Fragment, source: Saving) {

@@ -7,37 +7,52 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.SourceType
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
+import java.util.HashMap
 
 class Wallet(
-    id       : String?,
-    icon     : String,
+    uid      : String?,
+    icon     : Int,
     label    : String,
     currency : Currency,
     isMain   : Boolean,
-): Source(id, icon, label, SourceType.WALLET, currency) {
+): Source(uid, icon, label, SourceType.WALLET, currency) {
     val isMain   = isMain
 
-    constructor(): this(null, "", "", Currency.MYR, false)
+    constructor(): this(null, 0, "", Currency.MYR, false)
 
     companion object {
-        fun insertWallet(fragment: Fragment, source: Wallet) {
+        fun insertWallet(source: Wallet) {
             AuthActivity().db.collection("Sources").add(source)
-                .addOnCompleteListener(fragment.requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(fragment.context, "Added successfully.",
-                            Toast.LENGTH_SHORT).show()
-                        fragment.requireActivity().finish()
-                    } else {
-                        Toast.makeText(fragment.context, "Addition failed, please try again.",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
         }
 
-        fun getWalletById(id: String) {
-            var source = Wallet()
+        fun updateWalletById(id: String, icon: Int?, label: String?) {
+            val data = HashMap<String, Any>()
+            if (icon != null && icon != 0) {
+                data["icon"] = icon.toInt()
+            }
+            if (label != null && label != "") {
+                data["label"] = label.toString()
+            }
             AuthActivity().db.collection("Sources")
-                .document(id).set(source)
+                .document(id).update(data)
+        }
+
+        fun deleteWalletById(id: String) {
+            AuthActivity().db.collection("Sources")
+                .document(id).delete()
+        }
+
+        fun getWalletById(id: String): Task<DocumentSnapshot> {
+            return AuthActivity().db.collection("Sources")
+                .document(id).get()
+        }
+
+        fun getWallet(): Query {
+            return AuthActivity().db.collection("Sources")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
         }
     }
 

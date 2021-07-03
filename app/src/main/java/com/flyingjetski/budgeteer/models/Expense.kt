@@ -5,22 +5,28 @@ import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.Query
 import java.util.*
 
 class Expense(
-    id         : String?,
+    uid        : String?,
     date       : Date,
-    source     : Source,
+    sourceId   : String,
+    source     : Source?,
     currency   : Currency,
     categoryId : String,
-    category   : ExpenseCategory,
+    category   : ExpenseCategory?,
     label      : String,
     amount     : Double,
-    details    : String,
+    details    : String?,
     feedback   : Feedback,
 ) {
-    val id         = id
+    var id: String? = null
+    val uid        = uid
     val date       = date
+    val sourceId   = sourceId
     val source     = source
     val currency   = currency
     val categoryId = categoryId
@@ -30,27 +36,37 @@ class Expense(
     val details    = details
     val feedback   = feedback
 
-    constructor(): this(null, Date(), Source(), Currency.MYR, "", ExpenseCategory(), "", 0.0, "", Feedback.NEUTRAL)
+    constructor(): this(null, Date(), "", Source(), Currency.MYR, "", ExpenseCategory(), "", 0.0, "", Feedback.NEUTRAL)
 
     companion object {
-        fun insertExpense(fragment: Fragment, expense: Expense) {
+        fun insertExpense(expense: Expense) {
             AuthActivity().db.collection("Expenses").add(expense)
-                .addOnCompleteListener(fragment.requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(fragment.context, "Added successfully.",
-                            Toast.LENGTH_SHORT).show()
-                        fragment.requireActivity().finish()
-                    } else {
-                        Toast.makeText(fragment.context, "Addition failed, please try again.",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
         }
 
-        fun getExpenseById(id: String) {
-            var expense = Expense()
+        fun updateExpenseById(id: String, icon: Int?, label: String?) {
+            val data = HashMap<String, Any>()
+            if (icon != null && icon != 0) {
+                data["icon"] = icon.toInt()
+            }
+            if (label != null && label != "") {
+                data["label"] = label.toString()
+            }
             AuthActivity().db.collection("Expenses")
-                .document(id).set(expense)
+                .document(id).update(data)
+        }
+        fun deleteExpenseById(id: String) {
+            AuthActivity().db.collection("Expenses")
+                .document(id).delete()
+        }
+
+        fun getExpenseById(id: String): Task<DocumentSnapshot> {
+            return AuthActivity().db.collection("Expenses")
+                .document(id).get()
+        }
+
+        fun getExpense(): Query {
+            return AuthActivity().db.collection("Expenses")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
         }
     }
 
