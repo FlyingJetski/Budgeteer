@@ -95,6 +95,24 @@
         <action
             android:id="@+id/action_blankFragment_to_addWalletFragment"
             app:destination="@id/addWalletFragment" />
+        <action
+            android:id="@+id/action_blankFragment_to_viewBudgetFragment"
+            app:destination="@id/viewBudgetFragment" />
+        <action
+            android:id="@+id/action_blankFragment_to_viewExpenseFragment"
+            app:destination="@id/viewExpenseFragment" />
+        <action
+            android:id="@+id/action_blankFragment_to_viewIncomeFragment"
+            app:destination="@id/viewIncomeFragment" />
+        <action
+            android:id="@+id/action_blankFragment_to_viewIncomeCategoryFragment"
+            app:destination="@id/viewIncomeCategoryFragment" />
+        <action
+            android:id="@+id/action_blankFragment_to_viewSavingFragment"
+            app:destination="@id/viewSavingFragment" />
+        <action
+            android:id="@+id/action_blankFragment_to_viewWalletFragment"
+            app:destination="@id/viewWalletFragment" />
     </fragment>
     <fragment
         android:id="@+id/viewExpenseCategoryFragment"
@@ -104,4 +122,28 @@
             android:id="@+id/action_viewExpenseCategoryFragment_to_editExpenseCategoryFragment"
             app:destination="@id/editExpenseCategoryFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/viewBudgetFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewBudgetFragment"
+        android:label="ViewBudgetFragment" />
+    <fragment
+        android:id="@+id/viewExpenseFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewExpenseFragment"
+        android:label="ViewExpenseFragment" />
+    <fragment
+        android:id="@+id/viewIncomeCategoryFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewIncomeCategoryFragment"
+        android:label="ViewIncomeCategoryFragment" />
+    <fragment
+        android:id="@+id/viewIncomeFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewIncomeFragment"
+        android:label="ViewIncomeFragment" />
+    <fragment
+        android:id="@+id/viewSavingFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewSavingFragment"
+        android:label="ViewSavingFragment" />
+    <fragment
+        android:id="@+id/viewWalletFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewWalletFragment"
+        android:label="ViewWalletFragment" />
 </navigation>

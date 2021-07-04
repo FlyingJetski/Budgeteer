@@ -21,7 +21,7 @@ class Income(
     category    : IncomeCategory?,
     label       : String,
     amount      : Double,
-    details     : String,
+    details     : String?,
 ) {
     var id: String? = null
     val uid         = uid
@@ -38,8 +38,8 @@ class Income(
     constructor(): this(null, Date(), "", Source(), Currency.MYR, "", IncomeCategory(), "", 0.0, "")
 
     companion object {
-        fun insertIncome(expense: Expense) {
-            AuthActivity().db.collection("Incomes").add(expense)
+        fun insertIncome(income: Income) {
+            AuthActivity().db.collection("Incomes").add(income)
         }
 
         fun updateIncomeById(

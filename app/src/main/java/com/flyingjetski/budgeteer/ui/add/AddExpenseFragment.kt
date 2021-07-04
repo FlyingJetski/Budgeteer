@@ -11,12 +11,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.Common
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentAddExpenseBinding
 import com.flyingjetski.budgeteer.models.*
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -36,21 +36,15 @@ class AddExpenseFragment : Fragment() {
         return binding.root
     }
 
-    private fun updateLabel(calendar: Calendar) {
-        val myFormat = "dd/MM/yy" //In which you need put here
-        val sdf = SimpleDateFormat(myFormat, Locale.US)
-        binding.dateEditText.setText(sdf.format(calendar.time))
-    }
-
     private fun setupUI() {
         // Instantiation
         val calendar = Calendar.getInstance()
-        val date =
+        val calendarListener =
             OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 calendar[Calendar.YEAR] = year
                 calendar[Calendar.MONTH] = monthOfYear
                 calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                updateLabel(calendar)
+                Common.updateLabel(calendar, binding.dateEditText)
             }
 
         // Populate View
@@ -104,7 +98,7 @@ class AddExpenseFragment : Fragment() {
         // Set Listener
         binding.dateEditText.setOnClickListener{
             DatePickerDialog(
-                this.requireContext(), date, calendar[Calendar.YEAR], calendar[Calendar.MONTH],
+                this.requireContext(), calendarListener, calendar[Calendar.YEAR], calendar[Calendar.MONTH],
                 calendar[Calendar.DAY_OF_MONTH]
             ).show()
         }

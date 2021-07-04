@@ -63,7 +63,7 @@ class AddWalletFragment : Fragment() {
                     AuthActivity().auth.uid.toString(),
                     (binding.categoryGridView.adapter as
                             Adapters.CategoryIconGridAdapter).selectedIconResource,
-                    binding.label.text.toString(),
+                    binding.labelEditText.text.toString(),
                     binding.currencySpinner.selectedItem as Currency,
                     false
                 )

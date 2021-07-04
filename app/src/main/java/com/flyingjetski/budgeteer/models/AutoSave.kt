@@ -14,4 +14,6 @@ class AutoSave(
     val amount        = amount
     val frequency     = frequency
     val frequencyType = frequencyType
+
+    constructor(): this(Date(), 0.0, 0, FrequencyType.MONTH)
 }

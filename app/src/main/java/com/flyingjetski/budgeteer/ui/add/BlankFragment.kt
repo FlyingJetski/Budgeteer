@@ -24,18 +24,50 @@ class BlankFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_blank, container, false)
-        binding.addExpenseButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddExpenseFragment())
+        binding.addBudgetButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddBudgetFragment())
         }
         binding.addExpenseCategoryButton.setOnClickListener{
             Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddExpenseCategoryFragment())
         }
-        binding.viewExpenseCategoryButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewExpenseCategoryFragment())
+        binding.addExpenseButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddExpenseFragment())
+        }
+        binding.addIncomeCategoryButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddIncomeCategoryFragment())
+        }
+        binding.addIncomeButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddIncomeFragment())
+        }
+        binding.addSavingButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddSavingFragment())
         }
         binding.addWalletButton.setOnClickListener {
             Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddWalletFragment())
         }
+
+        binding.viewBudgetButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewBudgetFragment())
+        }
+        binding.viewExpenseCategoryButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewExpenseCategoryFragment())
+        }
+        binding.viewExpenseButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewExpenseFragment())
+        }
+        binding.viewIncomeCategoryButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewIncomeCategoryFragment())
+        }
+        binding.viewIncomeButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewIncomeFragment())
+        }
+        binding.viewSavingButton.setOnClickListener{
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewSavingFragment())
+        }
+        binding.viewWalletButton.setOnClickListener {
+            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewWalletFragment())
+        }
+
         return binding.root
     }
 

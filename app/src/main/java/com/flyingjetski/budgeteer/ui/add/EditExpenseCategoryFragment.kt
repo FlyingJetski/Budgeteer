@@ -59,7 +59,7 @@ class EditExpenseCategoryFragment : Fragment() {
                 expenseCategoryId.toString(),
                 (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
                     .selectedIconResource,
-                binding.label.text.toString(),
+                binding.labelEditText.text.toString(),
             )
             Navigation.findNavController(it).navigateUp()
         }
@@ -83,7 +83,7 @@ class EditExpenseCategoryFragment : Fragment() {
                             position,
                             binding.categoryGridView.adapter.getItemId(position),
                         )
-                        binding.label.setText(expenseCategory.label)
+                        binding.labelEditText.setText(expenseCategory.label)
                     }
                 }
             }

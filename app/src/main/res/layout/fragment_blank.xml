@@ -79,97 +79,89 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add Wallet"
-            app:layout_constraintBottom_toTopOf="@+id/editBudgetButton"
+            app:layout_constraintBottom_toTopOf="@+id/viewBudgetButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addSavingButton" />
 
         <Button
-            android:id="@+id/editBudgetButton"
+            android:id="@+id/viewBudgetButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Budget"
-            app:layout_constraintBottom_toTopOf="@+id/editExpenseButton"
+            android:text="View Budget"
+            app:layout_constraintBottom_toTopOf="@+id/viewExpenseButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/addWalletButton" />
 
         <Button
-            android:id="@+id/editExpenseButton"
+            android:id="@+id/viewExpenseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Expense"
-            app:layout_constraintBottom_toTopOf="@+id/editExpenseCategoryButton"
+            android:text="View Expense"
+            app:layout_constraintBottom_toTopOf="@+id/viewExpenseCategoryButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editBudgetButton" />
-
-        <Button
-            android:id="@+id/editExpenseCategoryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit Expense Category"
-            app:layout_constraintBottom_toTopOf="@+id/editIncomeButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editExpenseButton" />
-
-        <Button
-            android:id="@+id/editIncomeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit Income"
-            app:layout_constraintBottom_toTopOf="@+id/editIncomeCategoryButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editExpenseCategoryButton" />
-
-        <Button
-            android:id="@+id/editIncomeCategoryButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit Income Category"
-            app:layout_constraintBottom_toTopOf="@+id/editSavingButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editIncomeButton" />
-
-        <Button
-            android:id="@+id/editSavingButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Edit Saving"
-            app:layout_constraintBottom_toTopOf="@+id/editWalletButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editIncomeCategoryButton" />
-
-        <Button
-            android:id="@+id/editWalletButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:text="Edit Wallet"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editSavingButton" />
+            app:layout_constraintTop_toBottomOf="@+id/viewBudgetButton" />
 
         <Button
             android:id="@+id/viewExpenseCategoryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View Expense Category"
-            tools:layout_editor_absoluteX="16dp"
-            tools:layout_editor_absoluteY="16dp" />
+            app:layout_constraintBottom_toTopOf="@+id/viewIncomeButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewExpenseButton" />
+
+        <Button
+            android:id="@+id/viewIncomeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Income"
+            app:layout_constraintBottom_toTopOf="@+id/viewIncomeCategoryButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewExpenseCategoryButton" />
+
+        <Button
+            android:id="@+id/viewIncomeCategoryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Income Category"
+            app:layout_constraintBottom_toTopOf="@+id/viewSavingButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewIncomeButton" />
+
+        <Button
+            android:id="@+id/viewSavingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Saving"
+            app:layout_constraintBottom_toTopOf="@+id/viewWalletButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewIncomeCategoryButton" />
+
+        <Button
+            android:id="@+id/viewWalletButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:text="View Wallet"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewSavingButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

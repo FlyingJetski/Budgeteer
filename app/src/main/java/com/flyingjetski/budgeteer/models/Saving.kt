@@ -24,7 +24,7 @@ class Saving(
     val deadline = deadline
     val autoSave = autoSave
 
-    constructor(): this(null, false, 0, "", Currency.MYR, 0.0, Date(), AutoSave(Date(), 0.0, 0, FrequencyType.MONTH))
+    constructor(): this(null, false, 0, "", Currency.MYR, 0.0, Date(), AutoSave())
 
     companion object {
         fun insertSaving(source: Saving) {

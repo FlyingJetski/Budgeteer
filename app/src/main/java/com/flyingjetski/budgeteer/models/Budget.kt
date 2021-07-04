@@ -17,19 +17,19 @@ class Budget(
     currency    : Currency,
     amount      : Double,
     startDate   : Date,
-    duration    : Date,
+    endDate     : Date,
     isRecurring : Boolean,
 ): Source(uid, icon, label, SourceType.BUDGET, currency) {
     val isActive    = isActive
     val amount      = amount
     val startDate   = startDate
-    val duration    = duration
+    val endDate     = endDate
     val isRecurring = isRecurring
 
     constructor(): this(null, false, 0, "", Currency.MYR, 0.0, Date(), Date(), false)
 
     companion object {
-        fun insertBudget(source: Saving) {
+        fun insertBudget(source: Budget) {
             AuthActivity().db.collection("Sources").add(source)
         }
 
@@ -41,7 +41,7 @@ class Budget(
             currency    : Currency?,
             amount      : Double?,
             startDate   : Date?,
-            duration    : Date?,
+            endDate     : Date?,
             isRecurring : Boolean?,
         ) {
             val data = HashMap<String, Any>()
@@ -63,8 +63,8 @@ class Budget(
             if (startDate != null) {
                 data["startDate"] = startDate
             }
-            if (duration != null) {
-                data["duration"] = duration
+            if (endDate != null) {
+                data["endDate"] = endDate
             }
             if (isRecurring != null) {
                 data["isRecurring"] = isRecurring
