@@ -6,6 +6,7 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.FrequencyType
 import com.flyingjetski.budgeteer.models.enums.SourceType
+import com.google.firebase.firestore.Query
 import java.util.*
 
 class Budget(
@@ -28,24 +29,55 @@ class Budget(
     constructor(): this(null, false, 0, "", Currency.MYR, 0.0, Date(), Date(), false)
 
     companion object {
-        fun insertBudget(fragment: Fragment, source: Budget) {
+        fun insertBudget(source: Saving) {
             AuthActivity().db.collection("Sources").add(source)
-                .addOnCompleteListener(fragment.requireActivity()) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(fragment.context, "Added successfully.",
-                            Toast.LENGTH_SHORT).show()
-                        fragment.requireActivity().finish()
-                    } else {
-                        Toast.makeText(fragment.context, "Addition failed, please try again.",
-                            Toast.LENGTH_SHORT).show()
-                    }
-                }
         }
 
-        fun getBudgetById(id: String) {
-            var source = Budget()
+        fun updateBudgetById(
+            id          : String,
+            isActive    : Boolean?,
+            icon        : Int?,
+            label       : String?,
+            currency    : Currency?,
+            amount      : Double?,
+            startDate   : Date?,
+            duration    : Date?,
+            isRecurring : Boolean?,
+        ) {
+            val data = HashMap<String, Any>()
+            if (isActive != null) {
+                data["isActive"] = isActive
+            }
+            if (icon != null && icon != 0) {
+                data["icon"] = icon
+            }
+            if (label != null && label != "") {
+                data["label"] = label
+            }
+            if (currency != null) {
+                data["currency"] = currency
+            }
+            if (amount != null && amount != 0.0) {
+                data["amount"] = amount
+            }
+            if (startDate != null) {
+                data["startDate"] = startDate
+            }
+            if (duration != null) {
+                data["duration"] = duration
+            }
+            if (isRecurring != null) {
+                data["isRecurring"] = isRecurring
+            }
+
             AuthActivity().db.collection("Sources")
-                .document(id).set(source)
+                .document(id).update(data)
+        }
+
+        fun getBudget(): Query {
+            return AuthActivity().db.collection("Sources")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("type", SourceType.BUDGET)
         }
     }
 

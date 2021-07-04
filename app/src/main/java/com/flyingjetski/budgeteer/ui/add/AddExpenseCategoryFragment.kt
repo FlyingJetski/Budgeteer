@@ -25,8 +25,14 @@ class AddExpenseCategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_expense_category, container, false)
+        binding = DataBindingUtil.inflate(inflater,
+            R.layout.fragment_add_expense_category, container, false)
+        setupUI()
+        return binding.root
+    }
 
+    private fun setupUI() {
+        // Instantiation
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -37,20 +43,27 @@ class AddExpenseCategoryFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-        binding.categoryGridView.adapter = Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
 
+        // Populate View
+        binding.categoryGridView.adapter =
+            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+
+        // Set Listener
         binding.addButton.setOnClickListener {
             ExpenseCategory.insertExpenseCategory(
                 ExpenseCategory(
                     AuthActivity().auth.uid.toString(),
-                    (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter).selectedIconResource,
+                    (binding.categoryGridView.adapter as
+                            Adapters.CategoryIconGridAdapter).selectedIconResource,
                     binding.label.text.toString()
                 )
             )
             Navigation.findNavController(it).navigateUp()
         }
+    }
 
-        return binding.root
+    private fun setListeners() {
+
     }
 
 }

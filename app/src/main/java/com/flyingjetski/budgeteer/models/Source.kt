@@ -6,19 +6,20 @@ import com.flyingjetski.budgeteer.models.enums.SourceType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
+import java.util.HashMap
 
 open class Source(
-    uid       : String?,
+    uid      : String?,
     icon     : Int,
     label    : String,
-    source   : SourceType,
+    type     : SourceType,
     currency : Currency,
 ) {
     var id: String? = null
     val uid      = uid
     val icon     = icon
     val label    = label
-    val source   = source
+    val type     = type
     val currency = currency
 
     constructor(): this(null, 0, "", SourceType.WALLET, Currency.MYR)

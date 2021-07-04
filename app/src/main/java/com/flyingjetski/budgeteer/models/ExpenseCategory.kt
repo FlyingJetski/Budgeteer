@@ -32,10 +32,10 @@ class ExpenseCategory(
         fun updateExpenseCategoryById(id: String, icon: Int?, label: String?) {
             val data = HashMap<String, Any>()
             if (icon != null && icon != 0) {
-                data["icon"] = icon.toInt()
+                data["icon"] = icon
             }
             if (label != null && label != "") {
-                data["label"] = label.toString()
+                data["label"] = label
             }
             AuthActivity().db.collection("Categories")
                 .document(id).update(data)

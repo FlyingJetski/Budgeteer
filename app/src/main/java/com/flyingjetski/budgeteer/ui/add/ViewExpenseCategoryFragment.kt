@@ -24,7 +24,12 @@ class ViewExpenseCategoryFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_expense_category, container, false)
+        setupUI()
+        return binding.root
+    }
 
+    private fun setupUI() {
+        // Populate View
         ExpenseCategory.getExpenseCategory()
             .addSnapshotListener{
                     snapshot, _ ->
@@ -47,6 +52,7 @@ class ViewExpenseCategoryFragment : Fragment() {
                 }
             }
 
+        // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->
             Navigation.findNavController(view).navigate(
                 ViewExpenseCategoryFragmentDirections
@@ -55,8 +61,6 @@ class ViewExpenseCategoryFragment : Fragment() {
                     )
             )
         }
-
-        return binding.root
     }
 
 }

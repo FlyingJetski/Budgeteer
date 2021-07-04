@@ -32,9 +32,19 @@ class AddExpenseFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_expense, container, false)
+        setupUI()
+        return binding.root
+    }
 
+    private fun updateLabel(calendar: Calendar) {
+        val myFormat = "dd/MM/yy" //In which you need put here
+        val sdf = SimpleDateFormat(myFormat, Locale.US)
+        binding.dateEditText.setText(sdf.format(calendar.time))
+    }
+
+    private fun setupUI() {
+        // Instantiation
         val calendar = Calendar.getInstance()
-
         val date =
             OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
                 calendar[Calendar.YEAR] = year
@@ -43,13 +53,7 @@ class AddExpenseFragment : Fragment() {
                 updateLabel(calendar)
             }
 
-        binding.dateEditText.setOnClickListener{
-            DatePickerDialog(
-                this.requireContext(), date, calendar[Calendar.YEAR], calendar[Calendar.MONTH],
-                calendar[Calendar.DAY_OF_MONTH]
-            ).show()
-        }
-
+        // Populate View
         ExpenseCategory.getExpenseCategory()
             .addSnapshotListener{
                     snapshot, _ ->
@@ -96,6 +100,15 @@ class AddExpenseFragment : Fragment() {
                 }
             }
 
+
+        // Set Listener
+        binding.dateEditText.setOnClickListener{
+            DatePickerDialog(
+                this.requireContext(), date, calendar[Calendar.YEAR], calendar[Calendar.MONTH],
+                calendar[Calendar.DAY_OF_MONTH]
+            ).show()
+        }
+
         binding.addButton.setOnClickListener {
             Expense.insertExpense(
                 Expense(
@@ -115,13 +128,6 @@ class AddExpenseFragment : Fragment() {
             Navigation.findNavController(it).navigateUp()
         }
 
-        return binding.root
-    }
-
-    private fun updateLabel(calendar: Calendar) {
-        val myFormat = "dd/MM/yy" //In which you need put here
-        val sdf = SimpleDateFormat(myFormat, Locale.US)
-        binding.dateEditText.setText(sdf.format(calendar.time))
     }
 
 }

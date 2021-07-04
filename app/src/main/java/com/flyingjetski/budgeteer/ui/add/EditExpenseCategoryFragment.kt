@@ -25,7 +25,12 @@ class EditExpenseCategoryFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_expense_category, container, false)
+        setupUI()
+        return binding.root
+    }
 
+    private fun setupUI() {
+        // Instantiation
         var expenseCategoryId = arguments?.getString("expenseCategoryId")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
@@ -38,14 +43,33 @@ class EditExpenseCategoryFragment : Fragment() {
             }
         }
 
+        // Populate View
+        binding.categoryGridView.adapter =
+            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+
+
+        // Set Listeners
         binding.categoryGridView.setOnItemClickListener{ adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
             (adapterView.adapter as Adapters.CategoryIconGridAdapter)
                 .selectIcon(i)
         }
 
-        binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+        binding.editButton.setOnClickListener{
+            ExpenseCategory.updateExpenseCategoryById(
+                expenseCategoryId.toString(),
+                (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
+                    .selectedIconResource,
+                binding.label.text.toString(),
+            )
+            Navigation.findNavController(it).navigateUp()
+        }
 
+        binding.deleteButton.setOnClickListener{
+            ExpenseCategory.deleteExpenseCategoryById(expenseCategoryId.toString())
+            Navigation.findNavController(it).navigateUp()
+        }
+
+        // Actions
         ExpenseCategory.getExpenseCategoryById(expenseCategoryId.toString())
             .addOnSuccessListener { document ->
                 if (document != null) {
@@ -63,23 +87,6 @@ class EditExpenseCategoryFragment : Fragment() {
                     }
                 }
             }
-
-        binding.editButton.setOnClickListener{
-            ExpenseCategory.updateExpenseCategoryById(
-                expenseCategoryId.toString(),
-                (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
-                    .selectedIconResource,
-                binding.label.text.toString(),
-            )
-            Navigation.findNavController(it).navigateUp()
-        }
-
-        binding.deleteButton.setOnClickListener{
-            ExpenseCategory.deleteExpenseCategoryById(expenseCategoryId.toString())
-            Navigation.findNavController(it).navigateUp()
-        }
-
-        return binding.root
     }
 
 }

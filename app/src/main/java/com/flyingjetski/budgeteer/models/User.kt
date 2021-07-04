@@ -7,11 +7,11 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.MainActivity
 
 class User(
-    id       : String?,
+    uid       : String?,
     email    : String,
     password : String,
 ) {
-    val id       = id
+    val uid       = uid
     val email    = email
     val password = password
 
@@ -33,10 +33,10 @@ class User(
                 }
         }
 
-        fun getUserById(id: String) {
+        fun getUserById(uid: String) {
             var user = User()
             AuthActivity().db.collection("Users")
-                .document(id).set(user)
+                .document(uid).set(user)
         }
     }
 }

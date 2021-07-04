@@ -23,4 +23,10 @@ class AddBudgetFragment : Fragment() {
         return binding.root
     }
 
+    private fun setupUI() {
+        // Instantiation
+        // Populate View
+        // Set Listeners
+    }
+
 }

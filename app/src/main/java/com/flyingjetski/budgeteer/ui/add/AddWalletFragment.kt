@@ -29,7 +29,12 @@ class AddWalletFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_wallet, container, false)
+        setupUI()
+        return binding.root
+    }
 
+    private fun setupUI() {
+        // Instantiation
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -40,15 +45,24 @@ class AddWalletFragment : Fragment() {
                 e.printStackTrace()
             }
         }
-        binding.categoryGridView.adapter = Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
 
-        binding.currencySpinner.adapter = ArrayAdapter<Currency>(requireContext(), android.R.layout.simple_list_item_1, Currency.values())
+        // Populate View
+        binding.categoryGridView.adapter =
+            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+        binding.currencySpinner.adapter =
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                Currency.values()
+            )
 
+        // Set Listeners
         binding.addButton.setOnClickListener {
             Wallet.insertWallet(
                 Wallet(
                     AuthActivity().auth.uid.toString(),
-                    (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter).selectedIconResource,
+                    (binding.categoryGridView.adapter as
+                            Adapters.CategoryIconGridAdapter).selectedIconResource,
                     binding.label.text.toString(),
                     binding.currencySpinner.selectedItem as Currency,
                     false
@@ -56,8 +70,6 @@ class AddWalletFragment : Fragment() {
             )
             Navigation.findNavController(it).navigateUp()
         }
-
-        return binding.root
     }
 
 }

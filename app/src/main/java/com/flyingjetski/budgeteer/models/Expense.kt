@@ -43,17 +43,47 @@ class Expense(
             AuthActivity().db.collection("Expenses").add(expense)
         }
 
-        fun updateExpenseById(id: String, icon: Int?, label: String?) {
+        fun updateExpenseById(
+            id         : String,
+            date       : Date?,
+            sourceId   : String?,
+            currency   : Currency?,
+            categoryId : String?,
+            label      : String?,
+            amount     : Double?,
+            details    : String?,
+            feedback   : Feedback?,
+
+        ) {
             val data = HashMap<String, Any>()
-            if (icon != null && icon != 0) {
-                data["icon"] = icon.toInt()
+            if (date != null) {
+                data["date"] = date
+            }
+            if (sourceId != null && sourceId != "") {
+                data["sourceId"] = sourceId
+            }
+            if (currency != null) {
+                data["currency"] = currency
+            }
+            if (categoryId != null && categoryId != "") {
+                data["categoryId"] = categoryId
             }
             if (label != null && label != "") {
-                data["label"] = label.toString()
+                data["label"] = label
+            }
+            if (amount != null && amount != 0.0) {
+                data["amount"] = amount
+            }
+            if (details != null && details != "") {
+                data["details"] = details
+            }
+            if (feedback != null) {
+                data["feedback"] = feedback
             }
             AuthActivity().db.collection("Expenses")
                 .document(id).update(data)
         }
+
         fun deleteExpenseById(id: String) {
             AuthActivity().db.collection("Expenses")
                 .document(id).delete()

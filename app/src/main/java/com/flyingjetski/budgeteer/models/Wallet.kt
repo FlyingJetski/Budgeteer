@@ -28,7 +28,12 @@ class Wallet(
             AuthActivity().db.collection("Sources").add(source)
         }
 
-        fun updateWalletById(id: String, icon: Int?, label: String?) {
+        fun updateWalletById(
+            id: String,
+            icon: Int?,
+            label: String?,
+            currency: Currency?
+        ) {
             val data = HashMap<String, Any>()
             if (icon != null && icon != 0) {
                 data["icon"] = icon.toInt()
@@ -36,23 +41,17 @@ class Wallet(
             if (label != null && label != "") {
                 data["label"] = label.toString()
             }
+            if (currency != null) {
+                data["currency"] = currency
+            }
             AuthActivity().db.collection("Sources")
                 .document(id).update(data)
-        }
-
-        fun deleteWalletById(id: String) {
-            AuthActivity().db.collection("Sources")
-                .document(id).delete()
-        }
-
-        fun getWalletById(id: String): Task<DocumentSnapshot> {
-            return AuthActivity().db.collection("Sources")
-                .document(id).get()
         }
 
         fun getWallet(): Query {
             return AuthActivity().db.collection("Sources")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("type", SourceType.WALLET)
         }
     }
 
