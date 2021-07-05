@@ -11,11 +11,13 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseCategoryBinding
 import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.databinding.FragmentViewBudgetBinding
+import com.flyingjetski.budgeteer.models.Budget
 import com.flyingjetski.budgeteer.models.Category
 
 class ViewBudgetFragment : Fragment() {
 
-    lateinit var binding: FragmentViewExpenseCategoryBinding
+    lateinit var binding: FragmentViewBudgetBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,30 +25,30 @@ class ViewBudgetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_expense_category, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_budget, container, false)
         setupUI()
         return binding.root
     }
 
     private fun setupUI() {
         // Populate View
-        ExpenseCategory.getExpenseCategory()
+        Budget.getBudget()
             .addSnapshotListener{
                     snapshot, _ ->
                 run {
                     if (snapshot != null) {
-                        val categories = ArrayList<ExpenseCategory>()
+                        val budgets = ArrayList<Budget>()
                         val documents = snapshot.documents
                         documents.forEach {
-                            val category = it.toObject(ExpenseCategory::class.java)
-                            if (category != null) {
-                                category.id = it.id
-                                categories.add(category)
+                            val budget = it.toObject(Budget::class.java)
+                            if (budget != null) {
+                                budget.id = it.id
+                                budgets.add(budget)
                             }
                         }
-                        binding.listView.adapter = Adapters.CategoryListAdapter(
+                        binding.listView.adapter = Adapters.BudgetListAdapter(
                             this.requireContext(),
-                            categories as ArrayList<Category>,
+                            budgets,
                         )
                     }
                 }
@@ -55,9 +57,9 @@ class ViewBudgetFragment : Fragment() {
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->
             Navigation.findNavController(view).navigate(
-                ViewExpenseCategoryFragmentDirections
-                    .actionViewExpenseCategoryFragmentToEditExpenseCategoryFragment(
-                        (binding.listView.adapter.getItem(position) as ExpenseCategory).id.toString()
+                ViewBudgetFragmentDirections
+                    .actionViewBudgetFragmentToEditBudgetFragment(
+                        (binding.listView.adapter.getItem(position) as Budget).id.toString()
                     )
             )
         }

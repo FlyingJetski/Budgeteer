@@ -60,7 +60,7 @@ class AddBudgetFragment : Fragment() {
                 startCalendar[Calendar.YEAR] = year
                 startCalendar[Calendar.MONTH] = monthOfYear
                 startCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                Common.updateLabel(startCalendar, binding.startDateEditText)
+                binding.startDateEditText.setText(Common.updateLabel(startCalendar.time))
             }
 
         val endCalendar = Calendar.getInstance()
@@ -69,7 +69,7 @@ class AddBudgetFragment : Fragment() {
                 endCalendar[Calendar.YEAR] = year
                 endCalendar[Calendar.MONTH] = monthOfYear
                 endCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                Common.updateLabel(endCalendar, binding.endDateEditText)
+                binding.endDateEditText.setText(Common.updateLabel(endCalendar.time))
             }
 
 

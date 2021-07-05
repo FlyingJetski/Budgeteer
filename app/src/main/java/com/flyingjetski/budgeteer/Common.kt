@@ -6,10 +6,10 @@ import java.util.*
 
 class Common {
     companion object {
-        fun updateLabel(calendar: Calendar, editText: EditText) {
+        fun updateLabel(date: Date): String {
             val myFormat = "dd/MM/yy" //In which you need put here
             val sdf = SimpleDateFormat(myFormat, Locale.US)
-            editText.setText(sdf.format(calendar.time))
+            return sdf.format(date)
         }
     }
 }

@@ -8,14 +8,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.R
-import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseCategoryBinding
-import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
-import com.flyingjetski.budgeteer.models.Category
+import com.flyingjetski.budgeteer.databinding.FragmentViewIncomeBinding
+import com.flyingjetski.budgeteer.models.Income
 
 class ViewIncomeFragment : Fragment() {
 
-    lateinit var binding: FragmentViewExpenseCategoryBinding
+    lateinit var binding: FragmentViewIncomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,30 +22,30 @@ class ViewIncomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_expense_category, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_income, container, false)
         setupUI()
         return binding.root
     }
 
     private fun setupUI() {
         // Populate View
-        ExpenseCategory.getExpenseCategory()
+        Income.getIncome()
             .addSnapshotListener{
                     snapshot, _ ->
                 run {
                     if (snapshot != null) {
-                        val categories = ArrayList<ExpenseCategory>()
+                        val incomes = ArrayList<Income>()
                         val documents = snapshot.documents
                         documents.forEach {
-                            val category = it.toObject(ExpenseCategory::class.java)
-                            if (category != null) {
-                                category.id = it.id
-                                categories.add(category)
+                            val income = it.toObject(Income::class.java)
+                            if (income != null) {
+                                income.id = it.id
+                                incomes.add(income)
                             }
                         }
-                        binding.listView.adapter = Adapters.CategoryListAdapter(
+                        binding.listView.adapter = Adapters.IncomeListAdapter(
                             this.requireContext(),
-                            categories as ArrayList<Category>,
+                            incomes,
                         )
                     }
                 }
@@ -55,9 +54,9 @@ class ViewIncomeFragment : Fragment() {
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->
             Navigation.findNavController(view).navigate(
-                ViewExpenseCategoryFragmentDirections
-                    .actionViewExpenseCategoryFragmentToEditExpenseCategoryFragment(
-                        (binding.listView.adapter.getItem(position) as ExpenseCategory).id.toString()
+                ViewIncomeFragmentDirections
+                    .actionViewIncomeFragmentToEditIncomeFragment(
+                        (binding.listView.adapter.getItem(position) as Income).id.toString()
                     )
             )
         }

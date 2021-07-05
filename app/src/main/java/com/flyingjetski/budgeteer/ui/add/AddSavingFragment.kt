@@ -57,7 +57,7 @@ class AddSavingFragment : Fragment() {
                 calendar[Calendar.YEAR] = year
                 calendar[Calendar.MONTH] = monthOfYear
                 calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                Common.updateLabel(calendar, binding.targetDateEditText)
+                binding.targetDateEditText.setText(Common.updateLabel(calendar.time))
             }
 
         // Populate View

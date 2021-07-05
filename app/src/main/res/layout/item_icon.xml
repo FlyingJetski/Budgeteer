@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
-            android:id="@+id/item_icon"
+            android:id="@+id/iconImageView"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:foregroundGravity="center"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/item_label"
+            android:id="@+id/categoryLabelTextView"
             android:layout_width="50dp"
             android:layout_height="20dp"
             android:foregroundGravity="center"
@@ -32,16 +32,16 @@
             android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_icon" />
+            app:layout_constraintTop_toBottomOf="@+id/iconImageView" />
 
         <TextView
-            android:id="@+id/item_id"
+            android:id="@+id/idTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_icon" />
+            app:layout_constraintTop_toBottomOf="@id/iconImageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

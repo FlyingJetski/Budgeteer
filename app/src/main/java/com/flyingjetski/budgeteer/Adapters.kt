@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
-import com.flyingjetski.budgeteer.models.Category
-import com.flyingjetski.budgeteer.models.Source
+import com.flyingjetski.budgeteer.models.*
 
 class Adapters {
     class CategoryGridAdapter(
@@ -37,21 +36,22 @@ class Adapters {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val rowView = inflater.inflate(R.layout.item_icon, null, false)
 
-            val idText = rowView.findViewById(R.id.item_id) as TextView
-            val labelText = rowView.findViewById(R.id.item_label) as TextView
-            val iconItem = rowView.findViewById(R.id.item_icon) as ImageView
-            iconItem.setOnClickListener {
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            val amountTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+
+            iconImageView.setOnClickListener {
                 selectedCategoryId = categories[position].id
                 imageViews.forEach{
                     it.setBackgroundColor(Color.WHITE)
                 }
                 it.setBackgroundColor(Color.GRAY)
             }
-            imageViews.add(iconItem)
+            imageViews.add(iconImageView)
 
-            idText.text = categories[position].id
-            labelText.text = categories[position].label
-            iconItem.setImageResource(categories[position].icon)
+            idTextView.text = categories[position].id
+            amountTextView.text = categories[position].label
+            iconImageView.setImageResource(categories[position].icon)
 
             return rowView
         }
@@ -83,17 +83,17 @@ class Adapters {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val rowView = inflater.inflate(R.layout.item_icon, null, false)
 
-            val iconItem = rowView.findViewById(R.id.item_icon) as ImageView
-            iconItem.setOnClickListener {
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            iconImageView.setOnClickListener {
                 selectedIconResource = resources[position]
                 imageViews.forEach{
                     it.setBackgroundColor(Color.WHITE)
                 }
                 it.setBackgroundColor(Color.GRAY)
             }
-            imageViews.add(iconItem)
+            imageViews.add(iconImageView)
 
-            iconItem.setImageResource(resources[position])
+            iconImageView.setImageResource(resources[position])
 
             return rowView
         }
@@ -110,42 +110,6 @@ class Adapters {
         fun selectIcon(position: Int) {
             imageViews[position+2].setBackgroundColor(Color.GRAY)
         }
-    }
-
-    class CategoryListAdapter(
-        private val context: Context,
-        private val categories: ArrayList<Category>
-    ): BaseAdapter() {
-
-        private val inflater: LayoutInflater
-                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-        override fun getCount(): Int {
-            return categories.size
-        }
-
-        override fun getItem(position: Int): Any {
-            return categories[position]
-        }
-
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val rowView = inflater.inflate(R.layout.list_category, null, false)
-
-            val idText = rowView.findViewById(R.id.item_id) as TextView
-            val titleText = rowView.findViewById(R.id.item_label) as TextView
-            val imageView = rowView.findViewById(R.id.item_icon) as ImageView
-
-            idText.text = categories[position].id
-            titleText.text = categories[position].label
-            imageView.setImageResource(categories[position].icon)
-
-            return rowView
-        }
-
     }
 
     class SourceGridAdapter(
@@ -173,21 +137,262 @@ class Adapters {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val rowView = inflater.inflate(R.layout.item_icon, null, false)
 
-            val idText = rowView.findViewById(R.id.item_id) as TextView
-            val labelText = rowView.findViewById(R.id.item_label) as TextView
-            val iconItem = rowView.findViewById(R.id.item_icon) as ImageView
-            iconItem.setOnClickListener {
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            val amountTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+
+            iconImageView.setOnClickListener {
                 selectedSourceId = sources[position].id
                 imageViews.forEach{
                     it.setBackgroundColor(Color.WHITE)
                 }
                 it.setBackgroundColor(Color.GRAY)
             }
-            imageViews.add(iconItem)
+            imageViews.add(iconImageView)
 
-            idText.text = sources[position].id
-            labelText.text = sources[position].label
-            iconItem.setImageResource(sources[position].icon)
+            idTextView.text = sources[position].id
+            amountTextView.text = sources[position].label
+            iconImageView.setImageResource(sources[position].icon)
+
+            return rowView
+        }
+
+    }
+
+    class BudgetListAdapter(
+        private val context: Context,
+        private val categories: ArrayList<Budget>
+    ): BaseAdapter() {
+
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return categories.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return categories[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.list_budget, null, false)
+
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
+            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
+            val startDateTextView = rowView.findViewById(R.id.startDateTextView) as TextView
+            val endDateTextView = rowView.findViewById(R.id.dateTextView) as TextView
+
+            idTextView.text = categories[position].id
+            iconImageView.setImageResource(categories[position].icon)
+            labelTextView.text = categories[position].label
+            amountTextView.text = categories[position].amount.toString()
+            currencyTextView.text = categories[position].currency.toString()
+            startDateTextView.text = Common.updateLabel(categories[position].startDate)
+            endDateTextView.text = Common.updateLabel(categories[position].endDate)
+
+            return rowView
+        }
+
+    }
+
+    class SavingListAdapter(
+        private val context: Context,
+        private val categories: ArrayList<Saving>
+    ): BaseAdapter() {
+
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return categories.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return categories[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.list_saving, null, false)
+
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val targetTextView = rowView.findViewById(R.id.targetTextView) as TextView
+            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
+            val deadlineTextView = rowView.findViewById(R.id.deadlineTextView) as TextView
+
+            idTextView.text = categories[position].id
+            iconImageView.setImageResource(categories[position].icon)
+            labelTextView.text = categories[position].label
+            targetTextView.text = categories[position].target.toString()
+            currencyTextView.text = categories[position].currency.toString()
+            deadlineTextView.text = Common.updateLabel(categories[position].deadline)
+
+            return rowView
+        }
+
+    }
+
+    class WalletListAdapter(
+        private val context: Context,
+        private val categories: ArrayList<Wallet>
+    ): BaseAdapter() {
+
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return categories.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return categories[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.list_wallet, null, false)
+
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
+
+            idTextView.text = categories[position].id
+            iconImageView.setImageResource(categories[position].icon)
+            labelTextView.text = categories[position].label
+            currencyTextView.text = categories[position].currency.toString()
+
+            return rowView
+        }
+
+    }
+
+    class CategoryListAdapter(
+        private val context: Context,
+        private val categories: ArrayList<Category>
+    ): BaseAdapter() {
+
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return categories.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return categories[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.list_category, null, false)
+
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            val amountTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+
+            idTextView.text = categories[position].id
+            iconImageView.setImageResource(categories[position].icon)
+            amountTextView.text = categories[position].label
+
+            return rowView
+        }
+
+    }
+
+    class ExpenseListAdapter(
+        private val context: Context,
+        private val categories: ArrayList<Expense>
+    ): BaseAdapter() {
+
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return categories.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return categories[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.list_expense, null, false)
+
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
+            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
+            val dateTextView = rowView.findViewById(R.id.dateTextView) as TextView
+
+            idTextView.text = categories[position].id
+            labelTextView.text = categories[position].label
+            amountTextView.text = categories[position].amount.toString()
+            currencyTextView.text = categories[position].currency.toString()
+            dateTextView.text = Common.updateLabel(categories[position].date)
+
+            return rowView
+        }
+
+    }
+
+    class IncomeListAdapter(
+        private val context: Context,
+        private val categories: ArrayList<Income>
+    ): BaseAdapter() {
+
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return categories.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return categories[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.list_income, null, false)
+
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
+            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
+            val dateTextView = rowView.findViewById(R.id.dateTextView) as TextView
+
+            idTextView.text = categories[position].id
+            labelTextView.text = categories[position].label
+            amountTextView.text = categories[position].amount.toString()
+            currencyTextView.text = categories[position].currency.toString()
+            dateTextView.text = Common.updateLabel(categories[position].date)
 
             return rowView
         }

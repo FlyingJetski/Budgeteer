@@ -44,7 +44,7 @@ class AddExpenseFragment : Fragment() {
                 calendar[Calendar.YEAR] = year
                 calendar[Calendar.MONTH] = monthOfYear
                 calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                Common.updateLabel(calendar, binding.dateEditText)
+                binding.dateEditText.setText(Common.updateLabel(calendar.time))
             }
 
         // Populate View

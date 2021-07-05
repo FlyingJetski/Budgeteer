@@ -8,14 +8,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.R
-import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseCategoryBinding
-import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.databinding.FragmentViewSavingBinding
 import com.flyingjetski.budgeteer.models.Category
+import com.flyingjetski.budgeteer.models.Saving
 
 class ViewSavingFragment : Fragment() {
 
-    lateinit var binding: FragmentViewExpenseCategoryBinding
+    lateinit var binding: FragmentViewSavingBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,30 +23,30 @@ class ViewSavingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_expense_category, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_saving, container, false)
         setupUI()
         return binding.root
     }
 
     private fun setupUI() {
         // Populate View
-        ExpenseCategory.getExpenseCategory()
+        Saving.getSaving()
             .addSnapshotListener{
                     snapshot, _ ->
                 run {
                     if (snapshot != null) {
-                        val categories = ArrayList<ExpenseCategory>()
+                        val savings = ArrayList<Saving>()
                         val documents = snapshot.documents
                         documents.forEach {
-                            val category = it.toObject(ExpenseCategory::class.java)
-                            if (category != null) {
-                                category.id = it.id
-                                categories.add(category)
+                            val saving = it.toObject(Saving::class.java)
+                            if (saving != null) {
+                                saving.id = it.id
+                                savings.add(saving)
                             }
                         }
-                        binding.listView.adapter = Adapters.CategoryListAdapter(
+                        binding.listView.adapter = Adapters.SavingListAdapter(
                             this.requireContext(),
-                            categories as ArrayList<Category>,
+                            savings,
                         )
                     }
                 }
@@ -55,9 +55,9 @@ class ViewSavingFragment : Fragment() {
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->
             Navigation.findNavController(view).navigate(
-                ViewExpenseCategoryFragmentDirections
-                    .actionViewExpenseCategoryFragmentToEditExpenseCategoryFragment(
-                        (binding.listView.adapter.getItem(position) as ExpenseCategory).id.toString()
+                ViewSavingFragmentDirections
+                    .actionViewSavingFragmentToEditSavingFragment(
+                        (binding.listView.adapter.getItem(position) as Saving).id.toString()
                     )
             )
         }

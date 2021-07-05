@@ -36,11 +36,18 @@
     <fragment
         android:id="@+id/editBudgetFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditBudgetFragment"
-        android:label="EditBudgetFragment" />
+        android:label="EditBudgetFragment" >
+        <argument android:name="budgetId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/editExpenseFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditExpenseFragment"
-        android:label="EditExpenseFragment" />
+        android:label="EditExpenseFragment" >
+        <argument
+            android:name="expenseId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/editExpenseCategoryFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditExpenseCategoryFragment"
@@ -51,19 +58,35 @@
     <fragment
         android:id="@+id/editIncomeFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditIncomeFragment"
-        android:label="EditIncomeFragment" />
+        android:label="EditIncomeFragment" >
+        <argument
+            android:name="incomeId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/editIncomeCategoryFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditIncomeCategoryFragment"
-        android:label="EditIncomeCategoryFragment" />
+        android:label="EditIncomeCategoryFragment" >
+        <argument
+            android:name="incomeCategoryId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/editSavingFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditSavingFragment"
-        android:label="EditSavingFragment" />
+        android:label="EditSavingFragment" >
+        <argument
+            android:name="savingId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/editWalletFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.EditWalletFragment"
-        android:label="EditWalletFragment" />
+        android:label="EditWalletFragment" >
+        <argument
+            android:name="walletId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/blankFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.BlankFragment"
@@ -125,25 +148,49 @@
     <fragment
         android:id="@+id/viewBudgetFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.ViewBudgetFragment"
-        android:label="ViewBudgetFragment" />
+        android:label="ViewBudgetFragment" >
+        <action
+            android:id="@+id/action_viewBudgetFragment_to_editBudgetFragment"
+            app:destination="@id/editBudgetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/viewExpenseFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.ViewExpenseFragment"
-        android:label="ViewExpenseFragment" />
+        android:label="ViewExpenseFragment" >
+        <action
+            android:id="@+id/action_viewExpenseFragment_to_editExpenseFragment"
+            app:destination="@id/editExpenseFragment" />
+    </fragment>
     <fragment
         android:id="@+id/viewIncomeCategoryFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.ViewIncomeCategoryFragment"
-        android:label="ViewIncomeCategoryFragment" />
+        android:label="ViewIncomeCategoryFragment" >
+        <action
+            android:id="@+id/action_viewIncomeCategoryFragment_to_editIncomeCategoryFragment"
+            app:destination="@id/editIncomeCategoryFragment" />
+    </fragment>
     <fragment
         android:id="@+id/viewIncomeFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.ViewIncomeFragment"
-        android:label="ViewIncomeFragment" />
+        android:label="ViewIncomeFragment" >
+        <action
+            android:id="@+id/action_viewIncomeFragment_to_editIncomeFragment"
+            app:destination="@id/editIncomeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/viewSavingFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.ViewSavingFragment"
-        android:label="ViewSavingFragment" />
+        android:label="ViewSavingFragment" >
+        <action
+            android:id="@+id/action_viewSavingFragment_to_editSavingFragment"
+            app:destination="@id/editSavingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/viewWalletFragment"
         android:name="com.flyingjetski.budgeteer.ui.add.ViewWalletFragment"
-        android:label="ViewWalletFragment" />
+        android:label="ViewWalletFragment" >
+        <action
+            android:id="@+id/action_viewWalletFragment_to_editWalletFragment"
+            app:destination="@id/editWalletFragment" />
+    </fragment>
 </navigation>
