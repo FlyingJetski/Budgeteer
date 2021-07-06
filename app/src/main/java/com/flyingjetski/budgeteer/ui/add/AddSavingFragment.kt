@@ -17,7 +17,6 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentAddSavingBinding
 import com.flyingjetski.budgeteer.models.AutoSave
 import com.flyingjetski.budgeteer.models.Saving
-import com.flyingjetski.budgeteer.models.Wallet
 import com.flyingjetski.budgeteer.models.enums.Currency
 import java.lang.reflect.Field
 import java.util.*
@@ -57,7 +56,7 @@ class AddSavingFragment : Fragment() {
                 calendar[Calendar.YEAR] = year
                 calendar[Calendar.MONTH] = monthOfYear
                 calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                binding.targetDateEditText.setText(Common.updateLabel(calendar.time))
+                binding.targetDateEditText.setText(Common.dateToString(calendar.time))
             }
 
         // Populate View

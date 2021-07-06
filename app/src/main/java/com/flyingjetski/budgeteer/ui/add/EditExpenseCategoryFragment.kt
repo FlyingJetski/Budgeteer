@@ -49,9 +49,9 @@ class EditExpenseCategoryFragment : Fragment() {
 
 
         // Set Listeners
-        binding.categoryGridView.setOnItemClickListener{ adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
+        binding.categoryGridView.setOnItemClickListener{ adapterView: AdapterView<*>, _, position: Int, _ ->
             (adapterView.adapter as Adapters.CategoryIconGridAdapter)
-                .selectIcon(i)
+                .selectIcon(position)
         }
 
         binding.editButton.setOnClickListener{

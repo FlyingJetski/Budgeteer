@@ -42,7 +42,7 @@ class AddIncomeFragment : Fragment() {
                 calendar[Calendar.YEAR] = year
                 calendar[Calendar.MONTH] = monthOfYear
                 calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                binding.dateEditText.setText(Common.updateLabel(calendar.time))
+                binding.dateEditText.setText(Common.dateToString(calendar.time))
             }
 
         // Populate View

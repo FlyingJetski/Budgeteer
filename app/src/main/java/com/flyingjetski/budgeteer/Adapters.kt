@@ -195,8 +195,8 @@ class Adapters {
             labelTextView.text = categories[position].label
             amountTextView.text = categories[position].amount.toString()
             currencyTextView.text = categories[position].currency.toString()
-            startDateTextView.text = Common.updateLabel(categories[position].startDate)
-            endDateTextView.text = Common.updateLabel(categories[position].endDate)
+            startDateTextView.text = Common.dateToString(categories[position].startDate)
+            endDateTextView.text = Common.dateToString(categories[position].endDate)
 
             return rowView
         }
@@ -238,7 +238,7 @@ class Adapters {
             labelTextView.text = categories[position].label
             targetTextView.text = categories[position].target.toString()
             currencyTextView.text = categories[position].currency.toString()
-            deadlineTextView.text = Common.updateLabel(categories[position].deadline)
+            deadlineTextView.text = Common.dateToString(categories[position].deadline)
 
             return rowView
         }
@@ -352,7 +352,7 @@ class Adapters {
             labelTextView.text = categories[position].label
             amountTextView.text = categories[position].amount.toString()
             currencyTextView.text = categories[position].currency.toString()
-            dateTextView.text = Common.updateLabel(categories[position].date)
+            dateTextView.text = Common.dateToString(categories[position].date)
 
             return rowView
         }
@@ -392,7 +392,7 @@ class Adapters {
             labelTextView.text = categories[position].label
             amountTextView.text = categories[position].amount.toString()
             currencyTextView.text = categories[position].currency.toString()
-            dateTextView.text = Common.updateLabel(categories[position].date)
+            dateTextView.text = Common.dateToString(categories[position].date)
 
             return rowView
         }

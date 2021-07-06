@@ -1,15 +1,21 @@
 package com.flyingjetski.budgeteer
 
-import android.widget.EditText
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class Common {
     companion object {
-        fun updateLabel(date: Date): String {
-            val myFormat = "dd/MM/yy" //In which you need put here
-            val sdf = SimpleDateFormat(myFormat, Locale.US)
+        fun dateToString(date: Date): String {
+            val datePattern = "dd/MM/yy"
+            val sdf = SimpleDateFormat(datePattern, Locale.US)
             return sdf.format(date)
+        }
+
+        fun stringToDate(string: String): Date {
+            val datePattern = "dd/MM/yy"
+            val format = SimpleDateFormat(datePattern)
+            return format.parse(string)
         }
     }
 }

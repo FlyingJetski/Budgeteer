@@ -5,14 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Common
+import com.flyingjetski.budgeteer.Common.Companion.stringToDate
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditBudgetBinding
-import com.flyingjetski.budgeteer.databinding.FragmentHomeBinding
+import com.flyingjetski.budgeteer.models.Budget
 import com.flyingjetski.budgeteer.models.IncomeCategory
+import com.flyingjetski.budgeteer.models.Source
+import com.flyingjetski.budgeteer.models.enums.Currency
 import java.lang.reflect.Field
 
 class EditBudgetFragment : Fragment() {
@@ -32,7 +37,7 @@ class EditBudgetFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        var incomeCategoryId = arguments?.getString("incomeCategoryId")
+        var budgetId = arguments?.getString("budgetId")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -47,44 +52,65 @@ class EditBudgetFragment : Fragment() {
         // Populate View
         binding.categoryGridView.adapter =
             Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+        binding.currencySpinner.adapter =
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                Currency.values()
+            )
 
 
         // Set Listeners
-        binding.categoryGridView.setOnItemClickListener{ adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
+        binding.categoryGridView.setOnItemClickListener{ adapterView: AdapterView<*>, _, position: Int, _ ->
             (adapterView.adapter as Adapters.CategoryIconGridAdapter)
-                .selectIcon(i)
+                .selectIcon(position)
         }
 
         binding.editButton.setOnClickListener{
-            IncomeCategory.updateIncomeCategoryById(
-                incomeCategoryId.toString(),
+            Budget.updateBudgetById(
+                budgetId.toString(),
+                true,
                 (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
                     .selectedIconResource,
                 binding.labelEditText.text.toString(),
+                binding.currencySpinner.selectedItem as Currency,
+                binding.amountEditText.text.toString().toDouble(),
+                stringToDate(binding.startDateEditText.text.toString()),
+                stringToDate(binding.endDateEditText.text.toString()),
+                false,
             )
             Navigation.findNavController(it).navigateUp()
         }
 
         binding.deleteButton.setOnClickListener{
-            IncomeCategory.deleteIncomeCategoryById(incomeCategoryId.toString())
+            IncomeCategory.deleteIncomeCategoryById(budgetId.toString())
             Navigation.findNavController(it).navigateUp()
         }
 
         // Actions
-        IncomeCategory.getIncomeCategoryById(incomeCategoryId.toString())
+        Source.getSourceById(budgetId.toString())
             .addOnSuccessListener { document ->
                 if (document != null) {
-                    var incomeCategory = document.toObject(IncomeCategory::class.java)!!
-                    if (incomeCategory != null) {
+                    var budget = document.toObject(Budget::class.java)!!
+                    if (budget != null) {
                         binding.categoryGridView.deferNotifyDataSetChanged()
                         val position = (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
-                            .getPositionOfResource(incomeCategory.icon)
+                            .getPositionOfResource(budget.icon)
                         binding.categoryGridView.performItemClick(
                             binding.categoryGridView,
                             position,
                             binding.categoryGridView.adapter.getItemId(position),
                         )
-                        binding.labelEditText.setText(incomeCategory.label)
+                        binding.labelEditText.setText(budget.label)
+                        for (position in 0 until binding.currencySpinner.count) {
+                            if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == budget.currency) {
+                                binding.currencySpinner.setSelection(position)
+                                break
+                            }
+                        }
+                        binding.amountEditText.setText(budget.amount.toString())
+                        binding.startDateEditText.setText(Common.dateToString(budget.startDate))
+                        binding.endDateEditText.setText(Common.dateToString(budget.endDate))
                     }
                 }
             }

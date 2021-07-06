@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.EditText
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
@@ -16,13 +15,9 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Common
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentAddBudgetBinding
-import com.flyingjetski.budgeteer.databinding.FragmentHomeBinding
 import com.flyingjetski.budgeteer.models.Budget
-import com.flyingjetski.budgeteer.models.ExpenseCategory
-import com.flyingjetski.budgeteer.models.Wallet
 import com.flyingjetski.budgeteer.models.enums.Currency
 import java.lang.reflect.Field
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -60,7 +55,7 @@ class AddBudgetFragment : Fragment() {
                 startCalendar[Calendar.YEAR] = year
                 startCalendar[Calendar.MONTH] = monthOfYear
                 startCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                binding.startDateEditText.setText(Common.updateLabel(startCalendar.time))
+                binding.startDateEditText.setText(Common.dateToString(startCalendar.time))
             }
 
         val endCalendar = Calendar.getInstance()
@@ -69,7 +64,7 @@ class AddBudgetFragment : Fragment() {
                 endCalendar[Calendar.YEAR] = year
                 endCalendar[Calendar.MONTH] = monthOfYear
                 endCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                binding.endDateEditText.setText(Common.updateLabel(endCalendar.time))
+                binding.endDateEditText.setText(Common.dateToString(endCalendar.time))
             }
 
 
