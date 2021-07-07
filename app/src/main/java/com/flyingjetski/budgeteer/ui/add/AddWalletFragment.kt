@@ -12,8 +12,6 @@ import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentAddWalletBinding
-import com.flyingjetski.budgeteer.databinding.FragmentHomeBinding
-import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.models.Wallet
 import com.flyingjetski.budgeteer.models.enums.Currency
 import java.lang.reflect.Field
@@ -48,7 +46,7 @@ class AddWalletFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), icons)
         binding.currencySpinner.adapter =
             ArrayAdapter(
                 requireContext(),
@@ -62,7 +60,7 @@ class AddWalletFragment : Fragment() {
                 Wallet(
                     AuthActivity().auth.uid.toString(),
                     (binding.categoryGridView.adapter as
-                            Adapters.CategoryIconGridAdapter).selectedIconResource,
+                            Adapters.IconGridAdapter).selectedIconResource,
                     binding.labelEditText.text.toString(),
                     binding.currencySpinner.selectedItem as Currency,
                     false

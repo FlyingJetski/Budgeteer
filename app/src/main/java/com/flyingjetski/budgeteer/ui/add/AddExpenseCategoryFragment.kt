@@ -46,7 +46,7 @@ class AddExpenseCategoryFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), icons)
 
         // Set Listener
         binding.addButton.setOnClickListener {
@@ -54,7 +54,7 @@ class AddExpenseCategoryFragment : Fragment() {
                 ExpenseCategory(
                     AuthActivity().auth.uid.toString(),
                     (binding.categoryGridView.adapter as
-                            Adapters.CategoryIconGridAdapter).selectedIconResource,
+                            Adapters.IconGridAdapter).selectedIconResource,
                     binding.labelEditText.text.toString()
                 )
             )

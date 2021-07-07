@@ -15,7 +15,6 @@ import com.flyingjetski.budgeteer.Common.Companion.stringToDate
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditBudgetBinding
 import com.flyingjetski.budgeteer.models.Budget
-import com.flyingjetski.budgeteer.models.IncomeCategory
 import com.flyingjetski.budgeteer.models.Source
 import com.flyingjetski.budgeteer.models.enums.Currency
 import java.lang.reflect.Field
@@ -51,7 +50,7 @@ class EditBudgetFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), icons)
         binding.currencySpinner.adapter =
             ArrayAdapter(
                 requireContext(),
@@ -62,7 +61,7 @@ class EditBudgetFragment : Fragment() {
 
         // Set Listeners
         binding.categoryGridView.setOnItemClickListener{ adapterView: AdapterView<*>, _, position: Int, _ ->
-            (adapterView.adapter as Adapters.CategoryIconGridAdapter)
+            (adapterView.adapter as Adapters.IconGridAdapter)
                 .selectIcon(position)
         }
 
@@ -70,7 +69,7 @@ class EditBudgetFragment : Fragment() {
             Budget.updateBudgetById(
                 budgetId.toString(),
                 true,
-                (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
+                (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                     .selectedIconResource,
                 binding.labelEditText.text.toString(),
                 binding.currencySpinner.selectedItem as Currency,
@@ -83,7 +82,7 @@ class EditBudgetFragment : Fragment() {
         }
 
         binding.deleteButton.setOnClickListener{
-            IncomeCategory.deleteIncomeCategoryById(budgetId.toString())
+            Source.deleteSourceById(budgetId.toString())
             Navigation.findNavController(it).navigateUp()
         }
 
@@ -94,7 +93,7 @@ class EditBudgetFragment : Fragment() {
                     var budget = document.toObject(Budget::class.java)!!
                     if (budget != null) {
                         binding.categoryGridView.deferNotifyDataSetChanged()
-                        val position = (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
+                        val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                             .getPositionOfResource(budget.icon)
                         binding.categoryGridView.performItemClick(
                             binding.categoryGridView,

@@ -11,6 +11,60 @@ import android.widget.TextView
 import com.flyingjetski.budgeteer.models.*
 
 class Adapters {
+    class IconGridAdapter(
+        private val context: Context,
+        private val resources: ArrayList<Int>
+    ): BaseAdapter() {
+
+        var selectedIconResource: Int = 0
+        private val imageViews: ArrayList<ImageView> = ArrayList()
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return resources.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return resources[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return resources[position].toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.item_icon, null, false)
+
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            iconImageView.setOnClickListener {
+                selectedIconResource = resources[position]
+                imageViews.forEach{
+                    it.setBackgroundColor(Color.WHITE)
+                }
+                it.setBackgroundColor(Color.GRAY)
+            }
+            imageViews.add(iconImageView)
+
+            iconImageView.setImageResource(resources[position])
+
+            return rowView
+        }
+
+        fun getPositionOfResource(resource: Int): Int {
+            for (position in 0 until resources.size) {
+                if (resources[position] == resource) {
+                    return position
+                }
+            }
+            return 0
+        }
+
+        fun selectIcon(position: Int) {
+            imageViews[position+2].setBackgroundColor(Color.GRAY)
+        }
+    }
+
     class CategoryGridAdapter(
         private val context: Context,
         private val categories: ArrayList<Category>
@@ -56,51 +110,9 @@ class Adapters {
             return rowView
         }
 
-    }
-
-    class CategoryIconGridAdapter(
-        private val context: Context,
-        private val resources: ArrayList<Int>
-    ): BaseAdapter() {
-
-        var selectedIconResource: Int = 0
-        private val imageViews: ArrayList<ImageView> = ArrayList()
-        private val inflater: LayoutInflater
-                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-
-        override fun getCount(): Int {
-            return resources.size
-        }
-
-        override fun getItem(position: Int): Any {
-            return resources[position]
-        }
-
-        override fun getItemId(position: Int): Long {
-            return resources[position].toLong()
-        }
-
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-            val rowView = inflater.inflate(R.layout.item_icon, null, false)
-
-            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
-            iconImageView.setOnClickListener {
-                selectedIconResource = resources[position]
-                imageViews.forEach{
-                    it.setBackgroundColor(Color.WHITE)
-                }
-                it.setBackgroundColor(Color.GRAY)
-            }
-            imageViews.add(iconImageView)
-
-            iconImageView.setImageResource(resources[position])
-
-            return rowView
-        }
-
         fun getPositionOfResource(resource: Int): Int {
-            for (position in 0 until resources.size) {
-                if (resources[position] == resource) {
+            for (position in 0 until categories.size) {
+                if (categories[position].icon == resource) {
                     return position
                 }
             }
@@ -157,6 +169,18 @@ class Adapters {
             return rowView
         }
 
+        fun getPositionOfResource(resource: Int): Int {
+            for (position in 0 until sources.size) {
+                if (sources[position].icon == resource) {
+                    return position
+                }
+            }
+            return 0
+        }
+
+        fun selectIcon(position: Int) {
+            imageViews[position+2].setBackgroundColor(Color.GRAY)
+        }
     }
 
     class BudgetListAdapter(

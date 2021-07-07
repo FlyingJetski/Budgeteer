@@ -71,7 +71,7 @@ class AddBudgetFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), icons)
         binding.currencySpinner.adapter =
             ArrayAdapter(
                 requireContext(),
@@ -106,7 +106,7 @@ class AddBudgetFragment : Fragment() {
                     AuthActivity().auth.uid.toString(),
                     true,
                     (binding.categoryGridView.adapter as
-                            Adapters.CategoryIconGridAdapter).selectedIconResource,
+                            Adapters.IconGridAdapter).selectedIconResource,
                     binding.labelEditText.text.toString(),
                     binding.currencySpinner.selectedItem as Currency,
                     binding.amountEditText.text.toString().toDouble(),

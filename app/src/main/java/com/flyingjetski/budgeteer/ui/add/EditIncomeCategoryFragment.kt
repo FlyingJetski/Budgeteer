@@ -10,13 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.R
-import com.flyingjetski.budgeteer.databinding.FragmentEditIncomeBinding
+import com.flyingjetski.budgeteer.databinding.FragmentEditIncomeCategoryBinding
 import com.flyingjetski.budgeteer.models.IncomeCategory
 import java.lang.reflect.Field
 
 class EditIncomeCategoryFragment : Fragment() {
 
-    private lateinit var binding: FragmentEditIncomeBinding
+    private lateinit var binding: FragmentEditIncomeCategoryBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,19 +45,19 @@ class EditIncomeCategoryFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), icons)
 
 
         // Set Listeners
         binding.categoryGridView.setOnItemClickListener{ adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
-            (adapterView.adapter as Adapters.CategoryIconGridAdapter)
+            (adapterView.adapter as Adapters.IconGridAdapter)
                 .selectIcon(i)
         }
 
         binding.editButton.setOnClickListener{
             IncomeCategory.updateIncomeCategoryById(
                 incomeCategoryId.toString(),
-                (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
+                (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                     .selectedIconResource,
                 binding.labelEditText.text.toString(),
             )
@@ -76,7 +76,7 @@ class EditIncomeCategoryFragment : Fragment() {
                     var incomeCategory = document.toObject(IncomeCategory::class.java)!!
                     if (incomeCategory != null) {
                         binding.categoryGridView.deferNotifyDataSetChanged()
-                        val position = (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
+                        val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                             .getPositionOfResource(incomeCategory.icon)
                         binding.categoryGridView.performItemClick(
                             binding.categoryGridView,

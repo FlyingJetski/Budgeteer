@@ -110,12 +110,12 @@ class AddExpenseFragment : Fragment() {
                     calendar.time,
                     (binding.sourceGridView.adapter as Adapters.SourceGridAdapter).selectedSourceId.toString(),
                     null,
-                    Currency.MYR,
+                    binding.currencySpinner.selectedItem as Currency,
                     (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter).selectedCategoryId.toString(),
                     null,
-                    "first expense",
-                    100.0,
-                    null,
+                    binding.labelEditText.text.toString(),
+                    binding.amountEditText.text.toString().toDouble(),
+                    binding.detailsEditText.text.toString(),
                     Feedback.NEUTRAL,
                 )
             )

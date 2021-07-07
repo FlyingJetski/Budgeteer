@@ -56,12 +56,12 @@ class AddSavingFragment : Fragment() {
                 calendar[Calendar.YEAR] = year
                 calendar[Calendar.MONTH] = monthOfYear
                 calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
-                binding.targetDateEditText.setText(Common.dateToString(calendar.time))
+                binding.deadlineDateEditText.setText(Common.dateToString(calendar.time))
             }
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), icons)
         binding.currencySpinner.adapter =
             ArrayAdapter(
                 requireContext(),
@@ -70,7 +70,7 @@ class AddSavingFragment : Fragment() {
             )
 
         // Set Listeners
-        binding.targetDateEditText.setOnClickListener{
+        binding.deadlineDateEditText.setOnClickListener{
             DatePickerDialog(
                 this.requireContext(), calendarListener, calendar[Calendar.YEAR], calendar[Calendar.MONTH],
                 calendar[Calendar.DAY_OF_MONTH]
@@ -83,10 +83,10 @@ class AddSavingFragment : Fragment() {
                     AuthActivity().auth.uid.toString(),
                     true,
                     (binding.categoryGridView.adapter as
-                            Adapters.CategoryIconGridAdapter).selectedIconResource,
+                            Adapters.IconGridAdapter).selectedIconResource,
                     binding.labelEditText.text.toString(),
                     binding.currencySpinner.selectedItem as Currency,
-                    binding.amountEditText.text.toString().toDouble(),
+                    binding.targetEditText.text.toString().toDouble(),
                     calendar.time,
                     AutoSave(),
                 )

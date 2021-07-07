@@ -25,6 +25,11 @@ open class Source(
     constructor(): this(null, 0, "", SourceType.WALLET, Currency.MYR)
 
     companion object {
+        fun deleteSourceById(id: String) {
+            AuthActivity().db.collection("Sources")
+                .document(id).delete()
+        }
+
         fun getSourceById(id: String): Task<DocumentSnapshot> {
             return AuthActivity().db.collection("Sources")
                 .document(id).get()

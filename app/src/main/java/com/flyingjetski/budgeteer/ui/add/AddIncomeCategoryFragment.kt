@@ -11,8 +11,6 @@ import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentAddIncomeCategoryBinding
-import com.flyingjetski.budgeteer.databinding.FragmentHomeBinding
-import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.models.IncomeCategory
 import java.lang.reflect.Field
 
@@ -46,7 +44,7 @@ class AddIncomeCategoryFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), icons)
 
         // Set Listener
         binding.addButton.setOnClickListener {
@@ -54,7 +52,7 @@ class AddIncomeCategoryFragment : Fragment() {
                 IncomeCategory(
                     AuthActivity().auth.uid.toString(),
                     (binding.categoryGridView.adapter as
-                            Adapters.CategoryIconGridAdapter).selectedIconResource,
+                            Adapters.IconGridAdapter).selectedIconResource,
                     binding.labelEditText.text.toString()
                 )
             )

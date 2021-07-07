@@ -16,6 +16,7 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentAddIncomeBinding
 import com.flyingjetski.budgeteer.models.*
 import com.flyingjetski.budgeteer.models.enums.Currency
+import com.flyingjetski.budgeteer.models.enums.Feedback
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -108,12 +109,12 @@ class AddIncomeFragment : Fragment() {
                     calendar.time,
                     (binding.sourceGridView.adapter as Adapters.SourceGridAdapter).selectedSourceId.toString(),
                     null,
-                    Currency.MYR,
+                    binding.currencySpinner.selectedItem as Currency,
                     (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter).selectedCategoryId.toString(),
                     null,
-                    "first expense",
-                    100.0,
-                    null,
+                    binding.labelEditText.text.toString(),
+                    binding.amountEditText.text.toString().toDouble(),
+                    binding.detailsEditText.text.toString(),
                 )
             )
             Navigation.findNavController(it).navigateUp()

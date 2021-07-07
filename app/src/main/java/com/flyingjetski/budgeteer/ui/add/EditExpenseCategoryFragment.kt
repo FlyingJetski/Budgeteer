@@ -45,19 +45,19 @@ class EditExpenseCategoryFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.CategoryIconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), icons)
 
 
         // Set Listeners
         binding.categoryGridView.setOnItemClickListener{ adapterView: AdapterView<*>, _, position: Int, _ ->
-            (adapterView.adapter as Adapters.CategoryIconGridAdapter)
+            (adapterView.adapter as Adapters.IconGridAdapter)
                 .selectIcon(position)
         }
 
         binding.editButton.setOnClickListener{
             ExpenseCategory.updateExpenseCategoryById(
                 expenseCategoryId.toString(),
-                (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
+                (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                     .selectedIconResource,
                 binding.labelEditText.text.toString(),
             )
@@ -76,7 +76,7 @@ class EditExpenseCategoryFragment : Fragment() {
                     var expenseCategory = document.toObject(ExpenseCategory::class.java)!!
                     if (expenseCategory != null) {
                         binding.categoryGridView.deferNotifyDataSetChanged()
-                        val position = (binding.categoryGridView.adapter as Adapters.CategoryIconGridAdapter)
+                        val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                             .getPositionOfResource(expenseCategory.icon)
                         binding.categoryGridView.performItemClick(
                             binding.categoryGridView,
