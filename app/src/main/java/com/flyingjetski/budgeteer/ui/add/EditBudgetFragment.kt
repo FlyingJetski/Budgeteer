@@ -10,11 +10,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.Common
 import com.flyingjetski.budgeteer.Common.Companion.stringToDate
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditBudgetBinding
 import com.flyingjetski.budgeteer.models.Budget
+import com.flyingjetski.budgeteer.models.Category
 import com.flyingjetski.budgeteer.models.Source
 import com.flyingjetski.budgeteer.models.enums.Currency
 import java.lang.reflect.Field
@@ -87,10 +89,9 @@ class EditBudgetFragment : Fragment() {
         }
 
         // Actions
-        Source.getSourceById(budgetId.toString())
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    var budget = document.toObject(Budget::class.java)!!
+        Budget.getBudgetById(budgetId.toString(), object: Callback {
+            override fun onCallback(value: Any) {
+                val budget = value as Budget
                     if (budget != null) {
                         binding.categoryGridView.deferNotifyDataSetChanged()
                         val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
@@ -112,7 +113,7 @@ class EditBudgetFragment : Fragment() {
                         binding.endDateEditText.setText(Common.dateToString(budget.endDate))
                     }
                 }
-            }
+            })
     }
 
 }

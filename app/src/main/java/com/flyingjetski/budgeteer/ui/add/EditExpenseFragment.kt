@@ -1,6 +1,7 @@
 package com.flyingjetski.budgeteer.ui.add
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.Common
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditExpenseBinding
@@ -19,7 +21,6 @@ import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.models.Source
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
-import java.lang.reflect.Field
 
 class EditExpenseFragment : Fragment() {
 
@@ -41,51 +42,23 @@ class EditExpenseFragment : Fragment() {
         var expenseId = arguments?.getString("expenseId")
 
         // Populate View
-        Source.getSource()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val sources = ArrayList<Source>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val source = it.toObject(Source::class.java)
-                            if (source != null) {
-                                source.id = it.id
-                                sources.add(source)
-                            }
-                        }
-                        binding.sourceGridView.adapter =
-                            Adapters.SourceGridAdapter(
-                                this.requireContext(),
-                                sources,
-                            )
-                    }
-                }
+        Source.getSource(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.sourceGridView.adapter = Adapters.SourceGridAdapter(
+                    requireContext(),
+                    value as ArrayList<Source>,
+                )
             }
+        })
 
-        ExpenseCategory.getExpenseCategory()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val categories = ArrayList<ExpenseCategory>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val category = it.toObject(ExpenseCategory::class.java)
-                            if (category != null) {
-                                category.id = it.id
-                                categories.add(category)
-                            }
-                        }
-                        binding.categoryGridView.adapter =
-                            Adapters.CategoryGridAdapter(
-                                this.requireContext(),
-                                categories as ArrayList<Category>,
-                            )
-                    }
-                }
+        ExpenseCategory.getExpenseCategory(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
+                    requireContext(),
+                    value as ArrayList<Category>,
+                )
             }
+        })
 
         binding.currencySpinner.adapter =
             ArrayAdapter(
@@ -128,57 +101,53 @@ class EditExpenseFragment : Fragment() {
         }
 
         // Actions
-        Expense.getExpenseById(expenseId.toString())
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    var expense = document.toObject(Expense::class.java)!!
-                    if (expense != null) {
-                        Source.getSourceById(expense.sourceId)
-                            .addOnSuccessListener { document ->
-                                if (document != null) {
-                                    var source = document.toObject(Source::class.java)!!
-                                    if (source != null) {
-                                        binding.sourceGridView.deferNotifyDataSetChanged()
-                                        val position = (binding.sourceGridView.adapter as Adapters.SourceGridAdapter)
-                                            .getPositionOfResource(source.icon)
-                                        binding.sourceGridView.performItemClick(
-                                            binding.sourceGridView,
-                                            position,
-                                            binding.sourceGridView.adapter.getItemId(position),
-                                        )
-                                    }
-                                }
-                            }
-                        ExpenseCategory.getExpenseCategoryById(expense.categoryId)
-                            .addOnSuccessListener { document ->
-                                if (document != null) {
-                                    var expenseCategory = document.toObject(ExpenseCategory::class.java)!!
-                                    if (expenseCategory != null) {
-                                        binding.categoryGridView.deferNotifyDataSetChanged()
-                                        val position = (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
-                                            .getPositionOfResource(expenseCategory.icon)
-                                        binding.categoryGridView.performItemClick(
-                                            binding.categoryGridView,
-                                            position,
-                                            binding.categoryGridView.adapter.getItemId(position),
-                                        )
-                                        binding.labelEditText.setText(expenseCategory.label)
-                                    }
-                                }
-                            }
-                        binding.dateEditText.setText(Common.dateToString(expense.date))
-                        binding.labelEditText.setText(expense.label)
-                        binding.amountEditText.setText(expense.amount.toString())
-                        for (position in 0 until binding.currencySpinner.count) {
-                            if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == expense.currency) {
-                                binding.currencySpinner.setSelection(position)
-                                break
+        Expense.getExpenseById(expenseId.toString(), object: Callback {
+            override fun onCallback(value: Any) {
+                val expense = value as Expense
+                if (expense != null) {
+                    Source.getSourceById(expense.sourceId, object: Callback {
+                        override fun onCallback(value: Any) {
+                            val source = value as Source
+                            if (source != null) {
+                                binding.sourceGridView.deferNotifyDataSetChanged()
+                                val position = (binding.sourceGridView.adapter as Adapters.SourceGridAdapter)
+                                    .getPositionOfResource(source.icon)
+                                binding.sourceGridView.performItemClick(
+                                    binding.sourceGridView,
+                                    position,
+                                    binding.sourceGridView.adapter.getItemId(position),
+                                )
                             }
                         }
-                        binding.detailsEditText.setText(expense.details)
+                    })
+                    Category.getCategoryById(expense.categoryId, object: Callback {
+                        override fun onCallback(value: Any) {
+                            val category = value as Category
+                            Log.d("CAT", "${category.icon}")
+                            binding.categoryGridView.deferNotifyDataSetChanged()
+                            val position = (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
+                                .getPositionOfResource(category.icon)
+                            binding.categoryGridView.performItemClick(
+                                binding.categoryGridView,
+                                position,
+                                binding.categoryGridView.adapter.getItemId(position),
+                            )
+                            binding.labelEditText.setText(category.label)
+                        }
+                    })
+                    binding.dateEditText.setText(Common.dateToString(expense.date))
+                    binding.labelEditText.setText(expense.label)
+                    binding.amountEditText.setText(expense.amount.toString())
+                    for (position in 0 until binding.currencySpinner.count) {
+                        if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == expense.currency) {
+                            binding.currencySpinner.setSelection(position)
+                            break
+                        }
                     }
+                    binding.detailsEditText.setText(expense.details)
                 }
             }
+        })
     }
 
 }

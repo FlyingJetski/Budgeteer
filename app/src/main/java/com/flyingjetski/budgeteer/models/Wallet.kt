@@ -1,15 +1,9 @@
 package com.flyingjetski.budgeteer.models
 
-import android.content.Intent
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
-import com.flyingjetski.budgeteer.MainActivity
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.SourceType
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Query
 import java.util.HashMap
 
 class Wallet(
@@ -48,10 +42,40 @@ class Wallet(
                 .document(id).update(data)
         }
 
-        fun getWallet(): Query {
-            return AuthActivity().db.collection("Sources")
+        fun getWalletById(id: String, callback: Callback) {
+            AuthActivity().db.collection("Sources")
+                .document(id).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        var wallet = document.toObject(Wallet::class.java)!!
+                        if (wallet != null) {
+                            callback.onCallback(wallet)
+                        }
+                    }
+                }
+        }
+
+        fun getWallet(callback: Callback) {
+            AuthActivity().db.collection("Sources")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("type", SourceType.WALLET)
+                .addSnapshotListener{
+                        snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val wallets = ArrayList<Wallet>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val wallet = it.toObject(Wallet::class.java)
+                                if (wallet != null) {
+                                    wallet.id = it.id
+                                    wallets.add(wallet)
+                                }
+                            }
+                            callback.onCallback(wallets)
+                        }
+                    }
+                }
         }
     }
 

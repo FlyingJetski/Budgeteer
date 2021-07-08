@@ -10,9 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditWalletBinding
-import com.flyingjetski.budgeteer.models.Saving
 import com.flyingjetski.budgeteer.models.Source
 import com.flyingjetski.budgeteer.models.Wallet
 import com.flyingjetski.budgeteer.models.enums.Currency
@@ -80,29 +80,28 @@ class EditWalletFragment : Fragment() {
         }
 
         // Actions
-        Source.getSourceById(walletId.toString())
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    var saving = document.toObject(Saving::class.java)!!
-                    if (saving != null) {
+        Wallet.getWalletById(walletId.toString(), object: Callback {
+            override fun onCallback(value: Any) {
+                val wallet = value as Wallet
+                    if (wallet != null) {
                         binding.categoryGridView.deferNotifyDataSetChanged()
                         val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
-                            .getPositionOfResource(saving.icon)
+                            .getPositionOfResource(wallet.icon)
                         binding.categoryGridView.performItemClick(
                             binding.categoryGridView,
                             position,
                             binding.categoryGridView.adapter.getItemId(position),
                         )
-                        binding.labelEditText.setText(saving.label)
+                        binding.labelEditText.setText(wallet.label)
                         for (position in 0 until binding.currencySpinner.count) {
-                            if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == saving.currency) {
+                            if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == wallet.currency) {
                                 binding.currencySpinner.setSelection(position)
                                 break
                             }
                         }
                     }
                 }
-            }
+            })
     }
 
 }

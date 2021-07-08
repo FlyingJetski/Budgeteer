@@ -12,6 +12,8 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditExpenseCategoryBinding
 import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.models.Category
 import java.lang.reflect.Field
 
 class EditExpenseCategoryFragment : Fragment() {
@@ -55,7 +57,7 @@ class EditExpenseCategoryFragment : Fragment() {
         }
 
         binding.editButton.setOnClickListener{
-            ExpenseCategory.updateExpenseCategoryById(
+            Category.updateCategoryById(
                 expenseCategoryId.toString(),
                 (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                     .selectedIconResource,
@@ -65,28 +67,25 @@ class EditExpenseCategoryFragment : Fragment() {
         }
 
         binding.deleteButton.setOnClickListener{
-            ExpenseCategory.deleteExpenseCategoryById(expenseCategoryId.toString())
+            Category.deleteCategoryById(expenseCategoryId.toString())
             Navigation.findNavController(it).navigateUp()
         }
 
         // Actions
-        ExpenseCategory.getExpenseCategoryById(expenseCategoryId.toString())
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    var expenseCategory = document.toObject(ExpenseCategory::class.java)!!
-                    if (expenseCategory != null) {
-                        binding.categoryGridView.deferNotifyDataSetChanged()
-                        val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
-                            .getPositionOfResource(expenseCategory.icon)
-                        binding.categoryGridView.performItemClick(
-                            binding.categoryGridView,
-                            position,
-                            binding.categoryGridView.adapter.getItemId(position),
-                        )
-                        binding.labelEditText.setText(expenseCategory.label)
-                    }
-                }
+        Category.getCategoryById(expenseCategoryId.toString(), object: Callback {
+            override fun onCallback(value: Any) {
+                val category = value as Category
+                binding.categoryGridView.deferNotifyDataSetChanged()
+                val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
+                    .getPositionOfResource(category.icon)
+                binding.categoryGridView.performItemClick(
+                    binding.categoryGridView,
+                    position,
+                    binding.categoryGridView.adapter.getItemId(position),
+                )
+                binding.labelEditText.setText(category.label)
             }
+        })
     }
 
 }

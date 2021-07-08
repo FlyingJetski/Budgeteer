@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.Common
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditIncomeBinding
@@ -36,51 +37,23 @@ class EditIncomeFragment : Fragment() {
         var incomeId = arguments?.getString("incomeId")
 
         // Populate View
-        Source.getSource()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val sources = ArrayList<Source>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val source = it.toObject(Source::class.java)
-                            if (source != null) {
-                                source.id = it.id
-                                sources.add(source)
-                            }
-                        }
-                        binding.sourceGridView.adapter =
-                            Adapters.SourceGridAdapter(
-                                this.requireContext(),
-                                sources,
-                            )
-                    }
-                }
+        Source.getSource(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.sourceGridView.adapter = Adapters.SourceGridAdapter(
+                    requireContext(),
+                    value as ArrayList<Source>,
+                )
             }
+        })
 
-        IncomeCategory.getIncomeCategory()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val categories = ArrayList<IncomeCategory>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val category = it.toObject(IncomeCategory::class.java)
-                            if (category != null) {
-                                category.id = it.id
-                                categories.add(category)
-                            }
-                        }
-                        binding.categoryGridView.adapter =
-                            Adapters.CategoryGridAdapter(
-                                this.requireContext(),
-                                categories as ArrayList<Category>,
-                            )
-                    }
-                }
+        IncomeCategory.getIncomeCategory(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
+                    requireContext(),
+                    value as ArrayList<Category>,
+                )
             }
+        })
 
         binding.currencySpinner.adapter =
             ArrayAdapter(
@@ -122,15 +95,13 @@ class EditIncomeFragment : Fragment() {
         }
 
         // Actions
-        Income.getIncomeById(incomeId.toString())
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    var income = document.toObject(Income::class.java)!!
-                    if (income != null) {
-                        Source.getSourceById(income.sourceId)
-                            .addOnSuccessListener { document ->
-                                if (document != null) {
-                                    var source = document.toObject(Source::class.java)!!
+        Income.getIncomeById(incomeId.toString(), object: Callback {
+            override fun onCallback(value: Any) {
+                val income = value as Income
+                if (income != null) {
+                        Source.getSourceById(income.sourceId, object: Callback {
+                            override fun onCallback(value: Any) {
+                                val source = value as Source
                                     if (source != null) {
                                         binding.sourceGridView.deferNotifyDataSetChanged()
                                         val position = (binding.sourceGridView.adapter as Adapters.SourceGridAdapter)
@@ -142,24 +113,23 @@ class EditIncomeFragment : Fragment() {
                                         )
                                     }
                                 }
-                            }
-                        IncomeCategory.getIncomeCategoryById(income.categoryId)
-                            .addOnSuccessListener { document ->
-                                if (document != null) {
-                                    var incomeCategory = document.toObject(IncomeCategory::class.java)!!
-                                    if (incomeCategory != null) {
+                            })
+                        Category.getCategoryById(income.categoryId, object: Callback {
+                            override fun onCallback(value: Any) {
+                                val category = value as Category
+                                    if (category != null) {
                                         binding.categoryGridView.deferNotifyDataSetChanged()
                                         val position = (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
-                                            .getPositionOfResource(incomeCategory.icon)
+                                            .getPositionOfResource(category.icon)
                                         binding.categoryGridView.performItemClick(
                                             binding.categoryGridView,
                                             position,
                                             binding.categoryGridView.adapter.getItemId(position),
                                         )
-                                        binding.labelEditText.setText(incomeCategory.label)
+                                        binding.labelEditText.setText(category.label)
                                     }
                                 }
-                            }
+                            })
                         binding.dateEditText.setText(Common.dateToString(income.date))
                         binding.labelEditText.setText(income.label)
                         binding.amountEditText.setText(income.amount.toString())
@@ -172,7 +142,7 @@ class EditIncomeFragment : Fragment() {
                         binding.detailsEditText.setText(income.details)
                     }
                 }
-            }
+            })
     }
 
 }

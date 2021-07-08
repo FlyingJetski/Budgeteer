@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.databinding.FragmentViewIncomeBinding
+import com.flyingjetski.budgeteer.models.Expense
 import com.flyingjetski.budgeteer.models.Income
 
 class ViewIncomeFragment : Fragment() {
@@ -29,27 +31,14 @@ class ViewIncomeFragment : Fragment() {
 
     private fun setupUI() {
         // Populate View
-        Income.getIncome()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val incomes = ArrayList<Income>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val income = it.toObject(Income::class.java)
-                            if (income != null) {
-                                income.id = it.id
-                                incomes.add(income)
-                            }
-                        }
-                        binding.listView.adapter = Adapters.IncomeListAdapter(
-                            this.requireContext(),
-                            incomes,
-                        )
-                    }
-                }
+        Income.getIncome(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.listView.adapter = Adapters.IncomeListAdapter(
+                    requireContext(),
+                    value as ArrayList<Income>,
+                )
             }
+        })
 
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->

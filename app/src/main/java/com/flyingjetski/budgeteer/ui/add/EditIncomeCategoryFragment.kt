@@ -9,9 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditIncomeCategoryBinding
-import com.flyingjetski.budgeteer.models.IncomeCategory
+import com.flyingjetski.budgeteer.models.Category
 import java.lang.reflect.Field
 
 class EditIncomeCategoryFragment : Fragment() {
@@ -55,7 +56,7 @@ class EditIncomeCategoryFragment : Fragment() {
         }
 
         binding.editButton.setOnClickListener{
-            IncomeCategory.updateIncomeCategoryById(
+            Category.updateCategoryById(
                 incomeCategoryId.toString(),
                 (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                     .selectedIconResource,
@@ -65,28 +66,27 @@ class EditIncomeCategoryFragment : Fragment() {
         }
 
         binding.deleteButton.setOnClickListener{
-            IncomeCategory.deleteIncomeCategoryById(incomeCategoryId.toString())
+            Category.deleteCategoryById(incomeCategoryId.toString())
             Navigation.findNavController(it).navigateUp()
         }
 
         // Actions
-        IncomeCategory.getIncomeCategoryById(incomeCategoryId.toString())
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    var incomeCategory = document.toObject(IncomeCategory::class.java)!!
-                    if (incomeCategory != null) {
+        Category.getCategoryById(incomeCategoryId.toString(), object: Callback {
+            override fun onCallback(value: Any) {
+                val category = value as Category
+                    if (category != null) {
                         binding.categoryGridView.deferNotifyDataSetChanged()
                         val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
-                            .getPositionOfResource(incomeCategory.icon)
+                            .getPositionOfResource(category.icon)
                         binding.categoryGridView.performItemClick(
                             binding.categoryGridView,
                             position,
                             binding.categoryGridView.adapter.getItemId(position),
                         )
-                        binding.labelEditText.setText(incomeCategory.label)
+                        binding.labelEditText.setText(category.label)
                     }
                 }
-            }
+            })
     }
 
 }

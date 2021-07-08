@@ -1,12 +1,9 @@
 package com.flyingjetski.budgeteer.models
 
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.SourceType
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Query
-import java.util.HashMap
 
 open class Source(
     uid      : String?,
@@ -30,14 +27,39 @@ open class Source(
                 .document(id).delete()
         }
 
-        fun getSourceById(id: String): Task<DocumentSnapshot> {
-            return AuthActivity().db.collection("Sources")
+        fun getSourceById(id: String, callback: Callback) {
+            AuthActivity().db.collection("Sources")
                 .document(id).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        var source = document.toObject(Source::class.java)!!
+                        if (source != null) {
+                            callback.onCallback(source)
+                        }
+                    }
+                }
         }
 
-        fun getSource(): Query {
-            return AuthActivity().db.collection("Sources")
+        fun getSource(callback: Callback) {
+            AuthActivity().db.collection("Sources")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .addSnapshotListener{
+                        snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val sources = ArrayList<Source>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val source = it.toObject(Wallet::class.java)
+                                if (source != null) {
+                                    source.id = it.id
+                                    sources.add(source)
+                                }
+                            }
+                            callback.onCallback(sources)
+                        }
+                    }
+                }
         }
     }
 

@@ -7,8 +7,11 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.CategoryType
+import com.flyingjetski.budgeteer.models.enums.SourceType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
@@ -20,7 +23,7 @@ class ExpenseCategory(
     uid   : String?,
     icon  : Int,
     label : String,
-): Category(uid, icon, label, CategoryType.EXPENSE) {
+): Category(uid, icon, label, CategoryType.INCOME) {
 
     constructor(): this(null, 0, "")
 
@@ -29,35 +32,27 @@ class ExpenseCategory(
             AuthActivity().db.collection("Categories").add(category)
         }
 
-        fun updateExpenseCategoryById(id: String, icon: Int?, label: String?) {
-            val data = HashMap<String, Any>()
-            if (icon != null && icon != 0) {
-                data["icon"] = icon
-            }
-            if (label != null && label != "") {
-                data["label"] = label
-            }
+        fun getExpenseCategory(callback: Callback) {
             AuthActivity().db.collection("Categories")
-                .document(id).update(data)
-        }
-
-        fun deleteExpenseCategoryById(id: String) {
-            AuthActivity().db.collection("Categories")
-                .document(id).delete()
-        }
-
-        fun getExpenseCategoryById(id: String): Task<DocumentSnapshot> {
-            return AuthActivity().db.collection("Categories")
-                .document(id).get()
-        }
-
-        fun getExpenseCategory(): Query {
-            return AuthActivity().db.collection("Categories")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
-        }
-
-        override fun toString(): String {
-            return super.toString()
+                .whereEqualTo("type", CategoryType.EXPENSE)
+                .addSnapshotListener{
+                        snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val categories = ArrayList<Category>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val category = it.toObject(ExpenseCategory::class.java)
+                                if (category != null) {
+                                    category.id = it.id
+                                    categories.add(category)
+                                }
+                            }
+                            callback.onCallback(categories)
+                        }
+                    }
+                }
         }
     }
 }

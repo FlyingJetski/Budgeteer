@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.Common
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditSavingBinding
@@ -83,10 +84,9 @@ class EditSavingFragment : Fragment() {
         }
 
         // Actions
-        Source.getSourceById(savingId.toString())
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    var saving = document.toObject(Saving::class.java)!!
+        Saving.getSavingById(savingId.toString(), object: Callback {
+            override fun onCallback(value: Any) {
+                val saving = value as Saving
                     if (saving != null) {
                         binding.categoryGridView.deferNotifyDataSetChanged()
                         val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
@@ -107,7 +107,7 @@ class EditSavingFragment : Fragment() {
                         binding.deadlineDateEditText.setText(Common.dateToString(saving.deadline))
                     }
                 }
-            }
+            })
     }
 
 }

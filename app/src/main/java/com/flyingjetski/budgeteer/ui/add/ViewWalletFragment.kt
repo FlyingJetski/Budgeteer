@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.databinding.FragmentViewWalletBinding
 import com.flyingjetski.budgeteer.models.Category
+import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.models.Wallet
 
 class ViewWalletFragment : Fragment() {
@@ -30,27 +32,14 @@ class ViewWalletFragment : Fragment() {
 
     private fun setupUI() {
         // Populate View
-        Wallet.getWallet()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val wallets = ArrayList<Wallet>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val wallet = it.toObject(Wallet::class.java)
-                            if (wallet != null) {
-                                wallet.id = it.id
-                                wallets.add(wallet)
-                            }
-                        }
-                        binding.listView.adapter = Adapters.WalletListAdapter(
-                            this.requireContext(),
-                            wallets,
-                        )
-                    }
-                }
+        Wallet.getWallet(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.listView.adapter = Adapters.WalletListAdapter(
+                    requireContext(),
+                    value as ArrayList<Wallet>,
+                )
             }
+        })
 
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->

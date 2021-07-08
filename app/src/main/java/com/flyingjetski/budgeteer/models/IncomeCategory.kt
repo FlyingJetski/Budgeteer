@@ -3,6 +3,7 @@ package com.flyingjetski.budgeteer.models
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.CategoryType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
@@ -21,31 +22,27 @@ class IncomeCategory(
             AuthActivity().db.collection("Categories").add(category)
         }
 
-        fun updateIncomeCategoryById(id: String, icon: Int?, label: String?) {
-            val data = HashMap<String, Any>()
-            if (icon != null && icon != 0) {
-                data["icon"] = icon
-            }
-            if (label != null && label != "") {
-                data["label"] = label
-            }
+        fun getIncomeCategory(callback: Callback) {
             AuthActivity().db.collection("Categories")
-                .document(id).update(data)
-        }
-
-        fun deleteIncomeCategoryById(id: String) {
-            AuthActivity().db.collection("Categories")
-                .document(id).delete()
-        }
-
-        fun getIncomeCategoryById(id: String): Task<DocumentSnapshot> {
-            return AuthActivity().db.collection("Categories")
-                .document(id).get()
-        }
-
-        fun getIncomeCategory(): Query {
-            return AuthActivity().db.collection("Categories")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("type", CategoryType.INCOME)
+                .addSnapshotListener{
+                        snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val categories = ArrayList<Category>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val category = it.toObject(IncomeCategory::class.java)
+                                if (category != null) {
+                                    category.id = it.id
+                                    categories.add(category)
+                                }
+                            }
+                            callback.onCallback(categories)
+                        }
+                    }
+                }
         }
     }
 

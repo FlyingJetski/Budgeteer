@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.databinding.FragmentViewSavingBinding
+import com.flyingjetski.budgeteer.models.Budget
 import com.flyingjetski.budgeteer.models.Category
 import com.flyingjetski.budgeteer.models.Saving
 
@@ -30,27 +32,14 @@ class ViewSavingFragment : Fragment() {
 
     private fun setupUI() {
         // Populate View
-        Saving.getSaving()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val savings = ArrayList<Saving>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val saving = it.toObject(Saving::class.java)
-                            if (saving != null) {
-                                saving.id = it.id
-                                savings.add(saving)
-                            }
-                        }
-                        binding.listView.adapter = Adapters.SavingListAdapter(
-                            this.requireContext(),
-                            savings,
-                        )
-                    }
-                }
+        Saving.getSaving(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.listView.adapter = Adapters.SavingListAdapter(
+                    requireContext(),
+                    value as ArrayList<Saving>,
+                )
             }
+        })
 
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->

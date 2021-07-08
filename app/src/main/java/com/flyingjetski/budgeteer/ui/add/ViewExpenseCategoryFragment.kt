@@ -1,6 +1,7 @@
 package com.flyingjetski.budgeteer.ui.add
 
 import android.os.Bundle
+import android.telecom.Call
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseCategoryBinding
 import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.Category
 
 class ViewExpenseCategoryFragment : Fragment() {
@@ -30,27 +32,14 @@ class ViewExpenseCategoryFragment : Fragment() {
 
     private fun setupUI() {
         // Populate View
-        ExpenseCategory.getExpenseCategory()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val categories = ArrayList<ExpenseCategory>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val category = it.toObject(ExpenseCategory::class.java)
-                            if (category != null) {
-                                category.id = it.id
-                                categories.add(category)
-                            }
-                        }
-                        binding.listView.adapter = Adapters.CategoryListAdapter(
-                            this.requireContext(),
-                            categories as ArrayList<Category>,
-                        )
-                    }
-                }
+        ExpenseCategory.getExpenseCategory(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.listView.adapter = Adapters.CategoryListAdapter(
+                    requireContext(),
+                    value as ArrayList<Category>,
+                )
             }
+        })
 
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->

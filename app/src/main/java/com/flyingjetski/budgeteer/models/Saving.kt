@@ -1,12 +1,9 @@
 package com.flyingjetski.budgeteer.models
 
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
-import com.flyingjetski.budgeteer.models.enums.FrequencyType
 import com.flyingjetski.budgeteer.models.enums.SourceType
-import com.google.firebase.firestore.Query
 import java.util.*
 
 class Saving(
@@ -32,14 +29,14 @@ class Saving(
         }
 
         fun updateSavingById(
-            id       : String,
-            isActive : Boolean?,
-            icon     : Int?,
-            label    : String?,
-            currency : Currency?,
-            target   : Double?,
-            deadline : Date?,
-            autoSave : AutoSave?,
+            id: String,
+            isActive: Boolean?,
+            icon: Int?,
+            label: String?,
+            currency: Currency?,
+            target: Double?,
+            deadline: Date?,
+            autoSave: AutoSave?,
         ) {
             val data = HashMap<String, Any>()
             if (isActive != null) {
@@ -68,12 +65,39 @@ class Saving(
                 .document(id).update(data)
         }
 
-        fun getSaving(): Query {
-            return AuthActivity().db.collection("Sources")
+        fun getSavingById(id: String, callback: Callback) {
+            AuthActivity().db.collection("Sources")
+                .document(id).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        var saving = document.toObject(Saving::class.java)!!
+                        if (saving != null) {
+                            callback.onCallback(saving)
+                        }
+                    }
+                }
+        }
+
+        fun getSaving(callback: Callback) {
+            AuthActivity().db.collection("Sources")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("type", SourceType.SAVING)
+                .addSnapshotListener { snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val savings = ArrayList<Saving>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val saving = it.toObject(Saving::class.java)
+                                if (saving != null) {
+                                    saving.id = it.id
+                                    savings.add(saving)
+                                }
+                            }
+                            callback.onCallback(savings)
+                        }
+                    }
+                }
         }
     }
-
-
 }

@@ -1,6 +1,10 @@
 package com.flyingjetski.budgeteer.models.enums;
 
 public enum Currency {
+    MYR,
+    SGD,
+    USD,
+    IDR,
     ADP,
     AED,
     AFA,
@@ -118,7 +122,6 @@ public enum Currency {
     HRK,
     HTG,
     HUF,
-    IDR,
     IEP,
     ILP,
     ILR,
@@ -175,7 +178,6 @@ public enum Currency {
     MXN,
     MXP,
     MXV,
-    MYR,
     MZE,
     MZM,
     MZN,
@@ -216,7 +218,6 @@ public enum Currency {
     SDG,
     SDP,
     SEK,
-    SGD,
     SHP,
     SIT,
     SKK,
@@ -248,7 +249,6 @@ public enum Currency {
     UGS,
     UGW,
     UGX,
-    USD,
     USN,
     USS,
     UYI,

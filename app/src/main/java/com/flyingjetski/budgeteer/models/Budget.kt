@@ -1,12 +1,9 @@
 package com.flyingjetski.budgeteer.models
 
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
-import com.flyingjetski.budgeteer.models.enums.FrequencyType
 import com.flyingjetski.budgeteer.models.enums.SourceType
-import com.google.firebase.firestore.Query
 import java.util.*
 
 class Budget(
@@ -34,15 +31,15 @@ class Budget(
         }
 
         fun updateBudgetById(
-            id          : String,
-            isActive    : Boolean?,
-            icon        : Int?,
-            label       : String?,
-            currency    : Currency?,
-            amount      : Double?,
-            startDate   : Date?,
-            endDate     : Date?,
-            isRecurring : Boolean?,
+            id: String,
+            isActive: Boolean?,
+            icon: Int?,
+            label: String?,
+            currency: Currency?,
+            amount: Double?,
+            startDate: Date?,
+            endDate: Date?,
+            isRecurring: Boolean?,
         ) {
             val data = HashMap<String, Any>()
             if (isActive != null) {
@@ -74,11 +71,39 @@ class Budget(
                 .document(id).update(data)
         }
 
-        fun getBudget(): Query {
-            return AuthActivity().db.collection("Sources")
+        fun getBudgetById(id: String, callback: Callback) {
+            AuthActivity().db.collection("Sources")
+                .document(id).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        var budget = document.toObject(Budget::class.java)!!
+                        if (budget != null) {
+                            callback.onCallback(budget)
+                        }
+                    }
+                }
+        }
+
+        fun getBudget(callback: Callback) {
+            AuthActivity().db.collection("Sources")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("type", SourceType.BUDGET)
+                .addSnapshotListener { snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val budgets = ArrayList<Budget>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val budget = it.toObject(Budget::class.java)
+                                if (budget != null) {
+                                    budget.id = it.id
+                                    budgets.add(budget)
+                                }
+                            }
+                            callback.onCallback(budgets)
+                        }
+                    }
+                }
         }
     }
-
 }

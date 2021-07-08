@@ -11,9 +11,11 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseCategoryBinding
 import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseBinding
 import com.flyingjetski.budgeteer.models.Category
 import com.flyingjetski.budgeteer.models.Expense
+import com.flyingjetski.budgeteer.models.IncomeCategory
 
 class ViewExpenseFragment : Fragment() {
 
@@ -32,27 +34,14 @@ class ViewExpenseFragment : Fragment() {
 
     private fun setupUI() {
         // Populate View
-        Expense.getExpense()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val expenses = ArrayList<Expense>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val expense = it.toObject(Expense::class.java)
-                            if (expense != null) {
-                                expense.id = it.id
-                                expenses.add(expense)
-                            }
-                        }
-                        binding.listView.adapter = Adapters.ExpenseListAdapter(
-                            this.requireContext(),
-                            expenses,
-                        )
-                    }
-                }
+        Expense.getExpense(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.listView.adapter = Adapters.ExpenseListAdapter(
+                    requireContext(),
+                    value as ArrayList<Expense>,
+                )
             }
+        })
 
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->

@@ -6,13 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.flyingjetski.budgeteer.Adapters
-import com.flyingjetski.budgeteer.AuthActivity
-import com.flyingjetski.budgeteer.Common
-import com.flyingjetski.budgeteer.R
+import com.flyingjetski.budgeteer.*
 import com.flyingjetski.budgeteer.databinding.FragmentAddExpenseBinding
 import com.flyingjetski.budgeteer.models.*
 import com.flyingjetski.budgeteer.models.enums.Currency
@@ -48,52 +46,30 @@ class AddExpenseFragment : Fragment() {
             }
 
         // Populate View
-        ExpenseCategory.getExpenseCategory()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val categories = ArrayList<ExpenseCategory>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val category = it.toObject(ExpenseCategory::class.java)
-                            if (category != null) {
-                                category.id = it.id
-                                categories.add(category)
-                            }
-                        }
-                        binding.categoryGridView.adapter =
-                            Adapters.CategoryGridAdapter(
-                                this.requireContext(),
-                                categories as ArrayList<Category>,
-                            )
-                    }
-                }
-            }
+        binding.currencySpinner.adapter =
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_list_item_1,
+                Currency.values()
+            )
 
-        Source.getSource()
-            .addSnapshotListener{
-                    snapshot, _ ->
-                run {
-                    if (snapshot != null) {
-                        val sources = ArrayList<Source>()
-                        val documents = snapshot.documents
-                        documents.forEach {
-                            val source = it.toObject(Source::class.java)
-                            if (source != null) {
-                                source.id = it.id
-                                sources.add(source)
-                            }
-                        }
-                        binding.sourceGridView.adapter =
-                            Adapters.SourceGridAdapter(
-                                this.requireContext(),
-                                sources,
-                            )
-                    }
-                }
+        ExpenseCategory.getExpenseCategory(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
+                    requireContext(),
+                    value as ArrayList<Category>,
+                )
             }
+        })
 
+        Source.getSource(object: Callback {
+            override fun onCallback(value: Any) {
+                binding.sourceGridView.adapter = Adapters.SourceGridAdapter(
+                    requireContext(),
+                    value as ArrayList<Source>,
+                )
+            }
+        })
 
         // Set Listener
         binding.dateEditText.setOnClickListener{

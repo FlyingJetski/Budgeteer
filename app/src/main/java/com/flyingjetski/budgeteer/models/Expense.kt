@@ -1,10 +1,10 @@
 package com.flyingjetski.budgeteer.models
 
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
+import com.flyingjetski.budgeteer.models.enums.SourceType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
@@ -89,14 +89,38 @@ class Expense(
                 .document(id).delete()
         }
 
-        fun getExpenseById(id: String): Task<DocumentSnapshot> {
-            return AuthActivity().db.collection("Expenses")
+        fun getExpenseById(id: String, callback: Callback) {
+            AuthActivity().db.collection("Expenses")
                 .document(id).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        var expense = document.toObject(Expense::class.java)!!
+                        if (expense != null) {
+                            callback.onCallback(expense)
+                        }
+                    }
+                }
         }
 
-        fun getExpense(): Query {
-            return AuthActivity().db.collection("Expenses")
+        fun getExpense(callback: Callback) {
+            AuthActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .addSnapshotListener { snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val expenses = ArrayList<Expense>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val expense = it.toObject(Expense::class.java)
+                                if (expense != null) {
+                                    expense.id = it.id
+                                    expenses.add(expense)
+                                }
+                            }
+                            callback.onCallback(expenses)
+                        }
+                    }
+                }
         }
     }
 
