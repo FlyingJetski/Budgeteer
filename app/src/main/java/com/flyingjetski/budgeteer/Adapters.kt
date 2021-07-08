@@ -183,6 +183,70 @@ class Adapters {
         }
     }
 
+    class SourceGridHomeAdapter(
+        private val context: Context,
+        private val sources: ArrayList<Source>
+    ): BaseAdapter() {
+
+        var selectedSourceId: String? = null
+        private val imageViews: ArrayList<ImageView> = ArrayList()
+        private val inflater: LayoutInflater
+                = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        override fun getCount(): Int {
+            return sources.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return sources[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val rowView = inflater.inflate(R.layout.item_icon, null, false)
+
+            val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
+            val amountTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+
+//            iconImageView.setOnClickListener {
+//                if (selectedSourceId == sources[position].id) {
+//                    it.setBackgroundColor(Color.WHITE)
+//                } else {
+//                    selectedSourceId = sources[position].id
+//                    imageViews.forEach{
+//                        it.setBackgroundColor(Color.WHITE)
+//                    }
+//                    it.setBackgroundColor(Color.GRAY)
+//                }
+//                rowView.performClick()
+//            }
+            imageViews.add(iconImageView)
+
+            idTextView.text = sources[position].id
+            amountTextView.text = sources[position].label
+            iconImageView.setImageResource(sources[position].icon)
+
+            return rowView
+        }
+
+        fun getPositionOfResource(resource: Int): Int {
+            for (position in 0 until sources.size) {
+                if (sources[position].icon == resource) {
+                    return position
+                }
+            }
+            return 0
+        }
+
+        fun selectIcon(position: Int) {
+            imageViews[position+2].setBackgroundColor(Color.GRAY)
+        }
+    }
+
     class BudgetListAdapter(
         private val context: Context,
         private val categories: ArrayList<Budget>

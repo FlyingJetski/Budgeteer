@@ -90,7 +90,35 @@ class Income(
                 }
         }
 
-        fun getIncome(callback: Callback) {
+        fun getIncome(sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
+            var query = AuthActivity().db.collection("Expenses")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+            if (sourceId != null) {
+                query = query
+                    .whereEqualTo("sourceId", sourceId)
+            }
+            query
+                .whereGreaterThanOrEqualTo("date", dateStart)
+                .whereLessThan("date", dateEnd)
+                .addSnapshotListener { snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val incomes = ArrayList<Income>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val income = it.toObject(Income::class.java)
+                                if (income != null) {
+                                    income.id = it.id
+                                    incomes.add(income)
+                                }
+                            }
+                            callback.onCallback(incomes)
+                        }
+                    }
+                }
+        }
+
+        fun getAllIncome(callback: Callback) {
             AuthActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .addSnapshotListener { snapshot, _ ->

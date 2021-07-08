@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.models
 
+import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
@@ -102,7 +103,35 @@ class Expense(
                 }
         }
 
-        fun getExpense(callback: Callback) {
+        fun getExpense(sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
+            var query = AuthActivity().db.collection("Expenses")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+            if (sourceId != null) {
+                query = query
+                    .whereEqualTo("sourceId", sourceId)
+            }
+            query
+                .whereGreaterThanOrEqualTo("date", dateStart)
+                .whereLessThan("date", dateEnd)
+                .addSnapshotListener { snapshot, _ ->
+                    run {
+                        if (snapshot != null) {
+                            val expenses = ArrayList<Expense>()
+                            val documents = snapshot.documents
+                            documents.forEach {
+                                val expense = it.toObject(Expense::class.java)
+                                if (expense != null) {
+                                    expense.id = it.id
+                                    expenses.add(expense)
+                                }
+                            }
+                            callback.onCallback(expenses)
+                        }
+                    }
+                }
+        }
+
+        fun getAllExpense(callback: Callback) {
             AuthActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .addSnapshotListener { snapshot, _ ->

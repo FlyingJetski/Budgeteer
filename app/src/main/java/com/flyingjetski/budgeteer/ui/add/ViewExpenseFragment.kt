@@ -8,14 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.R
-import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseCategoryBinding
-import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseBinding
-import com.flyingjetski.budgeteer.models.Category
 import com.flyingjetski.budgeteer.models.Expense
-import com.flyingjetski.budgeteer.models.IncomeCategory
 
 class ViewExpenseFragment : Fragment() {
 
@@ -34,7 +30,7 @@ class ViewExpenseFragment : Fragment() {
 
     private fun setupUI() {
         // Populate View
-        Expense.getExpense(object: Callback {
+        Expense.getAllExpense(object: Callback {
             override fun onCallback(value: Any) {
                 binding.listView.adapter = Adapters.ExpenseListAdapter(
                     requireContext(),

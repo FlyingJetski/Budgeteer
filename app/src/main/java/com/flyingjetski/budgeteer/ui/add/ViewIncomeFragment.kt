@@ -11,7 +11,6 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.databinding.FragmentViewIncomeBinding
-import com.flyingjetski.budgeteer.models.Expense
 import com.flyingjetski.budgeteer.models.Income
 
 class ViewIncomeFragment : Fragment() {
@@ -31,7 +30,7 @@ class ViewIncomeFragment : Fragment() {
 
     private fun setupUI() {
         // Populate View
-        Income.getIncome(object: Callback {
+        Income.getAllIncome(object: Callback {
             override fun onCallback(value: Any) {
                 binding.listView.adapter = Adapters.IncomeListAdapter(
                     requireContext(),
