@@ -16,6 +16,7 @@ class BlankActivity: AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_blank)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         val id = intent.getStringExtra("Id").toString()
         when (intent.getStringExtra("Fragment").toString()) {
@@ -103,8 +104,13 @@ class BlankActivity: AppCompatActivity() {
             }
         }
         fragmentTransaction
-//            .disallowAddToBackStack()
+            .disallowAddToBackStack()
             .commit()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
 }
