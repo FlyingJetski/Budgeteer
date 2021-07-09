@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.flyingjetski.budgeteer.Common.Companion.roundDouble
 import com.flyingjetski.budgeteer.models.*
 
 class Adapters {
@@ -92,7 +93,7 @@ class Adapters {
 
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
-            val amountTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+            val labelTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
 
             iconImageView.setOnClickListener {
                 selectedCategoryId = categories[position].id
@@ -104,7 +105,7 @@ class Adapters {
             imageViews.add(iconImageView)
 
             idTextView.text = categories[position].id
-            amountTextView.text = categories[position].label
+            labelTextView.text = categories[position].label
             iconImageView.setImageResource(categories[position].icon)
 
             return rowView
@@ -151,7 +152,7 @@ class Adapters {
 
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
-            val amountTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+            val labelTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
 
             iconImageView.setOnClickListener {
                 selectedSourceId = sources[position].id
@@ -163,7 +164,7 @@ class Adapters {
             imageViews.add(iconImageView)
 
             idTextView.text = sources[position].id
-            amountTextView.text = sources[position].label
+            labelTextView.text = sources[position].label
             iconImageView.setImageResource(sources[position].icon)
 
             return rowView
@@ -210,24 +211,12 @@ class Adapters {
 
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
-            val amountTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+            val labelTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
 
-//            iconImageView.setOnClickListener {
-//                if (selectedSourceId == sources[position].id) {
-//                    it.setBackgroundColor(Color.WHITE)
-//                } else {
-//                    selectedSourceId = sources[position].id
-//                    imageViews.forEach{
-//                        it.setBackgroundColor(Color.WHITE)
-//                    }
-//                    it.setBackgroundColor(Color.GRAY)
-//                }
-//                rowView.performClick()
-//            }
             imageViews.add(iconImageView)
 
             idTextView.text = sources[position].id
-            amountTextView.text = sources[position].label
+            labelTextView.text = sources[position].label
             iconImageView.setImageResource(sources[position].icon)
 
             return rowView
@@ -273,6 +262,7 @@ class Adapters {
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val amountSpentTextView = rowView.findViewById(R.id.amountSpentTextView) as TextView
             val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
             val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
             val startDateTextView = rowView.findViewById(R.id.startDateTextView) as TextView
@@ -281,7 +271,8 @@ class Adapters {
             idTextView.text = categories[position].id
             iconImageView.setImageResource(categories[position].icon)
             labelTextView.text = categories[position].label
-            amountTextView.text = categories[position].amount.toString()
+            amountSpentTextView.text = roundDouble(categories[position].amountSpent).toString()
+            amountTextView.text = roundDouble(categories[position].amount).toString()
             currencyTextView.text = categories[position].currency.toString()
             startDateTextView.text = Common.dateToString(categories[position].startDate)
             endDateTextView.text = Common.dateToString(categories[position].endDate)
@@ -317,6 +308,7 @@ class Adapters {
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
             val targetTextView = rowView.findViewById(R.id.targetTextView) as TextView
             val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
             val deadlineTextView = rowView.findViewById(R.id.deadlineTextView) as TextView
@@ -324,7 +316,12 @@ class Adapters {
             idTextView.text = categories[position].id
             iconImageView.setImageResource(categories[position].icon)
             labelTextView.text = categories[position].label
-            targetTextView.text = categories[position].target.toString()
+            if (categories[position].amount != null) {
+                amountTextView.text = roundDouble(categories[position].amount!!).toString()
+            } else {
+                amountTextView.text = "0"
+            }
+            targetTextView.text = roundDouble(categories[position].target).toString()
             currencyTextView.text = categories[position].currency.toString()
             deadlineTextView.text = Common.dateToString(categories[position].deadline)
 
@@ -359,11 +356,17 @@ class Adapters {
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
             val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
 
             idTextView.text = categories[position].id
             iconImageView.setImageResource(categories[position].icon)
             labelTextView.text = categories[position].label
+            if (categories[position].amount != null) {
+                amountTextView.text = roundDouble(categories[position].amount!!).toString()
+            } else {
+                amountTextView.text = "0"
+            }
             currencyTextView.text = categories[position].currency.toString()
 
             return rowView
@@ -396,11 +399,11 @@ class Adapters {
 
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val iconImageView = rowView.findViewById(R.id.iconImageView) as ImageView
-            val amountTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+            val labelTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
 
             idTextView.text = categories[position].id
             iconImageView.setImageResource(categories[position].icon)
-            amountTextView.text = categories[position].label
+            labelTextView.text = categories[position].label
 
             return rowView
         }
@@ -433,13 +436,11 @@ class Adapters {
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
             val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
-            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
             val dateTextView = rowView.findViewById(R.id.dateTextView) as TextView
 
             idTextView.text = categories[position].id
             labelTextView.text = categories[position].label
-            amountTextView.text = categories[position].amount.toString()
-            currencyTextView.text = categories[position].currency.toString()
+            amountTextView.text = roundDouble(categories[position].amount).toString()
             dateTextView.text = Common.dateToString(categories[position].date)
 
             return rowView
@@ -473,13 +474,11 @@ class Adapters {
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
             val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
-            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
             val dateTextView = rowView.findViewById(R.id.dateTextView) as TextView
 
             idTextView.text = categories[position].id
             labelTextView.text = categories[position].label
-            amountTextView.text = categories[position].amount.toString()
-            currencyTextView.text = categories[position].currency.toString()
+            amountTextView.text = roundDouble(categories[position].amount).toString()
             dateTextView.text = Common.dateToString(categories[position].date)
 
             return rowView

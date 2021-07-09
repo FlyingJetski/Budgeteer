@@ -108,8 +108,8 @@ class AddBudgetFragment : Fragment() {
                     (binding.categoryGridView.adapter as
                             Adapters.IconGridAdapter).selectedIconResource,
                     binding.labelEditText.text.toString(),
-                    binding.currencySpinner.selectedItem as Currency,
                     binding.amountEditText.text.toString().toDouble(),
+                    binding.currencySpinner.selectedItem as Currency,
                     startCalendar.time,
                     endCalendar.time,
                     false

@@ -74,8 +74,8 @@ class EditBudgetFragment : Fragment() {
                 (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                     .selectedIconResource,
                 binding.labelEditText.text.toString(),
-                binding.currencySpinner.selectedItem as Currency,
                 binding.amountEditText.text.toString().toDouble(),
+                binding.currencySpinner.selectedItem as Currency,
                 stringToDate(binding.startDateEditText.text.toString()),
                 stringToDate(binding.endDateEditText.text.toString()),
                 false,
@@ -108,7 +108,7 @@ class EditBudgetFragment : Fragment() {
                                 break
                             }
                         }
-                        binding.amountEditText.setText(budget.amount.toString())
+                        binding.amountEditText.text.toString().toDouble()
                         binding.startDateEditText.setText(Common.dateToString(budget.startDate))
                         binding.endDateEditText.setText(Common.dateToString(budget.endDate))
                     }

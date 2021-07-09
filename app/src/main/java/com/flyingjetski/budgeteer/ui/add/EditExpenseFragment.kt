@@ -60,13 +60,6 @@ class EditExpenseFragment : Fragment() {
             }
         })
 
-        binding.currencySpinner.adapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                Currency.values()
-            )
-
         // Set Listeners
         binding.sourceGridView.setOnItemClickListener{ adapterView: AdapterView<*>, _, position: Int, _ ->
             (adapterView.adapter as Adapters.SourceGridAdapter)
@@ -84,7 +77,6 @@ class EditExpenseFragment : Fragment() {
                 Common.stringToDate(binding.dateEditText.text.toString()),
                 (binding.sourceGridView.adapter as Adapters.SourceGridAdapter)
                     .selectedSourceId,
-                binding.currencySpinner.selectedItem as Currency,
                 (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
                     .selectedCategoryId,
                 binding.labelEditText.text.toString(),
@@ -138,12 +130,6 @@ class EditExpenseFragment : Fragment() {
                     binding.dateEditText.setText(Common.dateToString(expense.date))
                     binding.labelEditText.setText(expense.label)
                     binding.amountEditText.setText(expense.amount.toString())
-                    for (position in 0 until binding.currencySpinner.count) {
-                        if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == expense.currency) {
-                            binding.currencySpinner.setSelection(position)
-                            break
-                        }
-                    }
                     binding.detailsEditText.setText(expense.details)
                 }
             }

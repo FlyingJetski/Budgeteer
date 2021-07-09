@@ -6,6 +6,11 @@ import java.util.*
 
 class Common {
     companion object {
+        fun roundDouble(double: Double): Double {
+            // rounds a double to 2 decimal points
+            return "%.2f".format(double).toDouble()
+        }
+
         fun dateToString(date: Date): String {
             val datePattern = "dd/MM/yy"
             val sdf = SimpleDateFormat(datePattern, Locale.US)

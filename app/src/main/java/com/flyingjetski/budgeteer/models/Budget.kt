@@ -3,7 +3,7 @@ package com.flyingjetski.budgeteer.models
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
-import com.flyingjetski.budgeteer.models.enums.SourceType
+import com.google.firebase.firestore.FieldValue
 import java.util.*
 
 class Budget(
@@ -11,23 +11,31 @@ class Budget(
     isActive    : Boolean,
     icon        : Int,
     label       : String,
-    currency    : Currency,
     amount      : Double,
+    currency    : Currency,
     startDate   : Date,
     endDate     : Date,
     isRecurring : Boolean,
-): Source(uid, icon, label, SourceType.BUDGET, currency) {
+) {
+    var id: String? = null
+    val amountSpent: Double = 0.0
+    val uid         = uid
     val isActive    = isActive
+    val icon        = icon
+    val label       = label
     val amount      = amount
+    val currency    = currency
     val startDate   = startDate
     val endDate     = endDate
     val isRecurring = isRecurring
 
-    constructor(): this(null, false, 0, "", Currency.MYR, 0.0, Date(), Date(), false)
+    constructor(): this(null, false, 0, "", 0.0, Currency.MYR, Date(), Date(), false)
 
     companion object {
-        fun insertBudget(source: Budget) {
-            AuthActivity().db.collection("Sources").add(source)
+        fun insertBudget(budget: Budget) {
+            AuthActivity().db.collection("Budgets").add(budget).addOnSuccessListener {
+                initializeBudgetAmountSpentById(it.id, budget.startDate, budget.endDate)
+            }
         }
 
         fun updateBudgetById(
@@ -35,12 +43,17 @@ class Budget(
             isActive: Boolean?,
             icon: Int?,
             label: String?,
-            currency: Currency?,
             amount: Double?,
+            currency: Currency?,
             startDate: Date?,
             endDate: Date?,
             isRecurring: Boolean?,
         ) {
+            if (startDate != null || endDate != null) {
+                resetBudgetAmountSpentById(id)
+                initializeBudgetAmountSpentById(id, startDate, endDate)
+            }
+
             val data = HashMap<String, Any>()
             if (isActive != null) {
                 data["isActive"] = isActive
@@ -51,11 +64,11 @@ class Budget(
             if (label != null && label != "") {
                 data["label"] = label
             }
-            if (currency != null) {
-                data["currency"] = currency
-            }
             if (amount != null && amount != 0.0) {
                 data["amount"] = amount
+            }
+            if (currency != null) {
+                data["currency"] = currency
             }
             if (startDate != null) {
                 data["startDate"] = startDate
@@ -67,12 +80,87 @@ class Budget(
                 data["isRecurring"] = isRecurring
             }
 
-            AuthActivity().db.collection("Sources")
+            AuthActivity().db.collection("Budgets")
                 .document(id).update(data)
         }
 
+        private fun initializeBudgetAmountSpentById(id: String, startDate: Date?, endDate: Date?) {
+            getBudgetById(id, object: Callback {
+                override fun onCallback(value: Any) {
+                    val budget = value as Budget
+                    if (budget != null) {
+                        var query = AuthActivity().db.collection("Expenses")
+                            .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                        query = if (startDate != null) {
+                            query.whereGreaterThanOrEqualTo("date", startDate)
+                        } else {
+                            query.whereGreaterThanOrEqualTo("date", budget.startDate)
+                        }
+                        query = if (endDate != null) {
+                            query.whereLessThanOrEqualTo("date", endDate)
+                        } else {
+
+                            query.whereGreaterThanOrEqualTo("date", budget.endDate)
+                        }
+                        query
+                            .get().addOnSuccessListener { query ->
+                                query.documents.forEach { document ->
+                                    val expense = document.toObject(Expense::class.java)
+                                    updateBudgetAmountSpentById(id, expense?.amount!!)
+                                }
+                            }
+                    }
+                }
+            })
+        }
+
+        private fun updateBudgetAmountSpentById(id: String, amount: Double) {
+            AuthActivity().db.collection("Budgets")
+                .document(id).update("amountSpent", FieldValue.increment(amount))
+        }
+
+        private fun resetBudgetAmountSpentById(id: String) {
+            getBudgetById(id, object: Callback {
+                override fun onCallback(value: Any) {
+                    val budget = value as Budget
+                    if (budget != null) {
+                        AuthActivity().db.collection("Budgets")
+                            .document(id).update("amountSpent", budget.amount)
+                    }
+                }
+            })
+        }
+
+        fun updateBudgetAmountSpent(oldDate: Date?, oldAmount:Double?, date: Date?, amount: Double?) {
+            // Update budgets based on expense's old date
+            if (oldDate != null || oldAmount != null) {
+                AuthActivity().db.collection("Budgets")
+                    .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                    .whereGreaterThanOrEqualTo("startDate", oldDate!!)
+                    .whereLessThanOrEqualTo("endDate", oldDate)
+                    .get().addOnSuccessListener { query ->
+                        query.documents.forEach { document ->
+                            document.reference.update("amountSpent", FieldValue.increment(oldAmount!!))
+                        }
+                    }
+            }
+
+            // Update budgets based on expense's current date
+            if (date != null || amount != null) {
+                AuthActivity().db.collection("Budgets")
+                    .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                    .whereGreaterThanOrEqualTo("startDate", date!!)
+                    .whereLessThanOrEqualTo("endDate", date)
+                    .get().addOnSuccessListener { query ->
+                        query.documents.forEach { document ->
+                            document.reference.update("amountSpent", FieldValue.increment(amount!!))
+                        }
+                    }
+            }
+        }
+
         fun getBudgetById(id: String, callback: Callback) {
-            AuthActivity().db.collection("Sources")
+            AuthActivity().db.collection("Budgets")
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
@@ -85,9 +173,8 @@ class Budget(
         }
 
         fun getBudget(callback: Callback) {
-            AuthActivity().db.collection("Sources")
+            AuthActivity().db.collection("Budgets")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
-                .whereEqualTo("type", SourceType.BUDGET)
                 .addSnapshotListener { snapshot, _ ->
                     run {
                         if (snapshot != null) {

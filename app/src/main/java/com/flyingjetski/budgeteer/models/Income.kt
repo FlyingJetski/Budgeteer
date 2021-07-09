@@ -10,7 +10,6 @@ class Income(
     date        : Date,
     sourceId    : String,
     source      : Source?,
-    currency    : Currency,
     categoryId  : String,
     category    : IncomeCategory?,
     label       : String,
@@ -22,39 +21,44 @@ class Income(
     val date        = date
     val sourceId    = sourceId
     val source      = source
-    val currency    = currency
     val categoryId  = categoryId
     val category    = category
     val label       = label
     val amount      = amount
     val details     = details
 
-    constructor(): this(null, Date(), "", Source(), Currency.MYR, "", IncomeCategory(), "", 0.0, "")
+    constructor(): this(null, Date(), "", Source(), "", IncomeCategory(), "", 0.0, "")
 
     companion object {
         fun insertIncome(income: Income) {
             AuthActivity().db.collection("Incomes").add(income)
+            Source.updateSourceAmountById(income.sourceId, income.amount)
         }
 
         fun updateIncomeById(
             id         : String,
             date       : Date?,
             sourceId   : String?,
-            currency   : Currency?,
             categoryId : String?,
             label      : String?,
             amount     : Double?,
             details    : String?,
             ) {
+            getIncomeById(id, object : Callback {
+                override fun onCallback(value: Any) {
+                    val income = value as Income
+                    if (income != null && amount != null) {
+                        Source.updateSourceAmountById(income.sourceId, -(income.amount - amount))
+                    }
+                }
+            })
+
             val data = HashMap<String, Any>()
             if (date != null) {
                 data["date"] = date
             }
             if (sourceId != null && sourceId != "") {
                 data["sourceId"] = sourceId
-            }
-            if (currency != null) {
-                data["currency"] = currency
             }
             if (categoryId != null && categoryId != "") {
                 data["categoryId"] = categoryId
@@ -73,6 +77,14 @@ class Income(
         }
 
         fun deleteIncomeById(id: String) {
+            getIncomeById(id, object : Callback {
+                override fun onCallback(value: Any) {
+                    val income = value as Income
+                    if (income != null) {
+                        Source.updateSourceAmountById(income.sourceId, -income.amount)
+                    }
+                }
+            })
             AuthActivity().db.collection("Incomes")
                 .document(id).delete()
         }
@@ -91,7 +103,7 @@ class Income(
         }
 
         fun getIncome(sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
-            var query = AuthActivity().db.collection("Expenses")
+            var query = AuthActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
             if (sourceId != null) {
                 query = query

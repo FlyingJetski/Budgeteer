@@ -4,24 +4,82 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.main.SourcesFragment">
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/walletLabel"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="#1976D2"
+            android:paddingStart="8dp"
+            android:text="Wallet"
+            android:textColor="#FFFFFF"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sources"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <ListView
+            android:id="@+id/walletListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/walletLabel">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        </ListView>
+
+        <TextView
+            android:id="@+id/budgetLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#1976D2"
+            android:paddingStart="8dp"
+            android:text="Budget"
+            android:textColor="#FFFFFF"
+            android:textSize="34sp"
+            app:layout_constraintTop_toBottomOf="@+id/walletListView"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <ListView
+            android:id="@+id/budgetListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/budgetLabel">
+
+        </ListView>
+
+        <TextView
+            android:id="@+id/savingLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="#1976D2"
+            android:paddingStart="8dp"
+            android:text="Saving"
+            android:textColor="#FFFFFF"
+            android:textSize="34sp"
+            app:layout_constraintTop_toBottomOf="@+id/budgetListView"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <ListView
+            android:id="@+id/savingListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/savingLabel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -46,13 +46,6 @@ class AddExpenseFragment : Fragment() {
             }
 
         // Populate View
-        binding.currencySpinner.adapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                Currency.values()
-            )
-
         ExpenseCategory.getExpenseCategory(object: Callback {
             override fun onCallback(value: Any) {
                 binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
@@ -86,7 +79,6 @@ class AddExpenseFragment : Fragment() {
                     calendar.time,
                     (binding.sourceGridView.adapter as Adapters.SourceGridAdapter).selectedSourceId.toString(),
                     null,
-                    binding.currencySpinner.selectedItem as Currency,
                     (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter).selectedCategoryId.toString(),
                     null,
                     binding.labelEditText.text.toString(),
@@ -95,7 +87,8 @@ class AddExpenseFragment : Fragment() {
                     Feedback.NEUTRAL,
                 )
             )
-            Navigation.findNavController(it).navigateUp()
+//            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
 
     }

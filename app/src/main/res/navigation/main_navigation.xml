@@ -35,6 +35,15 @@
         <action
             android:id="@+id/action_sourcesFragment_to_moreFragment"
             app:destination="@id/moreFragment" />
+        <action
+            android:id="@+id/action_sourcesFragment_to_editBudgetFragment"
+            app:destination="@id/editBudgetFragment" />
+        <action
+            android:id="@+id/action_sourcesFragment_to_editSavingFragment"
+            app:destination="@id/editSavingFragment" />
+        <action
+            android:id="@+id/action_sourcesFragment_to_editWalletFragment"
+            app:destination="@id/editWalletFragment" />
     </fragment>
 
     <fragment
@@ -67,5 +76,29 @@
         <action
             android:id="@+id/action_moreFragment_to_statisticsFragment"
             app:destination="@id/statisticsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editBudgetFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.EditBudgetFragment"
+        android:label="EditBudgetFragment">
+        <argument
+            android:name="budgetId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editSavingFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.EditSavingFragment"
+        android:label="EditSavingFragment" >
+        <argument
+            android:name="savingId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editWalletFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.EditWalletFragment"
+        android:label="EditWalletFragment" >
+        <argument
+            android:name="walletId"
+            app:argType="string" />
     </fragment>
 </navigation>

@@ -45,13 +45,6 @@ class AddIncomeFragment : Fragment() {
             }
 
         // Populate View
-        binding.currencySpinner.adapter =
-            ArrayAdapter(
-                requireContext(),
-                android.R.layout.simple_list_item_1,
-                Currency.values()
-            )
-
         IncomeCategory.getIncomeCategory(object: Callback {
             override fun onCallback(value: Any) {
                 binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
@@ -86,7 +79,6 @@ class AddIncomeFragment : Fragment() {
                     calendar.time,
                     (binding.sourceGridView.adapter as Adapters.SourceGridAdapter).selectedSourceId.toString(),
                     null,
-                    binding.currencySpinner.selectedItem as Currency,
                     (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter).selectedCategoryId.toString(),
                     null,
                     binding.labelEditText.text.toString(),
@@ -94,7 +86,7 @@ class AddIncomeFragment : Fragment() {
                     binding.detailsEditText.text.toString(),
                 )
             )
-            Navigation.findNavController(it).navigateUp()
+//            Navigation.findNavController(it).navigateUp()
         }
 
     }

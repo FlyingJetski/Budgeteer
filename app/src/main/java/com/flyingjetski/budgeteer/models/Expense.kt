@@ -1,14 +1,8 @@
 package com.flyingjetski.budgeteer.models
 
-import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
-import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
-import com.flyingjetski.budgeteer.models.enums.SourceType
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.Query
 import java.util.*
 
 class Expense(
@@ -16,7 +10,6 @@ class Expense(
     date       : Date,
     sourceId   : String,
     source     : Source?,
-    currency   : Currency,
     categoryId : String,
     category   : ExpenseCategory?,
     label      : String,
@@ -29,7 +22,6 @@ class Expense(
     val date       = date
     val sourceId   = sourceId
     val source     = source
-    val currency   = currency
     val categoryId = categoryId
     val category   = category
     val label      = label
@@ -37,34 +29,52 @@ class Expense(
     val details    = details
     val feedback   = feedback
 
-    constructor(): this(null, Date(), "", Source(), Currency.MYR, "", ExpenseCategory(), "", 0.0, "", Feedback.NEUTRAL)
+    constructor(): this(null, Date(), "", Source(), "", ExpenseCategory(), "", 0.0, "", Feedback.NEUTRAL)
 
     companion object {
         fun insertExpense(expense: Expense) {
             AuthActivity().db.collection("Expenses").add(expense)
+            Source.updateSourceAmountById(expense.sourceId, -expense.amount)
+            Budget.updateBudgetAmountSpent(null, null, expense.date, -expense.amount)
         }
 
         fun updateExpenseById(
             id         : String,
             date       : Date?,
             sourceId   : String?,
-            currency   : Currency?,
             categoryId : String?,
             label      : String?,
             amount     : Double?,
             details    : String?,
             feedback   : Feedback?,
-
         ) {
+            getExpenseById(id, object: Callback {
+                override fun onCallback(value: Any) {
+                    val expense = value as Expense
+                    if (expense != null) {
+                        if (date != null && amount != null) {
+                            Budget.updateBudgetAmountSpent(expense.date, expense.amount, date, -amount)
+                            return
+                        }
+                        if (amount != null) {
+                            Source.updateSourceAmountById(expense.sourceId, expense.amount - amount)
+                            Budget.updateBudgetAmountSpent(expense.date, expense.amount, expense.date, -amount)
+                            return
+                        }
+                        if (date != null) {
+                            Budget.updateBudgetAmountSpent(expense.date, expense.amount, date, -expense.amount)
+                            return
+                        }
+                    }
+                }
+            })
+
             val data = HashMap<String, Any>()
             if (date != null) {
                 data["date"] = date
             }
             if (sourceId != null && sourceId != "") {
                 data["sourceId"] = sourceId
-            }
-            if (currency != null) {
-                data["currency"] = currency
             }
             if (categoryId != null && categoryId != "") {
                 data["categoryId"] = categoryId
@@ -86,6 +96,16 @@ class Expense(
         }
 
         fun deleteExpenseById(id: String) {
+            getExpenseById(id, object: Callback {
+                override fun onCallback(value: Any) {
+                    val expense = value as Expense
+                    if (expense != null) {
+                        Source.updateSourceAmountById(expense.sourceId, expense.amount)
+                        Budget.updateBudgetAmountSpent( expense.date, expense.amount, null, null)
+                    }
+                }
+            })
+
             AuthActivity().db.collection("Expenses")
                 .document(id).delete()
         }

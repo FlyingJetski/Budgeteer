@@ -4,6 +4,8 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.SourceType
+import com.google.firebase.firestore.FieldValue
+import java.util.HashMap
 
 open class Source(
     uid      : String?,
@@ -13,6 +15,7 @@ open class Source(
     currency : Currency,
 ) {
     var id: String? = null
+    val amount: Double? = null
     val uid      = uid
     val icon     = icon
     val label    = label
@@ -22,6 +25,11 @@ open class Source(
     constructor(): this(null, 0, "", SourceType.WALLET, Currency.MYR)
 
     companion object {
+        fun updateSourceAmountById(id: String, amount: Double) {
+            AuthActivity().db.collection("Sources")
+                .document(id).update("amount", FieldValue.increment(amount))
+        }
+
         fun deleteSourceById(id: String) {
             AuthActivity().db.collection("Sources")
                 .document(id).delete()
