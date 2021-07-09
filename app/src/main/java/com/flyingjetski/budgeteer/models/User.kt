@@ -34,7 +34,7 @@ class User(
         }
 
         fun getUserById(uid: String) {
-            var user = User()
+            val user = User()
             AuthActivity().db.collection("Users")
                 .document(uid).set(user)
         }

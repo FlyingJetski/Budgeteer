@@ -49,6 +49,8 @@ class Saving(
                 data["label"] = label
             }
             if (currency != null) {
+                Expense.updateExpenseCurrencyBySourceId(id, currency)
+                Income.updateIncomeCurrencyBySourceId(id, currency)
                 data["currency"] = currency
             }
             if (target != null && target != 0.0) {
@@ -70,10 +72,8 @@ class Saving(
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        var saving = document.toObject(Saving::class.java)!!
-                        if (saving != null) {
-                            callback.onCallback(saving)
-                        }
+                        val saving = document.toObject(Saving::class.java)!!
+                        callback.onCallback(saving)
                     }
                 }
         }

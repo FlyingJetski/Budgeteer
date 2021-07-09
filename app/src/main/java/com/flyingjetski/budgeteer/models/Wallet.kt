@@ -36,6 +36,8 @@ class Wallet(
                 data["label"] = label.toString()
             }
             if (currency != null) {
+                Expense.updateExpenseCurrencyBySourceId(id, currency)
+                Income.updateIncomeCurrencyBySourceId(id, currency)
                 data["currency"] = currency
             }
             AuthActivity().db.collection("Sources")
@@ -47,10 +49,8 @@ class Wallet(
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        var wallet = document.toObject(Wallet::class.java)!!
-                        if (wallet != null) {
-                            callback.onCallback(wallet)
-                        }
+                        val wallet = document.toObject(Wallet::class.java)!!
+                        callback.onCallback(wallet)
                     }
                 }
         }

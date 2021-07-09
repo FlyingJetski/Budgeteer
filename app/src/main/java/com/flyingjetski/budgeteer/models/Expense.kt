@@ -2,6 +2,7 @@ package com.flyingjetski.budgeteer.models
 
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
 import java.util.*
 
@@ -18,6 +19,7 @@ class Expense(
     feedback   : Feedback,
 ) {
     var id: String? = null
+    var currency: Currency? = null
     val uid        = uid
     val date       = date
     val sourceId   = sourceId
@@ -33,9 +35,15 @@ class Expense(
 
     companion object {
         fun insertExpense(expense: Expense) {
+            Source.getSourceById(expense.categoryId, object: Callback {
+                override fun onCallback(value: Any) {
+                    val source = value as Source
+                    expense.currency = source.currency
+                }
+            })
             AuthActivity().db.collection("Expenses").add(expense)
             Source.updateSourceAmountById(expense.sourceId, -expense.amount)
-            Budget.updateBudgetAmountSpent(null, null, expense.date, -expense.amount)
+            Budget.updateBudgetAmountSpent(expense.currency!!, null, null, expense.date, -expense.amount)
         }
 
         fun updateExpenseById(
@@ -51,20 +59,18 @@ class Expense(
             getExpenseById(id, object: Callback {
                 override fun onCallback(value: Any) {
                     val expense = value as Expense
-                    if (expense != null) {
-                        if (date != null && amount != null) {
-                            Budget.updateBudgetAmountSpent(expense.date, expense.amount, date, -amount)
-                            return
-                        }
-                        if (amount != null) {
-                            Source.updateSourceAmountById(expense.sourceId, expense.amount - amount)
-                            Budget.updateBudgetAmountSpent(expense.date, expense.amount, expense.date, -amount)
-                            return
-                        }
-                        if (date != null) {
-                            Budget.updateBudgetAmountSpent(expense.date, expense.amount, date, -expense.amount)
-                            return
-                        }
+                    if (date != null && amount != null) {
+                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, date, -amount)
+                        return
+                    }
+                    if (amount != null) {
+                        Source.updateSourceAmountById(expense.sourceId, expense.amount - amount)
+                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, expense.date, -amount)
+                        return
+                    }
+                    if (date != null) {
+                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, date, -expense.amount)
+                        return
                     }
                 }
             })
@@ -74,6 +80,12 @@ class Expense(
                 data["date"] = date
             }
             if (sourceId != null && sourceId != "") {
+                Source.getSourceById(sourceId, object: Callback {
+                    override fun onCallback(value: Any) {
+                        val source = value as Source
+                        data["currency"] = source.currency
+                    }
+                })
                 data["sourceId"] = sourceId
             }
             if (categoryId != null && categoryId != "") {
@@ -99,10 +111,8 @@ class Expense(
             getExpenseById(id, object: Callback {
                 override fun onCallback(value: Any) {
                     val expense = value as Expense
-                    if (expense != null) {
-                        Source.updateSourceAmountById(expense.sourceId, expense.amount)
-                        Budget.updateBudgetAmountSpent( expense.date, expense.amount, null, null)
-                    }
+                    Source.updateSourceAmountById(expense.sourceId, expense.amount)
+                    Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, null, null)
                 }
             })
 
@@ -110,15 +120,24 @@ class Expense(
                 .document(id).delete()
         }
 
+        fun deleteExpenseBySourceId(id: String) {
+            AuthActivity().db.collection("Expenses")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("sourceId", id)
+                .get().addOnSuccessListener { query ->
+                    query.documents.forEach { document ->
+                        document.reference.delete()
+                    }
+                }
+        }
+
         fun getExpenseById(id: String, callback: Callback) {
             AuthActivity().db.collection("Expenses")
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        var expense = document.toObject(Expense::class.java)!!
-                        if (expense != null) {
-                            callback.onCallback(expense)
-                        }
+                        val expense = document.toObject(Expense::class.java)!!
+                        callback.onCallback(expense)
                     }
                 }
         }
@@ -147,6 +166,17 @@ class Expense(
                             }
                             callback.onCallback(expenses)
                         }
+                    }
+                }
+        }
+
+        fun updateExpenseCurrencyBySourceId(id: String, currency: Currency) {
+            AuthActivity().db.collection("Expenses")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("sourceId", id)
+                .get().addOnSuccessListener { query ->
+                    query.documents.forEach { document ->
+                        document.reference.update("currency", currency)
                     }
                 }
         }

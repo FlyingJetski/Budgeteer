@@ -31,6 +31,8 @@ open class Source(
         }
 
         fun deleteSourceById(id: String) {
+            Expense.deleteExpenseBySourceId(id)
+            Income.deleteIncomeBySourceId(id)
             AuthActivity().db.collection("Sources")
                 .document(id).delete()
         }
@@ -40,10 +42,8 @@ open class Source(
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        var source = document.toObject(Source::class.java)!!
-                        if (source != null) {
-                            callback.onCallback(source)
-                        }
+                        val source = document.toObject(Source::class.java)!!
+                        callback.onCallback(source)
                     }
                 }
         }

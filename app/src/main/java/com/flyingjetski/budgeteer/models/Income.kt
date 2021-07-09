@@ -4,6 +4,8 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class Income(
     uid         : String?,
@@ -17,6 +19,7 @@ class Income(
     details     : String?,
 ) {
     var id: String? = null
+    var currency: Currency? = null
     val uid         = uid
     val date        = date
     val sourceId    = sourceId
@@ -31,6 +34,12 @@ class Income(
 
     companion object {
         fun insertIncome(income: Income) {
+            Source.getSourceById(income.sourceId, object: Callback {
+                override fun onCallback(value: Any) {
+                    val source = value as Source
+                    income.currency = source.currency
+                }
+            })
             AuthActivity().db.collection("Incomes").add(income)
             Source.updateSourceAmountById(income.sourceId, income.amount)
         }
@@ -47,7 +56,7 @@ class Income(
             getIncomeById(id, object : Callback {
                 override fun onCallback(value: Any) {
                     val income = value as Income
-                    if (income != null && amount != null) {
+                    if (amount != null) {
                         Source.updateSourceAmountById(income.sourceId, -(income.amount - amount))
                     }
                 }
@@ -58,6 +67,12 @@ class Income(
                 data["date"] = date
             }
             if (sourceId != null && sourceId != "") {
+                Source.getSourceById(sourceId, object: Callback {
+                    override fun onCallback(value: Any) {
+                        val source = value as Source
+                        data["currency"] = source.currency
+                    }
+                })
                 data["sourceId"] = sourceId
             }
             if (categoryId != null && categoryId != "") {
@@ -80,13 +95,22 @@ class Income(
             getIncomeById(id, object : Callback {
                 override fun onCallback(value: Any) {
                     val income = value as Income
-                    if (income != null) {
-                        Source.updateSourceAmountById(income.sourceId, -income.amount)
-                    }
+                    Source.updateSourceAmountById(income.sourceId, -income.amount)
                 }
             })
             AuthActivity().db.collection("Incomes")
                 .document(id).delete()
+        }
+
+        fun deleteIncomeBySourceId(id: String) {
+            AuthActivity().db.collection("Incomes")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("sourceId", id)
+                .get().addOnSuccessListener { query ->
+                    query.documents.forEach { document ->
+                        document.reference.delete()
+                    }
+                }
         }
 
         fun getIncomeById(id: String, callback: Callback) {
@@ -94,10 +118,8 @@ class Income(
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        var income = document.toObject(Income::class.java)!!
-                        if (income != null) {
-                            callback.onCallback(income)
-                        }
+                        val income = document.toObject(Income::class.java)!!
+                        callback.onCallback(income)
                     }
                 }
         }
@@ -126,6 +148,17 @@ class Income(
                             }
                             callback.onCallback(incomes)
                         }
+                    }
+                }
+        }
+
+        fun updateIncomeCurrencyBySourceId(id: String, currency: Currency) {
+            AuthActivity().db.collection("Incomes")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("sourceId", id)
+                .get().addOnSuccessListener { query ->
+                    query.documents.forEach { document ->
+                        document.reference.update("currency", currency)
                     }
                 }
         }

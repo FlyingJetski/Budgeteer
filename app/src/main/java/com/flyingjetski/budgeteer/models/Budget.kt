@@ -4,6 +4,7 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.QuerySnapshot
 import java.util.*
 
 class Budget(
@@ -88,28 +89,28 @@ class Budget(
             getBudgetById(id, object: Callback {
                 override fun onCallback(value: Any) {
                     val budget = value as Budget
-                    if (budget != null) {
-                        var query = AuthActivity().db.collection("Expenses")
-                            .whereEqualTo("uid", AuthActivity().auth.uid.toString())
-                        query = if (startDate != null) {
-                            query.whereGreaterThanOrEqualTo("date", startDate)
-                        } else {
-                            query.whereGreaterThanOrEqualTo("date", budget.startDate)
-                        }
-                        query = if (endDate != null) {
-                            query.whereLessThanOrEqualTo("date", endDate)
-                        } else {
+                    var query = AuthActivity().db.collection("Expenses")
+                        .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                    query = if (startDate != null) {
+                        query.whereGreaterThanOrEqualTo("date", startDate)
+                    } else {
+                        query.whereGreaterThanOrEqualTo("date", budget.startDate)
+                    }
+                    query = if (endDate != null) {
+                        query.whereLessThanOrEqualTo("date", endDate)
+                    } else {
 
-                            query.whereGreaterThanOrEqualTo("date", budget.endDate)
-                        }
-                        query
-                            .get().addOnSuccessListener { query ->
-                                query.documents.forEach { document ->
-                                    val expense = document.toObject(Expense::class.java)
-                                    updateBudgetAmountSpentById(id, expense?.amount!!)
+                        query.whereGreaterThanOrEqualTo("date", budget.endDate)
+                    }
+                    query
+                        .get().addOnSuccessListener { querySnapshot: QuerySnapshot ->
+                            querySnapshot.documents.forEach { document ->
+                                val expense = document.toObject(Expense::class.java)
+                                if (budget.currency == expense?.currency) {
+                                    updateBudgetAmountSpentById(id, expense.amount)
                                 }
                             }
-                    }
+                        }
                 }
             })
         }
@@ -123,19 +124,18 @@ class Budget(
             getBudgetById(id, object: Callback {
                 override fun onCallback(value: Any) {
                     val budget = value as Budget
-                    if (budget != null) {
-                        AuthActivity().db.collection("Budgets")
-                            .document(id).update("amountSpent", budget.amount)
-                    }
+                    AuthActivity().db.collection("Budgets")
+                        .document(id).update("amountSpent", budget.amount)
                 }
             })
         }
 
-        fun updateBudgetAmountSpent(oldDate: Date?, oldAmount:Double?, date: Date?, amount: Double?) {
+        fun updateBudgetAmountSpent(currency: Currency, oldDate: Date?, oldAmount:Double?, date: Date?, amount: Double?) {
             // Update budgets based on expense's old date
             if (oldDate != null || oldAmount != null) {
                 AuthActivity().db.collection("Budgets")
                     .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                    .whereEqualTo("currency", currency)
                     .whereGreaterThanOrEqualTo("startDate", oldDate!!)
                     .whereLessThanOrEqualTo("endDate", oldDate)
                     .get().addOnSuccessListener { query ->
@@ -149,6 +149,7 @@ class Budget(
             if (date != null || amount != null) {
                 AuthActivity().db.collection("Budgets")
                     .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                    .whereEqualTo("currency", currency)
                     .whereGreaterThanOrEqualTo("startDate", date!!)
                     .whereLessThanOrEqualTo("endDate", date)
                     .get().addOnSuccessListener { query ->
@@ -164,10 +165,8 @@ class Budget(
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        var budget = document.toObject(Budget::class.java)!!
-                        if (budget != null) {
-                            callback.onCallback(budget)
-                        }
+                        val budget = document.toObject(Budget::class.java)!!
+                        callback.onCallback(budget)
                     }
                 }
         }

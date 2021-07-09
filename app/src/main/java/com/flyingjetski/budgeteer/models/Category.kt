@@ -41,10 +41,8 @@ open class Category(
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        var category = document.toObject(Category::class.java)!!
-                        if (category != null) {
-                            callback.onCallback(category)
-                        }
+                        val category = document.toObject(Category::class.java)!!
+                        callback.onCallback(category)
                     }
                 }
         }
