@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditExpenseCategoryBinding
-import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.Category
@@ -33,7 +32,7 @@ class EditExpenseCategoryFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        val expenseCategoryId = arguments?.getString("expenseCategoryId")
+        val expenseCategoryId = arguments?.getString("Id")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 

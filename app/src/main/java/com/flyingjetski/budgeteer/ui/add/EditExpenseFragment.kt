@@ -39,7 +39,7 @@ class EditExpenseFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        val expenseId = arguments?.getString("expenseId")
+        val expenseId = arguments?.getString("Id")
 
         // Populate View
         Source.getSource(object: Callback {
@@ -84,7 +84,7 @@ class EditExpenseFragment : Fragment() {
                 binding.detailsEditText.text.toString(),
                 Feedback.NEUTRAL,
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
 
         binding.deleteButton.setOnClickListener{
@@ -112,7 +112,6 @@ class EditExpenseFragment : Fragment() {
                 Category.getCategoryById(expense.categoryId, object: Callback {
                     override fun onCallback(value: Any) {
                         val category = value as Category
-                        Log.d("CAT", "${category.icon}")
                         binding.categoryGridView.deferNotifyDataSetChanged()
                         val position = (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
                             .getPositionOfResource(category.icon)
@@ -121,7 +120,6 @@ class EditExpenseFragment : Fragment() {
                             position,
                             binding.categoryGridView.adapter.getItemId(position),
                         )
-                        binding.labelEditText.setText(category.label)
                     }
                 })
                 binding.dateEditText.setText(Common.dateToString(expense.date))

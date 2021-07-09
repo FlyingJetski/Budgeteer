@@ -43,14 +43,14 @@ class ViewBudgetFragment : Fragment() {
         })
 
         // Set Listeners
-        binding.listView.setOnItemClickListener{adapterView, view, position, id ->
-            Navigation.findNavController(view).navigate(
-                ViewBudgetFragmentDirections
-                    .actionViewBudgetFragmentToEditBudgetFragment(
-                        (binding.listView.adapter.getItem(position) as Budget).id.toString()
-                    )
-            )
-        }
+//        binding.listView.setOnItemClickListener{adapterView, view, position, id ->
+//            Navigation.findNavController(view).navigate(
+//                ViewBudgetFragmentDirections
+//                    .actionViewBudgetFragmentToEditBudgetFragment(
+//                        (binding.listView.adapter.getItem(position) as Budget).id.toString()
+//                    )
+//            )
+//        }
     }
 
 }

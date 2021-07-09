@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.ui.add
 
+import android.content.Intent
 import android.os.Bundle
 import android.telecom.Call
 import android.view.LayoutInflater
@@ -12,8 +13,10 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseCategoryBinding
 import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.BlankActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.Category
+import com.flyingjetski.budgeteer.models.Expense
 
 class ViewExpenseCategoryFragment : Fragment() {
 
@@ -43,12 +46,10 @@ class ViewExpenseCategoryFragment : Fragment() {
 
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->
-            Navigation.findNavController(view).navigate(
-                ViewExpenseCategoryFragmentDirections
-                    .actionViewExpenseCategoryFragmentToEditExpenseCategoryFragment(
-                        (binding.listView.adapter.getItem(position) as ExpenseCategory).id.toString()
-                    )
-            )
+            val intent = Intent(requireContext(), BlankActivity::class.java)
+            intent.putExtra("Fragment", "EditExpenseCategory")
+            intent.putExtra("Id", (binding.listView.adapter.getItem(position) as ExpenseCategory).id.toString())
+            startActivity(intent)
         }
     }
 

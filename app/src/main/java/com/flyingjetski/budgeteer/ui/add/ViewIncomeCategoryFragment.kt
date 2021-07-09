@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.ui.add
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentViewExpenseCategoryBinding
 import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.Adapters
+import com.flyingjetski.budgeteer.BlankActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.databinding.FragmentViewIncomeCategoryBinding
 import com.flyingjetski.budgeteer.models.Category
@@ -44,12 +46,10 @@ class ViewIncomeCategoryFragment : Fragment() {
 
         // Set Listeners
         binding.listView.setOnItemClickListener{adapterView, view, position, id ->
-            Navigation.findNavController(view).navigate(
-                ViewIncomeCategoryFragmentDirections
-                    .actionViewIncomeCategoryFragmentToEditIncomeCategoryFragment(
-                        (binding.listView.adapter.getItem(position) as IncomeCategory).id.toString()
-                    )
-            )
+            val intent = Intent(requireContext(), BlankActivity::class.java)
+            intent.putExtra("Fragment", "EditIncomeCategory")
+            intent.putExtra("Id", (binding.listView.adapter.getItem(position) as IncomeCategory).id.toString())
+            startActivity(intent)
         }
     }
 

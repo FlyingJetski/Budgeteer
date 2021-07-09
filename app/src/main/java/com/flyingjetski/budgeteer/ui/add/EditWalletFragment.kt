@@ -1,6 +1,7 @@
 package com.flyingjetski.budgeteer.ui.add
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +35,8 @@ class EditWalletFragment : Fragment() {
     }
 
     private fun setupUI() {
-        val walletId = arguments?.getString("walletId")
+        val walletId = arguments?.getString("Id")
+        Log.d("ZXC", walletId.toString())
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -71,7 +73,7 @@ class EditWalletFragment : Fragment() {
                 binding.labelEditText.text.toString(),
                 binding.currencySpinner.selectedItem as Currency,
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
 
         binding.deleteButton.setOnClickListener{

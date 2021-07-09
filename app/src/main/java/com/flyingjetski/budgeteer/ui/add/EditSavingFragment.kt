@@ -34,7 +34,7 @@ class EditSavingFragment : Fragment() {
     }
 
     private fun setupUI() {
-        val savingId = arguments?.getString("savingId")
+        val savingId = arguments?.getString("Id")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 

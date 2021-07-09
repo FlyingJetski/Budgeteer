@@ -42,14 +42,14 @@ class ViewSavingFragment : Fragment() {
         })
 
         // Set Listeners
-        binding.listView.setOnItemClickListener{adapterView, view, position, id ->
-            Navigation.findNavController(view).navigate(
-                ViewSavingFragmentDirections
-                    .actionViewSavingFragmentToEditSavingFragment(
-                        (binding.listView.adapter.getItem(position) as Saving).id.toString()
-                    )
-            )
-        }
+//        binding.listView.setOnItemClickListener{adapterView, view, position, id ->
+//            Navigation.findNavController(view).navigate(
+//                ViewSavingFragmentDirections
+//                    .actionViewSavingFragmentToEditSavingFragment(
+//                        (binding.listView.adapter.getItem(position) as Saving).id.toString()
+//                    )
+//            )
+//        }
     }
 
 }

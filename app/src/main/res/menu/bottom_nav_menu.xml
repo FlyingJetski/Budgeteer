@@ -17,9 +17,9 @@
         android:title="@string/add" />
 
     <item
-        android:id="@+id/statisticsFragment"
+        android:id="@+id/viewFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
-        android:title="@string/statistics" />
+        android:title="@string/view" />
 
     <item
         android:id="@+id/moreFragment"

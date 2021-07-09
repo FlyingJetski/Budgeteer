@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.models
 
+import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency

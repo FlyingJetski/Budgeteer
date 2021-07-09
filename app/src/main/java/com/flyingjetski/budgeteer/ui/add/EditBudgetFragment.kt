@@ -1,5 +1,7 @@
 package com.flyingjetski.budgeteer.ui.add
 
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +22,8 @@ import com.flyingjetski.budgeteer.models.Category
 import com.flyingjetski.budgeteer.models.Source
 import com.flyingjetski.budgeteer.models.enums.Currency
 import java.lang.reflect.Field
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EditBudgetFragment : Fragment() {
 
@@ -38,7 +42,7 @@ class EditBudgetFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        val budgetId = arguments?.getString("budgetId")
+        val budgetId = arguments?.getString("Id")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -49,6 +53,24 @@ class EditBudgetFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+
+        val startCalendar = Calendar.getInstance()
+        val startDateListener =
+            OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                startCalendar[Calendar.YEAR] = year
+                startCalendar[Calendar.MONTH] = monthOfYear
+                startCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+                binding.startDateEditText.setText(Common.dateToString(startCalendar.time))
+            }
+
+        val endCalendar = Calendar.getInstance()
+        val endDateListener =
+            OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                endCalendar[Calendar.YEAR] = year
+                endCalendar[Calendar.MONTH] = monthOfYear
+                endCalendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+                binding.endDateEditText.setText(Common.dateToString(endCalendar.time))
+            }
 
         // Populate View
         binding.categoryGridView.adapter =
@@ -67,6 +89,26 @@ class EditBudgetFragment : Fragment() {
                 .selectIcon(position)
         }
 
+        binding.startDateEditText.setOnClickListener{
+            DatePickerDialog(
+                this.requireContext(),
+                startDateListener,
+                startCalendar[Calendar.YEAR],
+                startCalendar[Calendar.MONTH],
+                startCalendar[Calendar.DAY_OF_MONTH]
+            ).show()
+        }
+
+        binding.endDateEditText.setOnClickListener{
+            DatePickerDialog(
+                this.requireContext(),
+                endDateListener,
+                endCalendar[Calendar.YEAR],
+                endCalendar[Calendar.MONTH],
+                endCalendar[Calendar.DAY_OF_MONTH]
+            ).show()
+        }
+
         binding.editButton.setOnClickListener{
             Budget.updateBudgetById(
                 budgetId.toString(),
@@ -80,12 +122,12 @@ class EditBudgetFragment : Fragment() {
                 stringToDate(binding.endDateEditText.text.toString()),
                 false,
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
 
         binding.deleteButton.setOnClickListener{
             Source.deleteSourceById(budgetId.toString())
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
 
         // Actions
@@ -93,6 +135,19 @@ class EditBudgetFragment : Fragment() {
             override fun onCallback(value: Any) {
                 val budget = value as Budget
                 binding.categoryGridView.deferNotifyDataSetChanged()
+
+                startCalendar.set(
+                    budget.startDate.year,
+                    budget.startDate.month,
+                    budget.startDate.date,
+                )
+
+                endCalendar.set(
+                    budget.startDate.year,
+                    budget.startDate.month,
+                    budget.startDate.date,
+                )
+
                 val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                     .getPositionOfResource(budget.icon)
                 binding.categoryGridView.performItemClick(
@@ -107,7 +162,7 @@ class EditBudgetFragment : Fragment() {
                         break
                     }
                 }
-                binding.amountEditText.text.toString().toDouble()
+                binding.amountEditText.setText(budget.amount.toString())
                 binding.startDateEditText.setText(Common.dateToString(budget.startDate))
                 binding.endDateEditText.setText(Common.dateToString(budget.endDate))
             }

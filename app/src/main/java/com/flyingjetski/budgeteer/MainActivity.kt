@@ -5,10 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.flyingjetski.budgeteer.databinding.ActivityMainBinding
-import com.flyingjetski.budgeteer.ui.auth.LoginFragmentDirections
 import com.flyingjetski.budgeteer.ui.main.*
 
 class MainActivity : AppCompatActivity() {
@@ -34,8 +32,8 @@ class MainActivity : AppCompatActivity() {
                         R.id.sourcesFragment -> {
                             navController.navigate(SourcesFragmentDirections.actionSourcesFragmentToHomeFragment())
                         }
-                        R.id.statisticsFragment -> {
-                            navController.navigate(StatisticsFragmentDirections.actionStatisticsFragmentToHomeFragment())
+                        R.id.viewFragment -> {
+                            navController.navigate(ViewFragmentDirections.actionViewFragmentToHomeFragment())
                         }
                         R.id.moreFragment -> {
                             navController.navigate(MoreFragmentDirections.actionMoreFragmentToHomeFragment())
@@ -49,8 +47,8 @@ class MainActivity : AppCompatActivity() {
                         R.id.homeFragment -> {
                             navController.navigate(HomeFragmentDirections.actionHomeFragmentToSourcesFragment())
                         }
-                        R.id.statisticsFragment -> {
-                            navController.navigate(StatisticsFragmentDirections.actionStatisticsFragmentToSourcesFragment())
+                        R.id.viewFragment -> {
+                            navController.navigate(ViewFragmentDirections.actionViewFragmentToSourcesFragment())
                         }
                         R.id.moreFragment -> {
                             navController.navigate(MoreFragmentDirections.actionMoreFragmentToSourcesFragment())
@@ -60,19 +58,21 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.addActivity -> {
-                    startActivity(Intent(this, AddActivity::class.java))
+                    val intent = Intent(this, BlankActivity::class.java)
+                    intent.putExtra("Fragment", "AddExpense")
+                    startActivity(intent)
                     true
                 }
-                R.id.statisticsFragment -> {
+                R.id.viewFragment -> {
                     when(navView.selectedItemId) {
                         R.id.homeFragment -> {
-                            navController.navigate(HomeFragmentDirections.actionHomeFragmentToStatisticsFragment())
+                            navController.navigate(HomeFragmentDirections.actionHomeFragmentToViewFragment())
                         }
                         R.id.sourcesFragment -> {
-                            navController.navigate(SourcesFragmentDirections.actionSourcesFragmentToStatisticsFragment())
+                            navController.navigate(SourcesFragmentDirections.actionSourcesFragmentToViewFragment())
                         }
                         R.id.moreFragment -> {
-                            navController.navigate(MoreFragmentDirections.actionMoreFragmentToStatisticsFragment())
+                            navController.navigate(MoreFragmentDirections.actionMoreFragmentToViewFragment())
                         }
                         else -> false
                     }
@@ -86,8 +86,8 @@ class MainActivity : AppCompatActivity() {
                         R.id.sourcesFragment -> {
                             navController.navigate(SourcesFragmentDirections.actionSourcesFragmentToMoreFragment())
                         }
-                        R.id.statisticsFragment -> {
-                            navController.navigate(StatisticsFragmentDirections.actionStatisticsFragmentToMoreFragment())
+                        R.id.viewFragment -> {
+                            navController.navigate(ViewFragmentDirections.actionViewFragmentToMoreFragment())
                         }
                         else -> false
                     }

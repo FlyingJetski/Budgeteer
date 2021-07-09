@@ -46,28 +46,6 @@ class BlankFragment : Fragment() {
             Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToAddWalletFragment())
         }
 
-        binding.viewBudgetButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewBudgetFragment())
-        }
-        binding.viewExpenseCategoryButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewExpenseCategoryFragment())
-        }
-        binding.viewExpenseButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewExpenseFragment())
-        }
-        binding.viewIncomeCategoryButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewIncomeCategoryFragment())
-        }
-        binding.viewIncomeButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewIncomeFragment())
-        }
-        binding.viewSavingButton.setOnClickListener{
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewSavingFragment())
-        }
-        binding.viewWalletButton.setOnClickListener {
-            Navigation.findNavController(it).navigate(BlankFragmentDirections.actionBlankFragmentToViewWalletFragment())
-        }
-
         return binding.root
     }
 

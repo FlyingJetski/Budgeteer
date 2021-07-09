@@ -34,7 +34,7 @@ class EditIncomeFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        val incomeId = arguments?.getString("incomeId")
+        val incomeId = arguments?.getString("Id")
 
         // Populate View
         Source.getSource(object: Callback {
@@ -78,12 +78,12 @@ class EditIncomeFragment : Fragment() {
                 binding.amountEditText.text.toString().toDouble(),
                 binding.detailsEditText.text.toString(),
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
 
         binding.deleteButton.setOnClickListener{
             Income.deleteIncomeById(incomeId.toString())
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
 
         // Actions
@@ -114,9 +114,8 @@ class EditIncomeFragment : Fragment() {
                             position,
                             binding.categoryGridView.adapter.getItemId(position),
                         )
-                        binding.labelEditText.setText(category.label)
                     }
-                    })
+                })
                 binding.dateEditText.setText(Common.dateToString(income.date))
                 binding.labelEditText.setText(income.label)
                 binding.amountEditText.setText(income.amount.toString())

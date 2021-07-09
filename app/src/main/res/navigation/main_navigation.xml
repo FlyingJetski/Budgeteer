@@ -17,8 +17,8 @@
             android:id="@+id/action_homeFragment_to_moreFragment"
             app:destination="@id/moreFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_statisticsFragment"
-            app:destination="@id/statisticsFragment" />
+            android:id="@+id/action_homeFragment_to_viewFragment"
+            app:destination="@id/viewFragment" />
     </fragment>
 
     <fragment
@@ -26,15 +26,6 @@
         android:name="com.flyingjetski.budgeteer.ui.main.SourcesFragment"
         android:label="@string/sources"
         tools:layout="@layout/fragment_sources" >
-        <action
-            android:id="@+id/action_sourcesFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
-            android:id="@+id/action_sourcesFragment_to_statisticsFragment"
-            app:destination="@id/statisticsFragment" />
-        <action
-            android:id="@+id/action_sourcesFragment_to_moreFragment"
-            app:destination="@id/moreFragment" />
         <action
             android:id="@+id/action_sourcesFragment_to_editBudgetFragment"
             app:destination="@id/editBudgetFragment" />
@@ -44,22 +35,43 @@
         <action
             android:id="@+id/action_sourcesFragment_to_editWalletFragment"
             app:destination="@id/editWalletFragment" />
+        <action
+            android:id="@+id/action_sourcesFragment_to_moreFragment"
+            app:destination="@id/moreFragment" />
+        <action
+            android:id="@+id/action_sourcesFragment_to_viewFragment"
+            app:destination="@id/viewFragment" />
+        <action
+            android:id="@+id/action_sourcesFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/statisticsFragment"
-        android:name="com.flyingjetski.budgeteer.ui.main.StatisticsFragment"
-        android:label="@string/statistics"
-        tools:layout="@layout/fragment_statistics" >
+        android:id="@+id/viewFragment"
+        android:name="com.flyingjetski.budgeteer.ui.main.ViewFragment"
+        android:label="@string/view"
+        tools:layout="@layout/fragment_statistics">
         <action
-            android:id="@+id/action_statisticsFragment_to_homeFragment"
+            android:id="@+id/action_viewFragment_to_viewExpenseFragment"
+            app:destination="@id/viewExpenseFragment" />
+        <action
+            android:id="@+id/action_viewFragment_to_viewExpenseCategoryFragment"
+            app:destination="@id/viewExpenseCategoryFragment" />
+        <action
+            android:id="@+id/action_viewFragment_to_viewIncomeFragment"
+            app:destination="@id/viewIncomeFragment" />
+        <action
+            android:id="@+id/action_viewFragment_to_viewIncomeCategoryFragment"
+            app:destination="@id/viewIncomeCategoryFragment" />
+        <action
+            android:id="@+id/action_viewFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
-            android:id="@+id/action_statisticsFragment_to_moreFragment"
-            app:destination="@id/moreFragment" />
-        <action
-            android:id="@+id/action_statisticsFragment_to_sourcesFragment"
+            android:id="@+id/action_viewFragment_to_sourcesFragment"
             app:destination="@id/sourcesFragment" />
+        <action
+            android:id="@+id/action_viewFragment_to_moreFragment"
+            app:destination="@id/moreFragment" />
     </fragment>
 
     <fragment
@@ -68,14 +80,14 @@
         android:label="@string/more"
         tools:layout="@layout/fragment_more" >
         <action
-            android:id="@+id/action_moreFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-        <action
             android:id="@+id/action_moreFragment_to_sourcesFragment"
             app:destination="@id/sourcesFragment" />
         <action
-            android:id="@+id/action_moreFragment_to_statisticsFragment"
-            app:destination="@id/statisticsFragment" />
+            android:id="@+id/action_moreFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_moreFragment_to_viewFragment"
+            app:destination="@id/viewFragment" />
     </fragment>
     <fragment
         android:id="@+id/editBudgetFragment"
@@ -99,6 +111,68 @@
         android:label="EditWalletFragment" >
         <argument
             android:name="walletId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewExpenseFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewExpenseFragment"
+        android:label="ViewExpenseFragment" >
+        <action
+            android:id="@+id/action_viewExpenseFragment_to_editExpenseFragment"
+            app:destination="@id/editExpenseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewExpenseCategoryFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewExpenseCategoryFragment"
+        android:label="ViewExpenseCategoryFragment" >
+        <action
+            android:id="@+id/action_viewExpenseCategoryFragment_to_editExpenseCategoryFragment"
+            app:destination="@id/editExpenseCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewIncomeFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewIncomeFragment"
+        android:label="ViewIncomeFragment" >
+        <action
+            android:id="@+id/action_viewIncomeFragment_to_editIncomeFragment"
+            app:destination="@id/editIncomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewIncomeCategoryFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.ViewIncomeCategoryFragment"
+        android:label="ViewIncomeCategoryFragment" >
+        <action
+            android:id="@+id/action_viewIncomeCategoryFragment_to_editIncomeCategoryFragment"
+            app:destination="@id/editIncomeCategoryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editExpenseCategoryFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.EditExpenseCategoryFragment"
+        android:label="EditExpenseCategoryFragment" >
+        <argument android:name="expenseCategoryId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editExpenseFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.EditExpenseFragment"
+        android:label="EditExpenseFragment" >
+        <argument
+            android:name="expenseId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editIncomeCategoryFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.EditIncomeCategoryFragment"
+        android:label="EditIncomeCategoryFragment" >
+        <argument android:name="incomeCategoryId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editIncomeFragment"
+        android:name="com.flyingjetski.budgeteer.ui.add.EditIncomeFragment"
+        android:label="EditIncomeFragment" >
+        <argument
+            android:name="incomeId"
             app:argType="string" />
     </fragment>
 </navigation>

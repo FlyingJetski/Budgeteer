@@ -2,10 +2,12 @@ package com.flyingjetski.budgeteer
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import com.flyingjetski.budgeteer.Common.Companion.roundDouble
@@ -121,7 +123,7 @@ class Adapters {
         }
 
         fun selectIcon(position: Int) {
-            imageViews[position+2].setBackgroundColor(Color.GRAY)
+            imageViews[position+1].setBackgroundColor(Color.GRAY)
         }
     }
 
@@ -180,7 +182,7 @@ class Adapters {
         }
 
         fun selectIcon(position: Int) {
-            imageViews[position+2].setBackgroundColor(Color.GRAY)
+            imageViews[position+1].setBackgroundColor(Color.GRAY)
         }
     }
 
@@ -412,18 +414,18 @@ class Adapters {
 
     class ExpenseListAdapter(
         private val context: Context,
-        private val categories: ArrayList<Expense>
+        private val expenses: ArrayList<Expense>
     ): BaseAdapter() {
 
         private val inflater: LayoutInflater
                 = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         override fun getCount(): Int {
-            return categories.size
+            return expenses.size
         }
 
         override fun getItem(position: Int): Any {
-            return categories[position]
+            return expenses[position]
         }
 
         override fun getItemId(position: Int): Long {
@@ -435,13 +437,29 @@ class Adapters {
 
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val categoryIconImageView = rowView.findViewById(R.id.categoryImageView) as ImageView
+            val categoryLabelTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
             val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
+            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
             val dateTextView = rowView.findViewById(R.id.dateTextView) as TextView
 
-            idTextView.text = categories[position].id
-            labelTextView.text = categories[position].label
-            amountTextView.text = roundDouble(categories[position].amount).toString()
-            dateTextView.text = Common.dateToString(categories[position].date)
+            idTextView.text = expenses[position].id
+            labelTextView.text = expenses[position].label
+            Category.getCategoryById(expenses[position].categoryId, object: Callback {
+                override fun onCallback(value: Any) {
+                    val category = value as Category
+                    categoryIconImageView.setImageResource(category.icon)
+                    categoryLabelTextView.text = category.label
+                }
+            })
+            amountTextView.text = roundDouble(expenses[position].amount).toString()
+            Source.getSourceById(expenses[position].sourceId, object: Callback {
+                override fun onCallback(value: Any) {
+                    val source = value as Source
+                    currencyTextView.text = source.currency.toString()
+                }
+            })
+            dateTextView.text = Common.dateToString(expenses[position].date)
 
             return rowView
         }
@@ -450,18 +468,18 @@ class Adapters {
 
     class IncomeListAdapter(
         private val context: Context,
-        private val categories: ArrayList<Income>
+        private val incomes: ArrayList<Income>
     ): BaseAdapter() {
 
         private val inflater: LayoutInflater
                 = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
         override fun getCount(): Int {
-            return categories.size
+            return incomes.size
         }
 
         override fun getItem(position: Int): Any {
-            return categories[position]
+            return incomes[position]
         }
 
         override fun getItemId(position: Int): Long {
@@ -473,13 +491,29 @@ class Adapters {
 
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
+            val categoryIconImageView = rowView.findViewById(R.id.categoryImageView) as ImageView
+            val categoryLabelTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
             val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
+            val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
             val dateTextView = rowView.findViewById(R.id.dateTextView) as TextView
 
-            idTextView.text = categories[position].id
-            labelTextView.text = categories[position].label
-            amountTextView.text = roundDouble(categories[position].amount).toString()
-            dateTextView.text = Common.dateToString(categories[position].date)
+            idTextView.text = incomes[position].id
+            labelTextView.text = incomes[position].label
+            Category.getCategoryById(incomes[position].categoryId, object: Callback {
+                override fun onCallback(value: Any) {
+                    val category = value as Category
+                    categoryIconImageView.setImageResource(category.icon)
+                    categoryLabelTextView.text = category.label
+                }
+            })
+            amountTextView.text = roundDouble(incomes[position].amount).toString()
+            Source.getSourceById(incomes[position].sourceId, object: Callback {
+                override fun onCallback(value: Any) {
+                    val source = value as Source
+                    currencyTextView.text = source.currency.toString()
+                }
+            })
+            dateTextView.text = Common.dateToString(incomes[position].date)
 
             return rowView
         }

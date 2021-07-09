@@ -43,7 +43,6 @@ open class Source(
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
-                        Log.d("ZXC", id)
                         val source = document.toObject(Source::class.java)!!
                         callback.onCallback(source)
                     }

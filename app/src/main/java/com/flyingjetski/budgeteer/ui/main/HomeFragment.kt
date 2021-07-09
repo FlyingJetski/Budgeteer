@@ -101,95 +101,7 @@ class HomeFragment : Fragment() {
                         currencies.add(source.currency)
                     }
                 }
-                binding.currencySpinner.adapter =
-                    ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, currencies)
 
-                binding.sourceGridView.adapter = Adapters.SourceGridHomeAdapter(
-                    requireContext(),
-                    sources,
-                )
-            }
-        })
-
-        // Set Listeners
-        binding.toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
-            if (isChecked) {
-                updatePie(source?.id, source?.label)
-            }
-        }
-
-        binding.yearSpinner.onItemSelectedListener = object : OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?){}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                updatePie(source?.id, source?.label)
-            }
-        }
-
-        binding.monthSpinner.onItemSelectedListener = object : OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?){}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                updatePie(source?.id, source?.label)
-            }
-        }
-
-        binding.quarterSpinner.onItemSelectedListener = object : OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?){}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                updatePie(source?.id, source?.label)
-            }
-        }
-
-        binding.dateRangeSpinner.onItemSelectedListener = object : OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?){}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when ((view as TextView).text.toString()) {
-                    "Monthly" -> {
-                        binding.monthSpinner.visibility = View.VISIBLE
-                        binding.quarterSpinner.visibility = View.INVISIBLE
-                    }
-                    "Quarterly" -> {
-                        binding.monthSpinner.visibility = View.INVISIBLE
-                        binding.quarterSpinner.visibility = View.VISIBLE
-                    }
-                    "Yearly" -> {
-                        binding.monthSpinner.visibility = View.INVISIBLE
-                        binding.quarterSpinner.visibility = View.INVISIBLE
-                    }
-                    else -> {}
-                }
-                updatePie(source?.id, source?.label)
-            }
-        }
-
-        binding.currencySpinner.onItemSelectedListener = object : OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?){}
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                updatePie(source?.id, source?.label)
-            }
-        }
-
-        binding.sourceGridView.setOnItemClickListener { _, _, position: Int, _ ->
-            if (previousSelectedSourcePosition != position) {
-                source = binding.sourceGridView.getItemAtPosition(position) as Source
-                previousSelectedSourcePosition = position
-                updatePie(source?.id, source?.label)
-            } else {
-                source = null
-                previousSelectedSourcePosition = -1
-                updatePie(null, null)
-            }
-        }
-
-        // Action
-        binding.monthSpinner.setSelection(Calendar.getInstance().get(Calendar.MONTH))
-        Source.getSource(object: Callback {
-            override fun onCallback(value: Any) {
-                val sources = value as ArrayList<Source>
-                sources.forEach { source ->
-                    if (!currencies.contains(source.currency)) {
-                        currencies.add(source.currency)
-                    }
-                }
                 binding.currencySpinner.adapter =
                     ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, currencies)
 
@@ -198,6 +110,77 @@ class HomeFragment : Fragment() {
                     sources,
                 )
 
+                // Set Listeners
+                binding.toggleButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
+                    if (isChecked) {
+                        updatePie(source?.id, source?.label)
+                    }
+                }
+
+                binding.yearSpinner.onItemSelectedListener = object : OnItemSelectedListener{
+                    override fun onNothingSelected(parent: AdapterView<*>?){}
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        updatePie(source?.id, source?.label)
+                    }
+                }
+
+                binding.monthSpinner.onItemSelectedListener = object : OnItemSelectedListener{
+                    override fun onNothingSelected(parent: AdapterView<*>?){}
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        updatePie(source?.id, source?.label)
+                    }
+                }
+
+                binding.quarterSpinner.onItemSelectedListener = object : OnItemSelectedListener{
+                    override fun onNothingSelected(parent: AdapterView<*>?){}
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        updatePie(source?.id, source?.label)
+                    }
+                }
+
+                binding.dateRangeSpinner.onItemSelectedListener = object : OnItemSelectedListener{
+                    override fun onNothingSelected(parent: AdapterView<*>?){}
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        when ((view as TextView).text.toString()) {
+                            "Monthly" -> {
+                                binding.monthSpinner.visibility = View.VISIBLE
+                                binding.quarterSpinner.visibility = View.INVISIBLE
+                            }
+                            "Quarterly" -> {
+                                binding.monthSpinner.visibility = View.INVISIBLE
+                                binding.quarterSpinner.visibility = View.VISIBLE
+                            }
+                            "Yearly" -> {
+                                binding.monthSpinner.visibility = View.INVISIBLE
+                                binding.quarterSpinner.visibility = View.INVISIBLE
+                            }
+                            else -> {}
+                        }
+                        updatePie(source?.id, source?.label)
+                    }
+                }
+
+                binding.currencySpinner.onItemSelectedListener = object : OnItemSelectedListener{
+                    override fun onNothingSelected(parent: AdapterView<*>?){}
+                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        updatePie(source?.id, source?.label)
+                    }
+                }
+
+                binding.sourceGridView.setOnItemClickListener { _, _, position: Int, _ ->
+                    if (previousSelectedSourcePosition != position) {
+                        source = binding.sourceGridView.getItemAtPosition(position) as Source
+                        previousSelectedSourcePosition = position
+                        updatePie(source?.id, source?.label)
+                    } else {
+                        source = null
+                        previousSelectedSourcePosition = -1
+                        updatePie(null, null)
+                    }
+                }
+
+                // Action
+                binding.monthSpinner.setSelection(Calendar.getInstance().get(Calendar.MONTH))
                 updatePie(source?.id, source?.label)
             }
         })
