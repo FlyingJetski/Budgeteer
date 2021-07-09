@@ -34,7 +34,7 @@ class EditWalletFragment : Fragment() {
     }
 
     private fun setupUI() {
-        var walletId = arguments?.getString("walletId")
+        val walletId = arguments?.getString("walletId")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -83,24 +83,22 @@ class EditWalletFragment : Fragment() {
         Wallet.getWalletById(walletId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val wallet = value as Wallet
-                    if (wallet != null) {
-                        binding.categoryGridView.deferNotifyDataSetChanged()
-                        val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
-                            .getPositionOfResource(wallet.icon)
-                        binding.categoryGridView.performItemClick(
-                            binding.categoryGridView,
-                            position,
-                            binding.categoryGridView.adapter.getItemId(position),
-                        )
-                        binding.labelEditText.setText(wallet.label)
-                        for (position in 0 until binding.currencySpinner.count) {
-                            if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == wallet.currency) {
-                                binding.currencySpinner.setSelection(position)
-                                break
-                            }
-                        }
+                binding.categoryGridView.deferNotifyDataSetChanged()
+                val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
+                    .getPositionOfResource(wallet.icon)
+                binding.categoryGridView.performItemClick(
+                    binding.categoryGridView,
+                    position,
+                    binding.categoryGridView.adapter.getItemId(position),
+                )
+                binding.labelEditText.setText(wallet.label)
+                for (position in 0 until binding.currencySpinner.count) {
+                    if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == wallet.currency) {
+                        binding.currencySpinner.setSelection(position)
+                        break
                     }
                 }
+            }
             })
     }
 

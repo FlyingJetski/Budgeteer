@@ -34,7 +34,7 @@ class EditIncomeFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        var incomeId = arguments?.getString("incomeId")
+        val incomeId = arguments?.getString("incomeId")
 
         // Populate View
         Source.getSource(object: Callback {
@@ -90,44 +90,38 @@ class EditIncomeFragment : Fragment() {
         Income.getIncomeById(incomeId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val income = value as Income
-                if (income != null) {
-                        Source.getSourceById(income.sourceId, object: Callback {
-                            override fun onCallback(value: Any) {
-                                val source = value as Source
-                                    if (source != null) {
-                                        binding.sourceGridView.deferNotifyDataSetChanged()
-                                        val position = (binding.sourceGridView.adapter as Adapters.SourceGridAdapter)
-                                            .getPositionOfResource(source.icon)
-                                        binding.sourceGridView.performItemClick(
-                                            binding.sourceGridView,
-                                            position,
-                                            binding.sourceGridView.adapter.getItemId(position),
-                                        )
-                                    }
-                                }
-                            })
-                        Category.getCategoryById(income.categoryId, object: Callback {
-                            override fun onCallback(value: Any) {
-                                val category = value as Category
-                                    if (category != null) {
-                                        binding.categoryGridView.deferNotifyDataSetChanged()
-                                        val position = (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
-                                            .getPositionOfResource(category.icon)
-                                        binding.categoryGridView.performItemClick(
-                                            binding.categoryGridView,
-                                            position,
-                                            binding.categoryGridView.adapter.getItemId(position),
-                                        )
-                                        binding.labelEditText.setText(category.label)
-                                    }
-                                }
-                            })
-                        binding.dateEditText.setText(Common.dateToString(income.date))
-                        binding.labelEditText.setText(income.label)
-                        binding.amountEditText.setText(income.amount.toString())
-                        binding.detailsEditText.setText(income.details)
+                Source.getSourceById(income.sourceId, object: Callback {
+                    override fun onCallback(value: Any) {
+                        val source = value as Source
+                        binding.sourceGridView.deferNotifyDataSetChanged()
+                        val position = (binding.sourceGridView.adapter as Adapters.SourceGridAdapter)
+                            .getPositionOfResource(source.icon)
+                        binding.sourceGridView.performItemClick(
+                            binding.sourceGridView,
+                            position,
+                            binding.sourceGridView.adapter.getItemId(position),
+                        )
                     }
-                }
+                    })
+                Category.getCategoryById(income.categoryId, object: Callback {
+                    override fun onCallback(value: Any) {
+                        val category = value as Category
+                        binding.categoryGridView.deferNotifyDataSetChanged()
+                        val position = (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
+                            .getPositionOfResource(category.icon)
+                        binding.categoryGridView.performItemClick(
+                            binding.categoryGridView,
+                            position,
+                            binding.categoryGridView.adapter.getItemId(position),
+                        )
+                        binding.labelEditText.setText(category.label)
+                    }
+                    })
+                binding.dateEditText.setText(Common.dateToString(income.date))
+                binding.labelEditText.setText(income.label)
+                binding.amountEditText.setText(income.amount.toString())
+                binding.detailsEditText.setText(income.details)
+            }
             })
     }
 

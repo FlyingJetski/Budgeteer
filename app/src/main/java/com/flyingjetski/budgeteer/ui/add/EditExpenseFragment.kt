@@ -39,7 +39,7 @@ class EditExpenseFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        var expenseId = arguments?.getString("expenseId")
+        val expenseId = arguments?.getString("expenseId")
 
         // Populate View
         Source.getSource(object: Callback {
@@ -96,42 +96,38 @@ class EditExpenseFragment : Fragment() {
         Expense.getExpenseById(expenseId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val expense = value as Expense
-                if (expense != null) {
-                    Source.getSourceById(expense.sourceId, object: Callback {
-                        override fun onCallback(value: Any) {
-                            val source = value as Source
-                            if (source != null) {
-                                binding.sourceGridView.deferNotifyDataSetChanged()
-                                val position = (binding.sourceGridView.adapter as Adapters.SourceGridAdapter)
-                                    .getPositionOfResource(source.icon)
-                                binding.sourceGridView.performItemClick(
-                                    binding.sourceGridView,
-                                    position,
-                                    binding.sourceGridView.adapter.getItemId(position),
-                                )
-                            }
-                        }
-                    })
-                    Category.getCategoryById(expense.categoryId, object: Callback {
-                        override fun onCallback(value: Any) {
-                            val category = value as Category
-                            Log.d("CAT", "${category.icon}")
-                            binding.categoryGridView.deferNotifyDataSetChanged()
-                            val position = (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
-                                .getPositionOfResource(category.icon)
-                            binding.categoryGridView.performItemClick(
-                                binding.categoryGridView,
-                                position,
-                                binding.categoryGridView.adapter.getItemId(position),
-                            )
-                            binding.labelEditText.setText(category.label)
-                        }
-                    })
-                    binding.dateEditText.setText(Common.dateToString(expense.date))
-                    binding.labelEditText.setText(expense.label)
-                    binding.amountEditText.setText(expense.amount.toString())
-                    binding.detailsEditText.setText(expense.details)
-                }
+                Source.getSourceById(expense.sourceId, object: Callback {
+                    override fun onCallback(value: Any) {
+                        val source = value as Source
+                        binding.sourceGridView.deferNotifyDataSetChanged()
+                        val position = (binding.sourceGridView.adapter as Adapters.SourceGridAdapter)
+                            .getPositionOfResource(source.icon)
+                        binding.sourceGridView.performItemClick(
+                            binding.sourceGridView,
+                            position,
+                            binding.sourceGridView.adapter.getItemId(position),
+                        )
+                    }
+                })
+                Category.getCategoryById(expense.categoryId, object: Callback {
+                    override fun onCallback(value: Any) {
+                        val category = value as Category
+                        Log.d("CAT", "${category.icon}")
+                        binding.categoryGridView.deferNotifyDataSetChanged()
+                        val position = (binding.categoryGridView.adapter as Adapters.CategoryGridAdapter)
+                            .getPositionOfResource(category.icon)
+                        binding.categoryGridView.performItemClick(
+                            binding.categoryGridView,
+                            position,
+                            binding.categoryGridView.adapter.getItemId(position),
+                        )
+                        binding.labelEditText.setText(category.label)
+                    }
+                })
+                binding.dateEditText.setText(Common.dateToString(expense.date))
+                binding.labelEditText.setText(expense.label)
+                binding.amountEditText.setText(expense.amount.toString())
+                binding.detailsEditText.setText(expense.details)
             }
         })
     }

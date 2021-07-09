@@ -32,7 +32,7 @@ class EditIncomeCategoryFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        var incomeCategoryId = arguments?.getString("incomeCategoryId")
+        val incomeCategoryId = arguments?.getString("incomeCategoryId")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -74,18 +74,16 @@ class EditIncomeCategoryFragment : Fragment() {
         Category.getCategoryById(incomeCategoryId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val category = value as Category
-                    if (category != null) {
-                        binding.categoryGridView.deferNotifyDataSetChanged()
-                        val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
-                            .getPositionOfResource(category.icon)
-                        binding.categoryGridView.performItemClick(
-                            binding.categoryGridView,
-                            position,
-                            binding.categoryGridView.adapter.getItemId(position),
-                        )
-                        binding.labelEditText.setText(category.label)
-                    }
-                }
+                binding.categoryGridView.deferNotifyDataSetChanged()
+                val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
+                    .getPositionOfResource(category.icon)
+                binding.categoryGridView.performItemClick(
+                    binding.categoryGridView,
+                    position,
+                    binding.categoryGridView.adapter.getItemId(position),
+                )
+                binding.labelEditText.setText(category.label)
+            }
             })
     }
 

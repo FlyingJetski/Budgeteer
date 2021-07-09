@@ -34,7 +34,7 @@ class EditSavingFragment : Fragment() {
     }
 
     private fun setupUI() {
-        var savingId = arguments?.getString("savingId")
+        val savingId = arguments?.getString("savingId")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -87,26 +87,24 @@ class EditSavingFragment : Fragment() {
         Saving.getSavingById(savingId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val saving = value as Saving
-                    if (saving != null) {
-                        binding.categoryGridView.deferNotifyDataSetChanged()
-                        val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
-                            .getPositionOfResource(saving.icon)
-                        binding.categoryGridView.performItemClick(
-                            binding.categoryGridView,
-                            position,
-                            binding.categoryGridView.adapter.getItemId(position),
-                        )
-                        binding.labelEditText.setText(saving.label)
-                        for (position in 0 until binding.currencySpinner.count) {
-                            if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == saving.currency) {
-                                binding.currencySpinner.setSelection(position)
-                                break
-                            }
-                        }
-                        binding.targetEditText.setText(saving.target.toString())
-                        binding.deadlineDateEditText.setText(Common.dateToString(saving.deadline))
+                binding.categoryGridView.deferNotifyDataSetChanged()
+                val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
+                    .getPositionOfResource(saving.icon)
+                binding.categoryGridView.performItemClick(
+                    binding.categoryGridView,
+                    position,
+                    binding.categoryGridView.adapter.getItemId(position),
+                )
+                binding.labelEditText.setText(saving.label)
+                for (position in 0 until binding.currencySpinner.count) {
+                    if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == saving.currency) {
+                        binding.currencySpinner.setSelection(position)
+                        break
                     }
                 }
+                binding.targetEditText.setText(saving.target.toString())
+                binding.deadlineDateEditText.setText(Common.dateToString(saving.deadline))
+            }
             })
     }
 

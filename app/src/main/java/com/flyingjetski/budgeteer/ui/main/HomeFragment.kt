@@ -155,7 +155,7 @@ class HomeFragment : Fragment() {
                         binding.monthSpinner.visibility = View.INVISIBLE
                         binding.quarterSpinner.visibility = View.INVISIBLE
                     }
-                    else -> false
+                    else -> {}
                 }
                 updatePie(source?.id, source?.label)
             }
@@ -204,8 +204,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun updatePie(sourceId: String?, legend: String?) {
-        var startDate: Date = Date()
-        var endDate: Date = Date()
+        var startDate = Date()
+        var endDate = Date()
 
         when (binding.dateRangeSpinner.selectedItem as String) {
             "Monthly" -> {
@@ -270,7 +270,6 @@ class HomeFragment : Fragment() {
                             1,
                         )
                     }
-                    else -> false
                 }
             }
             "Yearly" -> {
@@ -285,7 +284,6 @@ class HomeFragment : Fragment() {
                     1,
                 )
             }
-            else -> false
         }
 
         when (binding.toggleButton.checkedButtonId) {
@@ -293,7 +291,6 @@ class HomeFragment : Fragment() {
                 startDate, endDate, sourceId, legend)
             binding.incomeButton.id -> showIncomes(binding.currencySpinner.selectedItem as Currency,
                 startDate, endDate, sourceId, legend)
-            else -> false
         }
     }
 

@@ -38,7 +38,7 @@ class EditBudgetFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        var budgetId = arguments?.getString("budgetId")
+        val budgetId = arguments?.getString("budgetId")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -92,27 +92,25 @@ class EditBudgetFragment : Fragment() {
         Budget.getBudgetById(budgetId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val budget = value as Budget
-                    if (budget != null) {
-                        binding.categoryGridView.deferNotifyDataSetChanged()
-                        val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
-                            .getPositionOfResource(budget.icon)
-                        binding.categoryGridView.performItemClick(
-                            binding.categoryGridView,
-                            position,
-                            binding.categoryGridView.adapter.getItemId(position),
-                        )
-                        binding.labelEditText.setText(budget.label)
-                        for (position in 0 until binding.currencySpinner.count) {
-                            if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == budget.currency) {
-                                binding.currencySpinner.setSelection(position)
-                                break
-                            }
-                        }
-                        binding.amountEditText.text.toString().toDouble()
-                        binding.startDateEditText.setText(Common.dateToString(budget.startDate))
-                        binding.endDateEditText.setText(Common.dateToString(budget.endDate))
+                binding.categoryGridView.deferNotifyDataSetChanged()
+                val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
+                    .getPositionOfResource(budget.icon)
+                binding.categoryGridView.performItemClick(
+                    binding.categoryGridView,
+                    position,
+                    binding.categoryGridView.adapter.getItemId(position),
+                )
+                binding.labelEditText.setText(budget.label)
+                for (position in 0 until binding.currencySpinner.count) {
+                    if ((binding.currencySpinner.getItemAtPosition(position) as Currency) == budget.currency) {
+                        binding.currencySpinner.setSelection(position)
+                        break
                     }
                 }
+                binding.amountEditText.text.toString().toDouble()
+                binding.startDateEditText.setText(Common.dateToString(budget.startDate))
+                binding.endDateEditText.setText(Common.dateToString(budget.endDate))
+            }
             })
     }
 

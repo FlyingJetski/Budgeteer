@@ -33,7 +33,7 @@ class EditExpenseCategoryFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        var expenseCategoryId = arguments?.getString("expenseCategoryId")
+        val expenseCategoryId = arguments?.getString("expenseCategoryId")
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
