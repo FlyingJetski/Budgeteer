@@ -35,15 +35,15 @@ class Expense(
 
     companion object {
         fun insertExpense(expense: Expense) {
-            Source.getSourceById(expense.categoryId, object: Callback {
+            Source.getSourceById(expense.sourceId, object: Callback {
                 override fun onCallback(value: Any) {
                     val source = value as Source
                     expense.currency = source.currency
+                    AuthActivity().db.collection("Expenses").add(expense)
+                    Source.updateSourceAmountById(expense.sourceId, -expense.amount)
+                    Budget.updateBudgetAmountSpent(expense.currency!!, null, null, expense.date, -expense.amount)
                 }
             })
-            AuthActivity().db.collection("Expenses").add(expense)
-            Source.updateSourceAmountById(expense.sourceId, -expense.amount)
-            Budget.updateBudgetAmountSpent(expense.currency!!, null, null, expense.date, -expense.amount)
         }
 
         fun updateExpenseById(
@@ -142,9 +142,10 @@ class Expense(
                 }
         }
 
-        fun getExpense(sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
+        fun getExpense(currency: Currency, sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
             var query = AuthActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("currency", currency)
             if (sourceId != null) {
                 query = query
                     .whereEqualTo("sourceId", sourceId)

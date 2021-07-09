@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.models
 
+import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
@@ -42,6 +43,7 @@ open class Source(
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
+                        Log.d("ZXC", id)
                         val source = document.toObject(Source::class.java)!!
                         callback.onCallback(source)
                     }

@@ -137,10 +137,12 @@ class Budget(
                     .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                     .whereEqualTo("currency", currency)
                     .whereGreaterThanOrEqualTo("startDate", oldDate!!)
-                    .whereLessThanOrEqualTo("endDate", oldDate)
                     .get().addOnSuccessListener { query ->
                         query.documents.forEach { document ->
-                            document.reference.update("amountSpent", FieldValue.increment(oldAmount!!))
+                            val budget = document.toObject(Budget::class.java)
+                            if (budget!!.endDate.before(date)) {
+                                document.reference.update("amountSpent", FieldValue.increment(oldAmount!!))
+                            }
                         }
                     }
             }
@@ -151,10 +153,12 @@ class Budget(
                     .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                     .whereEqualTo("currency", currency)
                     .whereGreaterThanOrEqualTo("startDate", date!!)
-                    .whereLessThanOrEqualTo("endDate", date)
                     .get().addOnSuccessListener { query ->
                         query.documents.forEach { document ->
-                            document.reference.update("amountSpent", FieldValue.increment(amount!!))
+                            val budget = document.toObject(Budget::class.java)
+                            if (budget!!.endDate.before(date)) {
+                                document.reference.update("amountSpent", FieldValue.increment(amount!!))
+                            }
                         }
                     }
             }

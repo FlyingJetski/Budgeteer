@@ -38,10 +38,10 @@ class Income(
                 override fun onCallback(value: Any) {
                     val source = value as Source
                     income.currency = source.currency
+                    AuthActivity().db.collection("Incomes").add(income)
+                    Source.updateSourceAmountById(income.sourceId, income.amount)
                 }
             })
-            AuthActivity().db.collection("Incomes").add(income)
-            Source.updateSourceAmountById(income.sourceId, income.amount)
         }
 
         fun updateIncomeById(
@@ -124,9 +124,10 @@ class Income(
                 }
         }
 
-        fun getIncome(sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
+        fun getIncome(currency: Currency, sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
             var query = AuthActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("currency", currency)
             if (sourceId != null) {
                 query = query
                     .whereEqualTo("sourceId", sourceId)

@@ -28,9 +28,11 @@ import com.flyingjetski.budgeteer.models.Category
 import com.flyingjetski.budgeteer.models.Expense
 import com.flyingjetski.budgeteer.models.Income
 import com.flyingjetski.budgeteer.models.Source
+import com.flyingjetski.budgeteer.models.enums.Currency
 import java.text.DateFormatSymbols
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.exp
 
 
 class HomeFragment : Fragment() {
@@ -69,6 +71,8 @@ class HomeFragment : Fragment() {
         dateRanges.add("Quarterly")
         dateRanges.add("Yearly")
 
+        val currencies = ArrayList<Currency>()
+
         pie = AnyChart.pie()
         pie.labels()
             .position("outside")
@@ -91,9 +95,18 @@ class HomeFragment : Fragment() {
 
         Source.getSource(object: Callback {
             override fun onCallback(value: Any) {
+                val sources = value as ArrayList<Source>
+                sources.forEach { source ->
+                    if (!currencies.contains(source.currency)) {
+                        currencies.add(source.currency)
+                    }
+                }
+                binding.currencySpinner.adapter =
+                    ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, currencies)
+
                 binding.sourceGridView.adapter = Adapters.SourceGridHomeAdapter(
                     requireContext(),
-                    value as ArrayList<Source>,
+                    sources,
                 )
             }
         })
@@ -148,6 +161,13 @@ class HomeFragment : Fragment() {
             }
         }
 
+        binding.currencySpinner.onItemSelectedListener = object : OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?){}
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                updatePie(source?.id, source?.label)
+            }
+        }
+
         binding.sourceGridView.setOnItemClickListener { _, _, position: Int, _ ->
             if (previousSelectedSourcePosition != position) {
                 source = binding.sourceGridView.getItemAtPosition(position) as Source
@@ -162,7 +182,25 @@ class HomeFragment : Fragment() {
 
         // Action
         binding.monthSpinner.setSelection(Calendar.getInstance().get(Calendar.MONTH))
-        updatePie(source?.id, source?.label)
+        Source.getSource(object: Callback {
+            override fun onCallback(value: Any) {
+                val sources = value as ArrayList<Source>
+                sources.forEach { source ->
+                    if (!currencies.contains(source.currency)) {
+                        currencies.add(source.currency)
+                    }
+                }
+                binding.currencySpinner.adapter =
+                    ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, currencies)
+
+                binding.sourceGridView.adapter = Adapters.SourceGridHomeAdapter(
+                    requireContext(),
+                    sources,
+                )
+
+                updatePie(source?.id, source?.label)
+            }
+        })
     }
 
     private fun updatePie(sourceId: String?, legend: String?) {
@@ -251,14 +289,16 @@ class HomeFragment : Fragment() {
         }
 
         when (binding.toggleButton.checkedButtonId) {
-            binding.expenseButton.id -> showExpenses(startDate, endDate, sourceId, legend)
-            binding.incomeButton.id -> showIncomes(startDate, endDate, sourceId, legend)
+            binding.expenseButton.id -> showExpenses(binding.currencySpinner.selectedItem as Currency,
+                startDate, endDate, sourceId, legend)
+            binding.incomeButton.id -> showIncomes(binding.currencySpinner.selectedItem as Currency,
+                startDate, endDate, sourceId, legend)
             else -> false
         }
     }
 
-    private fun showExpenses(startDate: Date, endDate: Date, sourceId: String?, legend: String?) {
-        Expense.getExpense(sourceId, startDate, endDate, object: Callback {
+    private fun showExpenses(currency: Currency, startDate: Date, endDate: Date, sourceId: String?, legend: String?) {
+        Expense.getExpense(currency, sourceId, startDate, endDate, object: Callback {
             override fun onCallback(value: Any) {
                 val expenses = value as ArrayList<Expense>
                 val dataEntries = ArrayList<DataEntry>()
@@ -292,8 +332,8 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun showIncomes(startDate: Date, endDate: Date, sourceId: String?, legend: String?) {
-        Income.getIncome(sourceId, startDate, endDate, object: Callback {
+    private fun showIncomes(currency: Currency, startDate: Date, endDate: Date, sourceId: String?, legend: String?) {
+        Income.getIncome(currency, sourceId, startDate, endDate, object: Callback {
             override fun onCallback(value: Any) {
                 val incomes = value as ArrayList<Income>
                 val dataEntries = ArrayList<DataEntry>()
