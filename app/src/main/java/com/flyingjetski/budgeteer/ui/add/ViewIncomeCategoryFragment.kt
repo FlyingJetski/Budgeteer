@@ -53,6 +53,10 @@ class ViewIncomeCategoryFragment : Fragment() {
             (requireActivity() as BlankActivity).navigateToFragment(EditIncomeCategoryFragment(),
                 (binding.listView.adapter.getItem(position) as IncomeCategory).id.toString())
         }
+
+        binding.addIncomeCategoryButton.setOnClickListener{ view ->
+            (requireActivity() as BlankActivity).navigateToFragment(AddIncomeCategoryFragment(), null)
+        }
     }
 
 }

@@ -53,6 +53,10 @@ class ViewExpenseCategoryFragment : Fragment() {
             (requireActivity() as BlankActivity).navigateToFragment(EditExpenseCategoryFragment(),
                 (binding.listView.adapter.getItem(position) as ExpenseCategory).id.toString())
         }
+
+        binding.addExpenseCategoryButton.setOnClickListener{ view ->
+            (requireActivity() as BlankActivity).navigateToFragment(AddExpenseCategoryFragment(), null)
+        }
     }
 
 }
