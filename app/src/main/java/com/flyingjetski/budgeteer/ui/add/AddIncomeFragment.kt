@@ -35,6 +35,7 @@ class AddIncomeFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
+        val activity = requireActivity()
         val calendar = Calendar.getInstance()
         val calendarListener =
             OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
@@ -48,7 +49,7 @@ class AddIncomeFragment : Fragment() {
         IncomeCategory.getIncomeCategory(object: Callback {
             override fun onCallback(value: Any) {
                 binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
-                    requireContext(),
+                    activity,
                     value as ArrayList<Category>,
                 )
             }
@@ -57,7 +58,7 @@ class AddIncomeFragment : Fragment() {
         Source.getSource(object: Callback {
             override fun onCallback(value: Any) {
                 binding.sourceGridView.adapter = Adapters.SourceGridAdapter(
-                    requireContext(),
+                    activity,
                     value as ArrayList<Source>,
                 )
             }
@@ -86,13 +87,13 @@ class AddIncomeFragment : Fragment() {
                     binding.detailsEditText.text.toString(),
                 )
             )
-            requireActivity().finish()
+            activity.onBackPressed()
         }
 
         // Actions
         val today = Calendar.getInstance()
         calendar.set(
-            today.time.year,
+            today.time.year + 1900,
             today.time.month,
             today.time.date,
         )

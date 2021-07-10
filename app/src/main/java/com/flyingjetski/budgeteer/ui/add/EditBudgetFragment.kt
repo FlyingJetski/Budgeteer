@@ -43,16 +43,6 @@ class EditBudgetFragment : Fragment() {
     private fun setupUI() {
         // Instantiation
         val budgetId = arguments?.getString("Id")
-        val drawablesFields: Array<Field> = R.mipmap::class.java.fields
-        val icons: ArrayList<Int> = ArrayList()
-
-        for (field in drawablesFields) {
-            try {
-                icons.add(field.getInt(null))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
 
         val startCalendar = Calendar.getInstance()
         val startDateListener =
@@ -74,7 +64,7 @@ class EditBudgetFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.IconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), Common.sourceIcons)
         binding.currencySpinner.adapter =
             ArrayAdapter(
                 requireContext(),
@@ -126,7 +116,7 @@ class EditBudgetFragment : Fragment() {
         }
 
         binding.deleteButton.setOnClickListener{
-            Source.deleteSourceById(budgetId.toString())
+            Budget.deleteBudgetById(budgetId.toString())
             requireActivity().onBackPressed()
         }
 

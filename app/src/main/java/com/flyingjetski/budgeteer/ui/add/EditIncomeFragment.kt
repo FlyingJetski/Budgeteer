@@ -34,6 +34,7 @@ class EditIncomeFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
+        val activity = requireActivity()
         val incomeId = arguments?.getString("Id")
 
         val calendar = Calendar.getInstance()
@@ -58,7 +59,7 @@ class EditIncomeFragment : Fragment() {
         IncomeCategory.getIncomeCategory(object: Callback {
             override fun onCallback(value: Any) {
                 binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
-                    requireContext(),
+                    activity,
                     value as ArrayList<Category>,
                 )
             }
@@ -67,7 +68,7 @@ class EditIncomeFragment : Fragment() {
         // Set Listeners
         binding.dateEditText.setOnClickListener{
             DatePickerDialog(
-                this.requireContext(),
+                activity,
                 dateListener,
                 calendar[Calendar.YEAR],
                 calendar[Calendar.MONTH],
@@ -97,12 +98,12 @@ class EditIncomeFragment : Fragment() {
                 binding.amountEditText.text.toString().toDouble(),
                 binding.detailsEditText.text.toString(),
             )
-            (requireActivity() as BlankActivity).navigateToFragment(ViewIncomeFragment(), null)
+            activity.onBackPressed()
         }
 
         binding.deleteButton.setOnClickListener{
             Income.deleteIncomeById(incomeId.toString())
-            (requireActivity() as BlankActivity).navigateToFragment(ViewIncomeFragment(), null)
+            activity.onBackPressed()
         }
 
         // Actions
@@ -111,7 +112,7 @@ class EditIncomeFragment : Fragment() {
                 val income = value as Income
 
                 calendar.set(
-                    income.date.year,
+                    income.date.year + 1900,
                     income.date.month,
                     income.date.date,
                 )

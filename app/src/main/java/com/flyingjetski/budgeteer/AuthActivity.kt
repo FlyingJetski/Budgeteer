@@ -30,6 +30,8 @@ class AuthActivity: AppCompatActivity() {
             .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
             .build()
 
+        db.clearPersistence()
+
         @Suppress("UNUSED_VARIABLE")
         val binding = DataBindingUtil.setContentView<ActivityAuthBinding>(this, R.layout.activity_auth)
         val navController = this.findNavController(R.id.auth_navigation)

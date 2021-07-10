@@ -79,6 +79,7 @@ class HomeFragment : Fragment() {
             .position("outside")
             .enabled(true)
             .format("{%X}")
+        pie.legend().enabled(false)
 
         // Populate View
         binding.yearSpinner.adapter =
@@ -97,9 +98,13 @@ class HomeFragment : Fragment() {
         Source.getSource(object: Callback {
             override fun onCallback(value: Any) {
                 val sources = value as ArrayList<Source>
-                sources.forEach { source ->
-                    if (!currencies.contains(source.currency)) {
-                        currencies.add(source.currency)
+                if (sources.size == 0) {
+                    currencies.add(Currency.MYR)
+                } else {
+                    sources.forEach { source ->
+                        if (!currencies.contains(source.currency)) {
+                            currencies.add(source.currency)
+                        }
                     }
                 }
 

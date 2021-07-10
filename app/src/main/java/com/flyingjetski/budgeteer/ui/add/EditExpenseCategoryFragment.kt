@@ -12,6 +12,7 @@ import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentEditExpenseCategoryBinding
 import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.Common
 import com.flyingjetski.budgeteer.models.Category
 import java.lang.reflect.Field
 
@@ -32,21 +33,12 @@ class EditExpenseCategoryFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
+        val activity = requireActivity()
         val expenseCategoryId = arguments?.getString("Id")
-        val drawablesFields: Array<Field> = R.mipmap::class.java.fields
-        val icons: ArrayList<Int> = ArrayList()
-
-        for (field in drawablesFields) {
-            try {
-                icons.add(field.getInt(null))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.IconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), Common.expenseCategoryIcons)
 
 
         // Set Listeners
@@ -62,12 +54,12 @@ class EditExpenseCategoryFragment : Fragment() {
                     .selectedIconResource,
                 binding.labelEditText.text.toString(),
             )
-            requireActivity().onBackPressed()
+            activity.onBackPressed()
         }
 
         binding.deleteButton.setOnClickListener{
             Category.deleteCategoryById(expenseCategoryId.toString())
-            requireActivity().onBackPressed()
+            activity.onBackPressed()
         }
 
         // Actions

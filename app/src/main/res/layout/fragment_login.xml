@@ -67,16 +67,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/imageView"
                     android:autofillHints="@string/email" />
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imageView"
+                android:layout_width="256dp"
+                android:layout_height="256dp"
+                app:cardCornerRadius="40dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView">
+
                 <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="256dp"
-                    android:layout_height="256dp"
-                    android:layout_marginTop="48dp"
-                    android:src="@drawable/ic_launcher_background"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:contentDescription="@string/budgeteer_logo" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/budgeteer_logo"
+                    app:srcCompat="@mipmap/ic_budgeteer" />
+            </androidx.cardview.widget.CardView>
 
             <TextView
                     android:id="@+id/emailLabel"
@@ -93,6 +98,19 @@
                     android:text="@string/password"
                     app:layout_constraintBottom_toTopOf="@+id/passwordText"
                     app:layout_constraintStart_toStartOf="@+id/passwordText" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="256dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:text="Budgeteer"
+                android:textAlignment="center"
+                android:textSize="34sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

@@ -40,8 +40,6 @@ class ViewExpenseFragment : Fragment() {
 
     private fun setupUI() {
         // Initialization
-        val activity = requireActivity()
-
         val years = ArrayList<Int>()
         val thisYear: Int = Calendar.getInstance().get(Calendar.YEAR)
         for (year in thisYear downTo 1900) {

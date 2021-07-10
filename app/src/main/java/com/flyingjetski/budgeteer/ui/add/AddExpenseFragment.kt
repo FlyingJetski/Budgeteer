@@ -79,8 +79,16 @@ class AddExpenseFragment : Fragment() {
             ).show()
         }
 
-        binding.micImageView.setOnClickListener{ view ->
-            getSpeechInput(view)
+        binding.labelMicImageView.setOnClickListener{ view ->
+            getSpeechInput(view, 1)
+        }
+
+        binding.amountMicImageView.setOnClickListener{ view ->
+            getSpeechInput(view, 2)
+        }
+
+        binding.detailsMicImageView.setOnClickListener{ view ->
+            getSpeechInput(view, 3)
         }
 
         binding.addButton.setOnClickListener {
@@ -98,7 +106,7 @@ class AddExpenseFragment : Fragment() {
                     Feedback.NEUTRAL,
                 )
             )
-            requireActivity().finish()
+            activity.onBackPressed()
         }
 
         // Actions
@@ -111,12 +119,12 @@ class AddExpenseFragment : Fragment() {
         binding.dateEditText.setText(Common.dateToString(today.time))
     }
 
-    private fun getSpeechInput(view: View) {
+    private fun getSpeechInput(view: View, type: Int) {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
 
-        startActivityForResult(intent, 1)
+        startActivityForResult(intent, type)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -127,9 +135,20 @@ class AddExpenseFragment : Fragment() {
                 if (resultCode == RESULT_OK && data != null) {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     binding.labelEditText.setText(result?.get(0).toString())
+                }
+            }
+            2 -> {
+                if (resultCode == RESULT_OK && data != null) {
+                    val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (result?.get(0)?.toDoubleOrNull() != null) {
                         binding.amountEditText.setText(result?.get(0).toString())
                     }
+                }
+            }
+            3 -> {
+                if (resultCode == RESULT_OK && data != null) {
+                    val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    binding.detailsEditText.setText(result?.get(0).toString())
                 }
             }
         }

@@ -32,6 +32,8 @@ open class Category(
         }
 
         fun deleteCategoryById(id: String) {
+            Expense.deleteExpenseByCategoryId(id)
+            Income.deleteIncomeByCategoryId(id)
             AuthActivity().db.collection("Categories")
                 .document(id).delete()
         }

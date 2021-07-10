@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.Adapters
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.Common
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentAddWalletBinding
 import com.flyingjetski.budgeteer.models.Wallet
@@ -32,21 +33,9 @@ class AddWalletFragment : Fragment() {
     }
 
     private fun setupUI() {
-        // Instantiation
-        val drawablesFields: Array<Field> = R.mipmap::class.java.fields
-        val icons: ArrayList<Int> = ArrayList()
-
-        for (field in drawablesFields) {
-            try {
-                icons.add(field.getInt(null))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.IconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), Common.sourceIcons)
         binding.currencySpinner.adapter =
             ArrayAdapter(
                 requireContext(),

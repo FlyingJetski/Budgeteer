@@ -23,7 +23,7 @@ class ExpenseCategory(
     uid   : String?,
     icon  : Int,
     label : String,
-): Category(uid, icon, label, CategoryType.INCOME) {
+): Category(uid, icon, label, CategoryType.EXPENSE) {
 
     constructor(): this(null, 0, "")
 

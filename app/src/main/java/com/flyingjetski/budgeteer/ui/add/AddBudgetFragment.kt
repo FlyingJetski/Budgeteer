@@ -38,17 +38,6 @@ class AddBudgetFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        val drawablesFields: Array<Field> = R.mipmap::class.java.fields
-        val icons: ArrayList<Int> = ArrayList()
-
-        for (field in drawablesFields) {
-            try {
-                icons.add(field.getInt(null))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
         val startCalendar = Calendar.getInstance()
         val startDateListener =
             OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
@@ -71,7 +60,7 @@ class AddBudgetFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.IconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), Common.sourceIcons)
         binding.currencySpinner.adapter =
             ArrayAdapter(
                 requireContext(),

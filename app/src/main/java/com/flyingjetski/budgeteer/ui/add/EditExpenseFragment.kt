@@ -42,6 +42,7 @@ class EditExpenseFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
+        val activity = requireActivity()
         val expenseId = arguments?.getString("Id")
 
         val calendar = Calendar.getInstance()
@@ -57,7 +58,7 @@ class EditExpenseFragment : Fragment() {
         Source.getSource(object: Callback {
             override fun onCallback(value: Any) {
                 binding.sourceGridView.adapter = Adapters.SourceGridAdapter(
-                    requireContext(),
+                    activity,
                     value as ArrayList<Source>,
                 )
             }
@@ -66,7 +67,7 @@ class EditExpenseFragment : Fragment() {
         ExpenseCategory.getExpenseCategory(object: Callback {
             override fun onCallback(value: Any) {
                 binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
-                    requireContext(),
+                    activity,
                     value as ArrayList<Category>,
                 )
             }
@@ -75,7 +76,7 @@ class EditExpenseFragment : Fragment() {
         // Set Listeners
         binding.dateEditText.setOnClickListener{
             DatePickerDialog(
-                this.requireContext(),
+                activity,
                 dateListener,
                 calendar[Calendar.YEAR],
                 calendar[Calendar.MONTH],
@@ -120,7 +121,7 @@ class EditExpenseFragment : Fragment() {
                 val expense = value as Expense
 
                 calendar.set(
-                    expense.date.year,
+                    expense.date.year + 1900,
                     expense.date.month,
                     expense.date.date,
                 )

@@ -436,9 +436,10 @@ class Adapters {
             val rowView = inflater.inflate(R.layout.list_expense, null, false)
 
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val categoryImageView = rowView.findViewById(R.id.categoryImageView) as ImageView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
-            val categoryIconImageView = rowView.findViewById(R.id.categoryImageView) as ImageView
-            val categoryLabelTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+            val sourceImageView = rowView.findViewById(R.id.sourceImageView) as ImageView
+            val sourceLabelTextView = rowView.findViewById(R.id.sourceLabelTextView) as TextView
             val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
             val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
             val dateTextView = rowView.findViewById(R.id.dateTextView) as TextView
@@ -448,14 +449,15 @@ class Adapters {
             Category.getCategoryById(expenses[position].categoryId, object: Callback {
                 override fun onCallback(value: Any) {
                     val category = value as Category
-                    categoryIconImageView.setImageResource(category.icon)
-                    categoryLabelTextView.text = category.label
+                    categoryImageView.setImageResource(category.icon)
                 }
             })
             amountTextView.text = roundDouble(expenses[position].amount).toString()
             Source.getSourceById(expenses[position].sourceId, object: Callback {
                 override fun onCallback(value: Any) {
                     val source = value as Source
+                    sourceImageView.setImageResource(source.icon)
+                    sourceLabelTextView.text = source.label
                     currencyTextView.text = source.currency.toString()
                 }
             })
@@ -490,9 +492,10 @@ class Adapters {
             val rowView = inflater.inflate(R.layout.list_income, null, false)
 
             val idTextView = rowView.findViewById(R.id.idTextView) as TextView
+            val categoryImageView = rowView.findViewById(R.id.categoryImageView) as ImageView
             val labelTextView = rowView.findViewById(R.id.labelTextView) as TextView
-            val categoryIconImageView = rowView.findViewById(R.id.categoryImageView) as ImageView
-            val categoryLabelTextView = rowView.findViewById(R.id.categoryLabelTextView) as TextView
+            val sourceImageView = rowView.findViewById(R.id.sourceImageView) as ImageView
+            val sourceLabelTextView = rowView.findViewById(R.id.sourceLabelTextView) as TextView
             val amountTextView = rowView.findViewById(R.id.amountTextView) as TextView
             val currencyTextView = rowView.findViewById(R.id.currencyTextView) as TextView
             val dateTextView = rowView.findViewById(R.id.dateTextView) as TextView
@@ -502,14 +505,15 @@ class Adapters {
             Category.getCategoryById(incomes[position].categoryId, object: Callback {
                 override fun onCallback(value: Any) {
                     val category = value as Category
-                    categoryIconImageView.setImageResource(category.icon)
-                    categoryLabelTextView.text = category.label
+                    categoryImageView.setImageResource(category.icon)
                 }
             })
             amountTextView.text = roundDouble(incomes[position].amount).toString()
             Source.getSourceById(incomes[position].sourceId, object: Callback {
                 override fun onCallback(value: Any) {
                     val source = value as Source
+                    sourceImageView.setImageResource(source.icon)
+                    sourceLabelTextView.text = source.label
                     currencyTextView.text = source.currency.toString()
                 }
             })

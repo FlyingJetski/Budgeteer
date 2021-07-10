@@ -38,16 +38,6 @@ class EditSavingFragment : Fragment() {
 
     private fun setupUI() {
         val savingId = arguments?.getString("Id")
-        val drawablesFields: Array<Field> = R.mipmap::class.java.fields
-        val icons: ArrayList<Int> = ArrayList()
-
-        for (field in drawablesFields) {
-            try {
-                icons.add(field.getInt(null))
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
 
         val calendar = Calendar.getInstance()
         val dateListener =
@@ -60,7 +50,7 @@ class EditSavingFragment : Fragment() {
 
         // Populate View
         binding.categoryGridView.adapter =
-            Adapters.IconGridAdapter(this.requireContext(), icons)
+            Adapters.IconGridAdapter(this.requireContext(), Common.sourceIcons)
         binding.currencySpinner.adapter =
             ArrayAdapter(
                 requireContext(),

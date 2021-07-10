@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.models
 
+import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
@@ -85,6 +86,11 @@ class Budget(
                 .document(id).update(data)
         }
 
+        fun deleteBudgetById(id: String) {
+            AuthActivity().db.collection("Budgets")
+                .document(id).delete()
+        }
+
         private fun initializeBudgetAmountSpentById(id: String, startDate: Date?, endDate: Date?) {
             getBudgetById(id, object: Callback {
                 override fun onCallback(value: Any) {
@@ -133,14 +139,15 @@ class Budget(
         fun updateBudgetAmountSpent(currency: Currency, oldDate: Date?, oldAmount:Double?, date: Date?, amount: Double?) {
             // Update budgets based on expense's old date
             if (oldDate != null || oldAmount != null) {
+                Log.d("ASD", "1")
                 AuthActivity().db.collection("Budgets")
                     .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                     .whereEqualTo("currency", currency)
-                    .whereGreaterThanOrEqualTo("startDate", oldDate!!)
+                    .whereLessThanOrEqualTo("startDate", oldDate!!)
                     .get().addOnSuccessListener { query ->
                         query.documents.forEach { document ->
                             val budget = document.toObject(Budget::class.java)
-                            if (budget!!.endDate.before(date)) {
+                            if (budget!!.endDate.after(oldDate)) {
                                 document.reference.update("amountSpent", FieldValue.increment(oldAmount!!))
                             }
                         }
@@ -149,14 +156,15 @@ class Budget(
 
             // Update budgets based on expense's current date
             if (date != null || amount != null) {
+                Log.d("ASD", "2")
                 AuthActivity().db.collection("Budgets")
                     .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                     .whereEqualTo("currency", currency)
-                    .whereGreaterThanOrEqualTo("startDate", date!!)
+                    .whereLessThanOrEqualTo("startDate", date!!)
                     .get().addOnSuccessListener { query ->
                         query.documents.forEach { document ->
                             val budget = document.toObject(Budget::class.java)
-                            if (budget!!.endDate.before(date)) {
+                            if (budget!!.endDate.after(date)) {
                                 document.reference.update("amountSpent", FieldValue.increment(amount!!))
                             }
                         }

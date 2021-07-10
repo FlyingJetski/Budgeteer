@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.models
 
+import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
@@ -42,7 +43,7 @@ class Expense(
                     expense.currency = source.currency
                     AuthActivity().db.collection("Expenses").add(expense)
                     Source.updateSourceAmountById(expense.sourceId, -expense.amount)
-                    Budget.updateBudgetAmountSpent(expense.currency!!, null, null, expense.date, -expense.amount)
+                    Budget.updateBudgetAmountSpent(expense.currency!!, null, null, expense.date, expense.amount)
                 }
             })
         }
@@ -61,51 +62,47 @@ class Expense(
                 override fun onCallback(value: Any) {
                     val expense = value as Expense
                     if (date != null && amount != null) {
-                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, date, -amount)
-                        return
+                        Source.updateSourceAmountById(expense.sourceId, (expense.amount - amount))
+                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, -expense.amount, date, amount)
+                    } else if (amount != null) {
+                        Source.updateSourceAmountById(expense.sourceId, (expense.amount - amount))
+                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, -expense.amount, expense.date, amount)
+                    } else if (date != null) {
+                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, -expense.amount, date, expense.amount)
                     }
-                    if (amount != null) {
-                        Source.updateSourceAmountById(expense.sourceId, expense.amount - amount)
-                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, expense.date, -amount)
-                        return
-                    }
+
+                    val data = HashMap<String, Any>()
                     if (date != null) {
-                        Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, date, -expense.amount)
-                        return
+                        data["date"] = date
                     }
+                    if (sourceId != null && sourceId != "") {
+                        Source.getSourceById(sourceId, object: Callback {
+                            override fun onCallback(value: Any) {
+                                val source = value as Source
+                                data["currency"] = source.currency
+                            }
+                        })
+                        data["sourceId"] = sourceId
+                    }
+                    if (categoryId != null && categoryId != "") {
+                        data["categoryId"] = categoryId
+                    }
+                    if (label != null && label != "") {
+                        data["label"] = label
+                    }
+                    if (amount != null && amount != 0.0) {
+                        data["amount"] = amount
+                    }
+                    if (details != null && details != "") {
+                        data["details"] = details
+                    }
+                    if (feedback != null) {
+                        data["feedback"] = feedback
+                    }
+                    AuthActivity().db.collection("Expenses")
+                        .document(id).update(data)
                 }
             })
-
-            val data = HashMap<String, Any>()
-            if (date != null) {
-                data["date"] = date
-            }
-            if (sourceId != null && sourceId != "") {
-                Source.getSourceById(sourceId, object: Callback {
-                    override fun onCallback(value: Any) {
-                        val source = value as Source
-                        data["currency"] = source.currency
-                    }
-                })
-                data["sourceId"] = sourceId
-            }
-            if (categoryId != null && categoryId != "") {
-                data["categoryId"] = categoryId
-            }
-            if (label != null && label != "") {
-                data["label"] = label
-            }
-            if (amount != null && amount != 0.0) {
-                data["amount"] = amount
-            }
-            if (details != null && details != "") {
-                data["details"] = details
-            }
-            if (feedback != null) {
-                data["feedback"] = feedback
-            }
-            AuthActivity().db.collection("Expenses")
-                .document(id).update(data)
         }
 
         fun deleteExpenseById(id: String) {
@@ -113,12 +110,28 @@ class Expense(
                 override fun onCallback(value: Any) {
                     val expense = value as Expense
                     Source.updateSourceAmountById(expense.sourceId, expense.amount)
-                    Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, null, null)
+                    Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, -expense.amount, null, null)
+
+                    AuthActivity().db.collection("Expenses")
+                        .document(id).delete()
                 }
             })
+        }
 
+        fun deleteExpenseByCategoryId(id: String) {
             AuthActivity().db.collection("Expenses")
-                .document(id).delete()
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("categoryId", id)
+                .get().addOnSuccessListener { query ->
+                    query.documents.forEach { document ->
+                        if (document != null) {
+                            val expense = document.toObject(Expense::class.java)!!
+                            Source.updateSourceAmountById(expense.sourceId, -expense.amount)
+                            Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, null, null)
+                            document.reference.delete()
+                        }
+                    }
+                }
         }
 
         fun deleteExpenseBySourceId(id: String) {
@@ -127,7 +140,11 @@ class Expense(
                 .whereEqualTo("sourceId", id)
                 .get().addOnSuccessListener { query ->
                     query.documents.forEach { document ->
-                        document.reference.delete()
+                        if (document != null) {
+                            val expense = document.toObject(Expense::class.java)!!
+                            Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, expense.amount, null, null)
+                            document.reference.delete()
+                        }
                     }
                 }
         }
@@ -139,6 +156,20 @@ class Expense(
                     if (document != null) {
                         val expense = document.toObject(Expense::class.java)!!
                         callback.onCallback(expense)
+                    }
+                }
+        }
+
+        fun getExpenseBySourceId(id: String, callback: Callback) {
+            AuthActivity().db.collection("Expenses")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("sourceId", id)
+                .get().addOnSuccessListener { query ->
+                    query.documents.forEach { document ->
+                        if (document != null) {
+                            val expense = document.toObject(Expense::class.java)!!
+                            callback.onCallback(expense)
+                        }
                     }
                 }
         }

@@ -103,13 +103,32 @@ class Income(
                 .document(id).delete()
         }
 
+        fun deleteIncomeByCategoryId(id: String) {
+            AuthActivity().db.collection("Incomes")
+                .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .whereEqualTo("categoryId", id)
+                .get().addOnSuccessListener { query ->
+                    query.documents.forEach { document ->
+                        if (document != null) {
+                            val income = document.toObject(Income::class.java)!!
+                            Source.updateSourceAmountById(income.sourceId, -income.amount)
+                            document.reference.delete()
+                        }
+                    }
+                }
+        }
+
         fun deleteIncomeBySourceId(id: String) {
             AuthActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("sourceId", id)
                 .get().addOnSuccessListener { query ->
                     query.documents.forEach { document ->
-                        document.reference.delete()
+                        if (document != null) {
+                            val income = document.toObject(Income::class.java)!!
+                            Budget.updateBudgetAmountSpent(income.currency!!, income.date, income.amount, null, null)
+                            document.reference.delete()
+                        }
                     }
                 }
         }
