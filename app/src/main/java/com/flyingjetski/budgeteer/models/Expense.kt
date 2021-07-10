@@ -143,10 +143,13 @@ class Expense(
                 }
         }
 
-        fun getExpense(currency: Currency, sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
+        fun getExpense(currency: Currency?, sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
             var query = AuthActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
-                .whereEqualTo("currency", currency)
+            if (currency != null) {
+                query = query
+                    .whereEqualTo("currency", currency)
+            }
             if (sourceId != null) {
                 query = query
                     .whereEqualTo("sourceId", sourceId)
@@ -154,6 +157,7 @@ class Expense(
             query
                 .whereGreaterThanOrEqualTo("date", dateStart)
                 .whereLessThan("date", dateEnd)
+                .orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, _ ->
                     run {
                         if (snapshot != null) {

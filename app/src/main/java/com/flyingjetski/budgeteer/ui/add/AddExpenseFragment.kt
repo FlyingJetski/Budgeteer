@@ -1,8 +1,11 @@
 package com.flyingjetski.budgeteer.ui.add
 
+import android.app.Activity.RESULT_OK
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.content.Intent
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +39,7 @@ class AddExpenseFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
+        val activity = requireActivity()
         val calendar = Calendar.getInstance()
         val calendarListener =
             OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
@@ -49,7 +53,7 @@ class AddExpenseFragment : Fragment() {
         ExpenseCategory.getExpenseCategory(object: Callback {
             override fun onCallback(value: Any) {
                 binding.categoryGridView.adapter = Adapters.CategoryGridAdapter(
-                    requireContext(),
+                    activity,
                     value as ArrayList<Category>,
                 )
             }
@@ -58,7 +62,7 @@ class AddExpenseFragment : Fragment() {
         Source.getSource(object: Callback {
             override fun onCallback(value: Any) {
                 binding.sourceGridView.adapter = Adapters.SourceGridAdapter(
-                    requireContext(),
+                    activity,
                     value as ArrayList<Source>,
                 )
             }
@@ -73,6 +77,10 @@ class AddExpenseFragment : Fragment() {
                 calendar[Calendar.MONTH],
                 calendar[Calendar.DAY_OF_MONTH]
             ).show()
+        }
+
+        binding.micImageView.setOnClickListener{ view ->
+            getSpeechInput(view)
         }
 
         binding.addButton.setOnClickListener {
@@ -96,9 +104,31 @@ class AddExpenseFragment : Fragment() {
         // Actions
         val today = Calendar.getInstance()
         calendar.set(
-            today.time.year,
+            today.time.year + 1900,
             today.time.month,
             today.time.date,
         )
+        binding.dateEditText.setText(Common.dateToString(today.time))
+    }
+
+    fun getSpeechInput(view: View) {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+
+        startActivityForResult(intent, 69)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+            69 -> {
+                if (resultCode == RESULT_OK && data != null) {
+                    val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                    binding.labelEditText.setText(result?.get(0).toString())
+                }
+            }
+        }
     }
 }

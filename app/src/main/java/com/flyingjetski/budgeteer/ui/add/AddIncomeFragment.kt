@@ -96,5 +96,6 @@ class AddIncomeFragment : Fragment() {
             today.time.month,
             today.time.date,
         )
+        binding.dateEditText.setText(Common.dateToString(today.time))
     }
 }

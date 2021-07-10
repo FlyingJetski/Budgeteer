@@ -125,17 +125,21 @@ class Income(
                 }
         }
 
-        fun getIncome(currency: Currency, sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
+        fun getIncome(currency: Currency?, sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
             var query = AuthActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
-                .whereEqualTo("currency", currency)
             if (sourceId != null) {
                 query = query
                     .whereEqualTo("sourceId", sourceId)
             }
+            if (currency != null) {
+                query = query
+                    .whereEqualTo("currency", currency)
+            }
             query
                 .whereGreaterThanOrEqualTo("date", dateStart)
                 .whereLessThan("date", dateEnd)
+                .orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, _ ->
                     run {
                         if (snapshot != null) {
