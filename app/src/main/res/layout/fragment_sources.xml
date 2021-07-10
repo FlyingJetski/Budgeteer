@@ -9,120 +9,130 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_marginBottom="56dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:id="@+id/walletLinearLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/walletLabel"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="8dp"
-                    android:text="Wallet"
-                    android:textColor="#000000"
-                    android:textSize="28dp" />
+                    android:orientation="horizontal">
 
-                <Space
-                    android:layout_width="wrap_content"
+                    <TextView
+                        android:id="@+id/walletLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:text="Wallet"
+                        android:textColor="#000000"
+                        android:textSize="28dp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/addWalletButton"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="8dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:text="Add" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/walletLinearLayout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
 
-                <Button
-                    android:id="@+id/addWalletButton"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="8dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:text="Add" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/savingLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:text="Saving"
+                        android:textColor="#000000"
+                        android:textSize="28dp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/addSavingButton"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="8dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:text="Add" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/savingLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/budgetLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="8dp"
+                        android:text="Budget"
+                        android:textColor="#000000"
+                        android:textSize="28dp" />
+
+                    <Space
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/addBudgetButton"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="8dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:text="Add" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/budgetLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical"></LinearLayout>
             </LinearLayout>
+        </ScrollView>
 
-            <ListView
-                android:id="@+id/walletListView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"/>
-
-            <LinearLayout
-                android:id="@+id/savingLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/savingLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="8dp"
-                    android:text="Saving"
-                    android:textColor="#000000"
-                    android:textSize="28dp" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/addSavingButton"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="8dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:text="Add" />
-            </LinearLayout>
-
-            <ListView
-                android:id="@+id/savingListView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp" />
-
-            <LinearLayout
-                android:id="@+id/budgetLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/budgetLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="8dp"
-                    android:text="Budget"
-                    android:textColor="#000000"
-                    android:textSize="28dp" />
-
-                <Space
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:id="@+id/addBudgetButton"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="8dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:text="Add" />
-            </LinearLayout>
-
-
-            <ListView
-                android:id="@+id/budgetListView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
-            </ListView>
-        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
