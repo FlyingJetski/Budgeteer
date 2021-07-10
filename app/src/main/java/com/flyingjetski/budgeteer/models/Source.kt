@@ -3,6 +3,7 @@ package com.flyingjetski.budgeteer.models
 import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.SourceType
 import com.google.firebase.firestore.FieldValue
@@ -27,19 +28,19 @@ open class Source(
 
     companion object {
         fun updateSourceAmountById(id: String, amount: Double) {
-            AuthActivity().db.collection("Sources")
+            MainActivity().db.collection("Sources")
                 .document(id).update("amount", FieldValue.increment(amount))
         }
 
         fun deleteSourceById(id: String) {
             Expense.deleteExpenseBySourceId(id)
             Income.deleteIncomeBySourceId(id)
-            AuthActivity().db.collection("Sources")
+            MainActivity().db.collection("Sources")
                 .document(id).delete()
         }
 
         fun getSourceById(id: String, callback: Callback) {
-            AuthActivity().db.collection("Sources")
+            MainActivity().db.collection("Sources")
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
@@ -50,7 +51,7 @@ open class Source(
         }
 
         fun getSource(callback: Callback) {
-            AuthActivity().db.collection("Sources")
+            MainActivity().db.collection("Sources")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .addSnapshotListener{
                         snapshot, _ ->

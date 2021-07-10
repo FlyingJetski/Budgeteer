@@ -3,6 +3,7 @@ package com.flyingjetski.budgeteer.models
 import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
 import com.google.firebase.firestore.Query
@@ -41,7 +42,7 @@ class Expense(
                 override fun onCallback(value: Any) {
                     val source = value as Source
                     expense.currency = source.currency
-                    AuthActivity().db.collection("Expenses").add(expense)
+                    MainActivity().db.collection("Expenses").add(expense)
                     Source.updateSourceAmountById(expense.sourceId, -expense.amount)
                     Budget.updateBudgetAmountSpent(expense.currency!!, null, null, expense.date, expense.amount)
                 }
@@ -99,7 +100,7 @@ class Expense(
                     if (feedback != null) {
                         data["feedback"] = feedback
                     }
-                    AuthActivity().db.collection("Expenses")
+                    MainActivity().db.collection("Expenses")
                         .document(id).update(data)
                 }
             })
@@ -112,14 +113,14 @@ class Expense(
                     Source.updateSourceAmountById(expense.sourceId, expense.amount)
                     Budget.updateBudgetAmountSpent(expense.currency!!, expense.date, -expense.amount, null, null)
 
-                    AuthActivity().db.collection("Expenses")
+                    MainActivity().db.collection("Expenses")
                         .document(id).delete()
                 }
             })
         }
 
         fun deleteExpenseByCategoryId(id: String) {
-            AuthActivity().db.collection("Expenses")
+            MainActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("categoryId", id)
                 .get().addOnSuccessListener { query ->
@@ -135,7 +136,7 @@ class Expense(
         }
 
         fun deleteExpenseBySourceId(id: String) {
-            AuthActivity().db.collection("Expenses")
+            MainActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("sourceId", id)
                 .get().addOnSuccessListener { query ->
@@ -150,7 +151,7 @@ class Expense(
         }
 
         fun getExpenseById(id: String, callback: Callback) {
-            AuthActivity().db.collection("Expenses")
+            MainActivity().db.collection("Expenses")
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
@@ -161,7 +162,7 @@ class Expense(
         }
 
         fun getExpenseBySourceId(id: String, callback: Callback) {
-            AuthActivity().db.collection("Expenses")
+            MainActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("sourceId", id)
                 .get().addOnSuccessListener { query ->
@@ -175,7 +176,7 @@ class Expense(
         }
 
         fun getExpense(currency: Currency?, sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
-            var query = AuthActivity().db.collection("Expenses")
+            var query = MainActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
             if (currency != null) {
                 query = query
@@ -208,7 +209,7 @@ class Expense(
         }
 
         fun updateExpenseCurrencyBySourceId(id: String, currency: Currency) {
-            AuthActivity().db.collection("Expenses")
+            MainActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("sourceId", id)
                 .get().addOnSuccessListener { query ->
@@ -219,7 +220,7 @@ class Expense(
         }
 
         fun getAllExpense(callback: Callback) {
-            AuthActivity().db.collection("Expenses")
+            MainActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, _ ->

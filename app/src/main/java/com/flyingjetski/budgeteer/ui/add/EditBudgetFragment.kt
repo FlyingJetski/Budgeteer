@@ -127,13 +127,13 @@ class EditBudgetFragment : Fragment() {
                 binding.categoryGridView.deferNotifyDataSetChanged()
 
                 startCalendar.set(
-                    budget.startDate.year,
+                    budget.startDate.year + 1900,
                     budget.startDate.month,
                     budget.startDate.date,
                 )
 
                 endCalendar.set(
-                    budget.startDate.year,
+                    budget.startDate.year + 1900,
                     budget.startDate.month,
                     budget.startDate.date,
                 )

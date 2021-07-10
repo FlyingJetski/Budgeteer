@@ -18,19 +18,11 @@ class AuthActivity: AppCompatActivity() {
 
     // [START declare_auth]
     var auth = Firebase.auth
-    var db = Firebase.firestore
     // [END declare_auth]
 
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        db.firestoreSettings = FirebaseFirestoreSettings.Builder()
-            .setPersistenceEnabled(true)
-            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
-            .build()
-
-        db.clearPersistence()
 
         @Suppress("UNUSED_VARIABLE")
         val binding = DataBindingUtil.setContentView<ActivityAuthBinding>(this, R.layout.activity_auth)
@@ -47,14 +39,6 @@ class AuthActivity: AppCompatActivity() {
                 // Email Verification sent
             }
         // [END send_email_verification]
-    }
-
-    private fun updateUI(user: FirebaseUser?) {
-
-    }
-
-    private fun reload() {
-
     }
 
     companion object {

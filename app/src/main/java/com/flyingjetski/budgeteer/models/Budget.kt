@@ -3,6 +3,7 @@ package com.flyingjetski.budgeteer.models
 import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.QuerySnapshot
@@ -35,7 +36,7 @@ class Budget(
 
     companion object {
         fun insertBudget(budget: Budget) {
-            AuthActivity().db.collection("Budgets").add(budget).addOnSuccessListener {
+            MainActivity().db.collection("Budgets").add(budget).addOnSuccessListener {
                 initializeBudgetAmountSpentById(it.id, budget.startDate, budget.endDate)
             }
         }
@@ -82,12 +83,12 @@ class Budget(
                 data["isRecurring"] = isRecurring
             }
 
-            AuthActivity().db.collection("Budgets")
+            MainActivity().db.collection("Budgets")
                 .document(id).update(data)
         }
 
         fun deleteBudgetById(id: String) {
-            AuthActivity().db.collection("Budgets")
+            MainActivity().db.collection("Budgets")
                 .document(id).delete()
         }
 
@@ -95,7 +96,7 @@ class Budget(
             getBudgetById(id, object: Callback {
                 override fun onCallback(value: Any) {
                     val budget = value as Budget
-                    var query = AuthActivity().db.collection("Expenses")
+                    var query = MainActivity().db.collection("Expenses")
                         .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                     query = if (startDate != null) {
                         query.whereGreaterThanOrEqualTo("date", startDate)
@@ -122,7 +123,7 @@ class Budget(
         }
 
         private fun updateBudgetAmountSpentById(id: String, amount: Double) {
-            AuthActivity().db.collection("Budgets")
+            MainActivity().db.collection("Budgets")
                 .document(id).update("amountSpent", FieldValue.increment(amount))
         }
 
@@ -130,7 +131,7 @@ class Budget(
             getBudgetById(id, object: Callback {
                 override fun onCallback(value: Any) {
                     val budget = value as Budget
-                    AuthActivity().db.collection("Budgets")
+                    MainActivity().db.collection("Budgets")
                         .document(id).update("amountSpent", budget.amount)
                 }
             })
@@ -140,7 +141,7 @@ class Budget(
             // Update budgets based on expense's old date
             if (oldDate != null || oldAmount != null) {
                 Log.d("ASD", "1")
-                AuthActivity().db.collection("Budgets")
+                MainActivity().db.collection("Budgets")
                     .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                     .whereEqualTo("currency", currency)
                     .whereLessThanOrEqualTo("startDate", oldDate!!)
@@ -157,7 +158,7 @@ class Budget(
             // Update budgets based on expense's current date
             if (date != null || amount != null) {
                 Log.d("ASD", "2")
-                AuthActivity().db.collection("Budgets")
+                MainActivity().db.collection("Budgets")
                     .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                     .whereEqualTo("currency", currency)
                     .whereLessThanOrEqualTo("startDate", date!!)
@@ -173,7 +174,7 @@ class Budget(
         }
 
         fun getBudgetById(id: String, callback: Callback) {
-            AuthActivity().db.collection("Budgets")
+            MainActivity().db.collection("Budgets")
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
@@ -184,7 +185,7 @@ class Budget(
         }
 
         fun getBudget(callback: Callback) {
-            AuthActivity().db.collection("Budgets")
+            MainActivity().db.collection("Budgets")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .addSnapshotListener { snapshot, _ ->
                     run {

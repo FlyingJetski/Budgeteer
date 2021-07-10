@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.models.enums.CategoryType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
@@ -19,11 +20,11 @@ class IncomeCategory(
 
     companion object {
         fun insertIncomeCategory(category: IncomeCategory) {
-            AuthActivity().db.collection("Categories").add(category)
+            MainActivity().db.collection("Categories").add(category)
         }
 
         fun getIncomeCategory(callback: Callback) {
-            AuthActivity().db.collection("Categories")
+            MainActivity().db.collection("Categories")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("type", CategoryType.INCOME)
                 .addSnapshotListener{

@@ -162,5 +162,4 @@ class SourcesFragment : Fragment() {
             startActivity(intent)
         }
     }
-
 }

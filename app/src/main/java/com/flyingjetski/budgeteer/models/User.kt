@@ -19,7 +19,7 @@ class User(
 
     companion object {
         fun insertUser(fragment: Fragment, user: User) {
-            AuthActivity().db.collection("Users").add(user)
+            MainActivity().db.collection("Users").add(user)
                 .addOnCompleteListener(fragment.requireActivity()) { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(fragment.context, "Registered successfully.",
@@ -35,7 +35,7 @@ class User(
 
         fun getUserById(uid: String) {
             val user = User()
-            AuthActivity().db.collection("Users")
+            MainActivity().db.collection("Users")
                 .document(uid).set(user)
         }
     }

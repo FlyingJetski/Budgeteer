@@ -15,6 +15,9 @@ import androidx.navigation.findNavController
 import com.flyingjetski.budgeteer.databinding.ActivityMainBinding
 import com.flyingjetski.budgeteer.ui.main.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,10 +25,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
     private lateinit var navController: NavController
+    var db = Firebase.firestore
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        db.firestoreSettings = FirebaseFirestoreSettings.Builder()
+            .setPersistenceEnabled(true)
+            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+            .build()
+
+        db.clearPersistence()
 
         if (Common.expenseCategoryIcons.size == 0) {
             for (number in 1..Common.expenseCategoryIconCount) {
@@ -152,6 +163,9 @@ class MainActivity : AppCompatActivity() {
             if (navView.selectedItemId == R.id.addActivity) {
                 onBackPressed()
             }
+            if (navView.selectedItemId == R.id.sourcesFragment) {
+                onBackPressed()
+            }
         }
     }
 
@@ -170,10 +184,21 @@ class MainActivity : AppCompatActivity() {
     // [END on_start_check_user]
 
     override fun onBackPressed() {
-        if (navView.selectedItemId == R.id.addActivity) {
-            navView.selectedItemId = previousItem!!
-        } else {
-            this.moveTaskToBack(true);
+        when (navView.selectedItemId) {
+            R.id.addActivity -> {
+                navView.selectedItemId = previousItem!!
+            }
+            R.id.sourcesFragment -> {
+                if (previousItem == R.id.addActivity) {
+                    navView.selectedItemId = R.id.homeFragment
+                } else {
+                    navView.selectedItemId = previousItem!!
+                }
+                navView.selectedItemId = R.id.sourcesFragment
+            }
+            else -> {
+                this.moveTaskToBack(true);
+            }
         }
     }
 

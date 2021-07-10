@@ -3,6 +3,7 @@ package com.flyingjetski.budgeteer.models
 import android.util.Log
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.SourceType
 import java.util.HashMap
@@ -20,7 +21,7 @@ class Wallet(
 
     companion object {
         fun insertWallet(source: Wallet) {
-            AuthActivity().db.collection("Sources").add(source)
+            MainActivity().db.collection("Sources").add(source)
         }
 
         fun updateWalletById(
@@ -41,12 +42,12 @@ class Wallet(
                 Income.updateIncomeCurrencyBySourceId(id, currency)
                 data["currency"] = currency
             }
-            AuthActivity().db.collection("Sources")
+            MainActivity().db.collection("Sources")
                 .document(id).update(data)
         }
 
         fun getWalletById(id: String, callback: Callback) {
-            AuthActivity().db.collection("Sources")
+            MainActivity().db.collection("Sources")
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
@@ -57,7 +58,7 @@ class Wallet(
         }
 
         fun getWallet(callback: Callback) {
-            AuthActivity().db.collection("Sources")
+            MainActivity().db.collection("Sources")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("type", SourceType.WALLET)
                 .addSnapshotListener{

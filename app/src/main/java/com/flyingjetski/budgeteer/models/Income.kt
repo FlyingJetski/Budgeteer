@@ -2,6 +2,7 @@ package com.flyingjetski.budgeteer.models
 
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.google.firebase.firestore.Query
 import java.util.*
@@ -39,7 +40,7 @@ class Income(
                 override fun onCallback(value: Any) {
                     val source = value as Source
                     income.currency = source.currency
-                    AuthActivity().db.collection("Incomes").add(income)
+                    MainActivity().db.collection("Incomes").add(income)
                     Source.updateSourceAmountById(income.sourceId, income.amount)
                 }
             })
@@ -88,7 +89,7 @@ class Income(
             if (details != null && details != "") {
                 data["details"] = details
             }
-            AuthActivity().db.collection("Incomes")
+            MainActivity().db.collection("Incomes")
                 .document(id).update(data)
         }
 
@@ -99,12 +100,12 @@ class Income(
                     Source.updateSourceAmountById(income.sourceId, -income.amount)
                 }
             })
-            AuthActivity().db.collection("Incomes")
+            MainActivity().db.collection("Incomes")
                 .document(id).delete()
         }
 
         fun deleteIncomeByCategoryId(id: String) {
-            AuthActivity().db.collection("Incomes")
+            MainActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("categoryId", id)
                 .get().addOnSuccessListener { query ->
@@ -119,7 +120,7 @@ class Income(
         }
 
         fun deleteIncomeBySourceId(id: String) {
-            AuthActivity().db.collection("Incomes")
+            MainActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("sourceId", id)
                 .get().addOnSuccessListener { query ->
@@ -134,7 +135,7 @@ class Income(
         }
 
         fun getIncomeById(id: String, callback: Callback) {
-            AuthActivity().db.collection("Incomes")
+            MainActivity().db.collection("Incomes")
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
@@ -145,7 +146,7 @@ class Income(
         }
 
         fun getIncome(currency: Currency?, sourceId: String?, dateStart: Date, dateEnd: Date, callback: Callback) {
-            var query = AuthActivity().db.collection("Incomes")
+            var query = MainActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
             if (sourceId != null) {
                 query = query
@@ -178,7 +179,7 @@ class Income(
         }
 
         fun updateIncomeCurrencyBySourceId(id: String, currency: Currency) {
-            AuthActivity().db.collection("Incomes")
+            MainActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .whereEqualTo("sourceId", id)
                 .get().addOnSuccessListener { query ->
@@ -189,7 +190,7 @@ class Income(
         }
 
         fun getAllIncome(callback: Callback) {
-            AuthActivity().db.collection("Incomes")
+            MainActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
                 .orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, _ ->

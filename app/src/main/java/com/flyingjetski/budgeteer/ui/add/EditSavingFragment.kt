@@ -101,7 +101,7 @@ class EditSavingFragment : Fragment() {
                 val saving = value as Saving
 
                 calendar.set(
-                    saving.deadline.year,
+                    saving.deadline.year + 1900,
                     saving.deadline.month,
                     saving.deadline.date,
                 )

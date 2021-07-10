@@ -2,6 +2,7 @@ package com.flyingjetski.budgeteer.models
 
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.models.enums.CategoryType
 
 open class Category(
@@ -27,19 +28,19 @@ open class Category(
             if (label != null && label != "") {
                 data["label"] = label
             }
-            AuthActivity().db.collection("Categories")
+            MainActivity().db.collection("Categories")
                 .document(id).update(data)
         }
 
         fun deleteCategoryById(id: String) {
             Expense.deleteExpenseByCategoryId(id)
             Income.deleteIncomeByCategoryId(id)
-            AuthActivity().db.collection("Categories")
+            MainActivity().db.collection("Categories")
                 .document(id).delete()
         }
 
         fun getCategoryById(id: String, callback: Callback) {
-            AuthActivity().db.collection("Categories")
+            MainActivity().db.collection("Categories")
                 .document(id).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
