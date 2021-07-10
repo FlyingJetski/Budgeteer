@@ -118,13 +118,6 @@ class MainActivity : AppCompatActivity() {
     }
     // [END on_start_check_user]
 
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        if (hasFocus) {
-            navView.selectedItemId = previousItem!!
-        }
-    }
-
     override fun onBackPressed() {
         this.moveTaskToBack(true);
     }
