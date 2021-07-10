@@ -58,7 +58,7 @@ class AddExpenseCategoryFragment : Fragment() {
                     binding.labelEditText.text.toString()
                 )
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
     }
 

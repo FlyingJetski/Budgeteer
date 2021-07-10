@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.ui.add
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,8 @@ import com.flyingjetski.budgeteer.databinding.FragmentEditSavingBinding
 import com.flyingjetski.budgeteer.models.*
 import com.flyingjetski.budgeteer.models.enums.Currency
 import java.lang.reflect.Field
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EditSavingFragment : Fragment() {
 
@@ -46,6 +49,15 @@ class EditSavingFragment : Fragment() {
             }
         }
 
+        val calendar = Calendar.getInstance()
+        val dateListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                calendar[Calendar.YEAR] = year
+                calendar[Calendar.MONTH] = monthOfYear
+                calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+                binding.deadlineDateEditText.setText(Common.dateToString(calendar.time))
+            }
+
         // Populate View
         binding.categoryGridView.adapter =
             Adapters.IconGridAdapter(this.requireContext(), icons)
@@ -63,6 +75,16 @@ class EditSavingFragment : Fragment() {
                 .selectIcon(position)
         }
 
+        binding.deadlineDateEditText.setOnClickListener{
+            DatePickerDialog(
+                this.requireContext(),
+                dateListener,
+                calendar[Calendar.YEAR],
+                calendar[Calendar.MONTH],
+                calendar[Calendar.DAY_OF_MONTH]
+            ).show()
+        }
+
         binding.editButton.setOnClickListener{
             Saving.updateSavingById(
                 savingId.toString(),
@@ -75,18 +97,25 @@ class EditSavingFragment : Fragment() {
                 Common.stringToDate(binding.deadlineDateEditText.text.toString()),
                 AutoSave(),
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().onBackPressed()
         }
 
         binding.deleteButton.setOnClickListener{
             Source.deleteSourceById(savingId.toString())
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().onBackPressed()
         }
 
         // Actions
         Saving.getSavingById(savingId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val saving = value as Saving
+
+                calendar.set(
+                    saving.deadline.year,
+                    saving.deadline.month,
+                    saving.deadline.date,
+                )
+
                 binding.categoryGridView.deferNotifyDataSetChanged()
                 val position = (binding.categoryGridView.adapter as Adapters.IconGridAdapter)
                     .getPositionOfResource(saving.icon)

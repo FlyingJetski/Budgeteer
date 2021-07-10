@@ -62,12 +62,12 @@ class EditIncomeCategoryFragment : Fragment() {
                     .selectedIconResource,
                 binding.labelEditText.text.toString(),
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().onBackPressed()
         }
 
         binding.deleteButton.setOnClickListener{
             Category.deleteCategoryById(incomeCategoryId.toString())
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().onBackPressed()
         }
 
         // Actions

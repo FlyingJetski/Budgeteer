@@ -86,9 +86,15 @@ class AddIncomeFragment : Fragment() {
                     binding.detailsEditText.text.toString(),
                 )
             )
-//            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
 
+        // Actions
+        val today = Calendar.getInstance()
+        calendar.set(
+            today.time.year,
+            today.time.month,
+            today.time.date,
+        )
     }
-
 }

@@ -66,7 +66,7 @@ class AddWalletFragment : Fragment() {
                     false
                 )
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
     }
 

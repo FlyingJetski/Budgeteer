@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.ui.add
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,6 +22,8 @@ import com.flyingjetski.budgeteer.models.ExpenseCategory
 import com.flyingjetski.budgeteer.models.Source
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EditExpenseFragment : Fragment() {
 
@@ -40,6 +43,15 @@ class EditExpenseFragment : Fragment() {
     private fun setupUI() {
         // Instantiation
         val expenseId = arguments?.getString("Id")
+
+        val calendar = Calendar.getInstance()
+        val dateListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                calendar[Calendar.YEAR] = year
+                calendar[Calendar.MONTH] = monthOfYear
+                calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+                binding.dateEditText.setText(Common.dateToString(calendar.time))
+            }
 
         // Populate View
         Source.getSource(object: Callback {
@@ -61,6 +73,16 @@ class EditExpenseFragment : Fragment() {
         })
 
         // Set Listeners
+        binding.dateEditText.setOnClickListener{
+            DatePickerDialog(
+                this.requireContext(),
+                dateListener,
+                calendar[Calendar.YEAR],
+                calendar[Calendar.MONTH],
+                calendar[Calendar.DAY_OF_MONTH]
+            ).show()
+        }
+
         binding.sourceGridView.setOnItemClickListener{ adapterView: AdapterView<*>, _, position: Int, _ ->
             (adapterView.adapter as Adapters.SourceGridAdapter)
                 .selectIcon(position)
@@ -84,18 +106,25 @@ class EditExpenseFragment : Fragment() {
                 binding.detailsEditText.text.toString(),
                 Feedback.NEUTRAL,
             )
-            requireActivity().finish()
+            requireActivity().onBackPressed()
         }
 
         binding.deleteButton.setOnClickListener{
             Expense.deleteExpenseById(expenseId.toString())
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().onBackPressed()
         }
 
         // Actions
         Expense.getExpenseById(expenseId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val expense = value as Expense
+
+                calendar.set(
+                    expense.date.year,
+                    expense.date.month,
+                    expense.date.date,
+                )
+
                 Source.getSourceById(expense.sourceId, object: Callback {
                     override fun onCallback(value: Any) {
                         val source = value as Source

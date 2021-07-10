@@ -67,7 +67,10 @@ class AddExpenseFragment : Fragment() {
         // Set Listener
         binding.dateEditText.setOnClickListener{
             DatePickerDialog(
-                this.requireContext(), calendarListener, calendar[Calendar.YEAR], calendar[Calendar.MONTH],
+                this.requireContext(),
+                calendarListener,
+                calendar[Calendar.YEAR],
+                calendar[Calendar.MONTH],
                 calendar[Calendar.DAY_OF_MONTH]
             ).show()
         }
@@ -87,10 +90,15 @@ class AddExpenseFragment : Fragment() {
                     Feedback.NEUTRAL,
                 )
             )
-//            Navigation.findNavController(it).navigateUp()
             requireActivity().finish()
         }
 
+        // Actions
+        val today = Calendar.getInstance()
+        calendar.set(
+            today.time.year,
+            today.time.month,
+            today.time.date,
+        )
     }
-
 }

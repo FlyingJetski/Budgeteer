@@ -133,13 +133,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <Button
-                android:id="@+id/addButton"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/editButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#2E7D32"
-                android:text="Add" />
+                android:text="Edit"
+                android:theme="@style/Edit.Button" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/deleteButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Delete"
+                android:theme="@style/Delete.Button" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

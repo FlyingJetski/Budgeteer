@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
+import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.flyingjetski.budgeteer.databinding.ActivityMainBinding
 import com.flyingjetski.budgeteer.ui.main.*
@@ -13,6 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
+    private lateinit var navController: NavController
     private var previousItem: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +26,9 @@ class MainActivity : AppCompatActivity() {
         navView = binding.navView
         previousItem = navView.selectedItemId
         setContentView(binding.root)
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
+        navController = findNavController(R.id.nav_host_fragment_activity_main)
+
 
         navView.setOnNavigationItemSelectedListener { item ->
             previousItem = navView.selectedItemId
@@ -104,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = AuthActivity().auth.currentUser
         if(currentUser == null){
+            finish()
             startActivity(Intent(this, AuthActivity::class.java))
         } else {
             Log.d("LOGON", "${AuthActivity().auth.uid}")
@@ -116,5 +123,9 @@ class MainActivity : AppCompatActivity() {
         if (hasFocus) {
             navView.selectedItemId = previousItem!!
         }
+    }
+
+    override fun onBackPressed() {
+        this.moveTaskToBack(true);
     }
 }

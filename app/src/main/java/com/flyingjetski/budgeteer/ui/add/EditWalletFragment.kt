@@ -36,7 +36,6 @@ class EditWalletFragment : Fragment() {
 
     private fun setupUI() {
         val walletId = arguments?.getString("Id")
-        Log.d("ZXC", walletId.toString())
         val drawablesFields: Array<Field> = R.mipmap::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
@@ -73,12 +72,12 @@ class EditWalletFragment : Fragment() {
                 binding.labelEditText.text.toString(),
                 binding.currencySpinner.selectedItem as Currency,
             )
-            requireActivity().finish()
+            requireActivity().onBackPressed()
         }
 
         binding.deleteButton.setOnClickListener{
             Source.deleteSourceById(walletId.toString())
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().onBackPressed()
         }
 
         // Actions

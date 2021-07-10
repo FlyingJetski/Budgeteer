@@ -62,12 +62,12 @@ class EditExpenseCategoryFragment : Fragment() {
                     .selectedIconResource,
                 binding.labelEditText.text.toString(),
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().onBackPressed()
         }
 
         binding.deleteButton.setOnClickListener{
             Category.deleteCategoryById(expenseCategoryId.toString())
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().onBackPressed()
         }
 
         // Actions

@@ -8,44 +8,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/viewExpensesButton"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="64dp"
             android:text="View Expenses"
+            android:theme="@style/AppTheme.Button"
             app:cornerRadius="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/viewExpenseCategoriesButton"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_marginTop="24dp"
             android:text="View Expense Categories"
+            android:theme="@style/AppTheme.Button"
             app:cornerRadius="20dp"
             app:layout_constraintStart_toStartOf="@+id/viewExpensesButton"
             app:layout_constraintTop_toBottomOf="@+id/viewExpensesButton" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/viewIncomeCategoriesButton"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_marginTop="24dp"
             android:text="View Income Categories"
+            android:theme="@style/AppTheme.Button"
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="@+id/viewIncomesButton"
             app:layout_constraintTop_toBottomOf="@+id/viewIncomesButton" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/viewIncomesButton"
             android:layout_width="180dp"
             android:layout_height="180dp"
             android:layout_marginTop="64dp"
             android:layout_marginEnd="16dp"
             android:text="View Incomes"
+            android:theme="@style/AppTheme.Button"
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

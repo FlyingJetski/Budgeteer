@@ -115,7 +115,7 @@ class AddBudgetFragment : Fragment() {
                     false
                 )
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
     }
 

@@ -133,13 +133,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/addButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:backgroundTint="#2E7D32"
-                android:text="Add" />
+                android:text="Add"
+                android:theme="@style/Add.Button" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

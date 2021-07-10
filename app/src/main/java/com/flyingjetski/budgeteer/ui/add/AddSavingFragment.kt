@@ -91,7 +91,7 @@ class AddSavingFragment : Fragment() {
                     AutoSave(),
                 )
             )
-            Navigation.findNavController(it).navigateUp()
+            requireActivity().finish()
         }
     }
 

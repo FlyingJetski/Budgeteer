@@ -3,6 +3,7 @@ package com.flyingjetski.budgeteer.models
 import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
+import com.google.firebase.firestore.Query
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -167,6 +168,7 @@ class Income(
         fun getAllIncome(callback: Callback) {
             AuthActivity().db.collection("Incomes")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, _ ->
                     run {
                         if (snapshot != null) {

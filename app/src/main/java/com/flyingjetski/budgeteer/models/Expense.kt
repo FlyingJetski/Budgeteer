@@ -4,6 +4,7 @@ import com.flyingjetski.budgeteer.AuthActivity
 import com.flyingjetski.budgeteer.Callback
 import com.flyingjetski.budgeteer.models.enums.Currency
 import com.flyingjetski.budgeteer.models.enums.Feedback
+import com.google.firebase.firestore.Query
 import java.util.*
 
 class Expense(
@@ -185,6 +186,7 @@ class Expense(
         fun getAllExpense(callback: Callback) {
             AuthActivity().db.collection("Expenses")
                 .whereEqualTo("uid", AuthActivity().auth.uid.toString())
+                .orderBy("date", Query.Direction.DESCENDING)
                 .addSnapshotListener { snapshot, _ ->
                     run {
                         if (snapshot != null) {

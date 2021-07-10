@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.flyingjetski.budgeteer.AuthActivity
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentMoreBinding
 

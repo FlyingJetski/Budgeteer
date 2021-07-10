@@ -122,12 +122,12 @@ class EditBudgetFragment : Fragment() {
                 stringToDate(binding.endDateEditText.text.toString()),
                 false,
             )
-            requireActivity().finish()
+            requireActivity().onBackPressed()
         }
 
         binding.deleteButton.setOnClickListener{
             Source.deleteSourceById(budgetId.toString())
-            requireActivity().finish()
+            requireActivity().onBackPressed()
         }
 
         // Actions

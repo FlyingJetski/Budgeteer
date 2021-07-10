@@ -8,10 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.flyingjetski.budgeteer.Adapters
-import com.flyingjetski.budgeteer.BlankActivity
-import com.flyingjetski.budgeteer.Callback
-import com.flyingjetski.budgeteer.R
+import com.flyingjetski.budgeteer.*
 import com.flyingjetski.budgeteer.databinding.FragmentSourcesBinding
 import com.flyingjetski.budgeteer.databinding.FragmentViewBinding
 import com.flyingjetski.budgeteer.models.Budget
@@ -64,6 +61,12 @@ class SourcesFragment : Fragment() {
         })
 
         // Set Listeners
+        binding.addWalletButton.setOnClickListener { view ->
+            val intent = Intent(requireContext(), BlankActivity::class.java)
+            intent.putExtra("Fragment", "AddWallet")
+            startActivity(intent)
+        }
+
         binding.walletListView.setOnItemClickListener{adapterView, view, position, id ->
             val intent = Intent(requireContext(), BlankActivity::class.java)
             intent.putExtra("Fragment", "EditWallet")
@@ -71,10 +74,9 @@ class SourcesFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.budgetListView.setOnItemClickListener{adapterView, view, position, id ->
+        binding.addSavingButton.setOnClickListener { view ->
             val intent = Intent(requireContext(), BlankActivity::class.java)
-            intent.putExtra("Fragment", "EditBudget")
-            intent.putExtra("Id", (binding.budgetListView.adapter.getItem(position) as Budget).id.toString())
+            intent.putExtra("Fragment", "AddSaving")
             startActivity(intent)
         }
 
@@ -82,6 +84,19 @@ class SourcesFragment : Fragment() {
             val intent = Intent(requireContext(), BlankActivity::class.java)
             intent.putExtra("Fragment", "EditSaving")
             intent.putExtra("Id", (binding.savingListView.adapter.getItem(position) as Saving).id.toString())
+            startActivity(intent)
+        }
+
+        binding.addBudgetButton.setOnClickListener { view ->
+            val intent = Intent(requireContext(), BlankActivity::class.java)
+            intent.putExtra("Fragment", "AddBudget")
+            startActivity(intent)
+        }
+
+        binding.budgetListView.setOnItemClickListener{adapterView, view, position, id ->
+            val intent = Intent(requireContext(), BlankActivity::class.java)
+            intent.putExtra("Fragment", "EditBudget")
+            intent.putExtra("Id", (binding.budgetListView.adapter.getItem(position) as Budget).id.toString())
             startActivity(intent)
         }
     }

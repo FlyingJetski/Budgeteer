@@ -1,5 +1,6 @@
 package com.flyingjetski.budgeteer.ui.add
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,13 +10,12 @@ import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.flyingjetski.budgeteer.Adapters
-import com.flyingjetski.budgeteer.Callback
-import com.flyingjetski.budgeteer.Common
-import com.flyingjetski.budgeteer.R
+import com.flyingjetski.budgeteer.*
 import com.flyingjetski.budgeteer.databinding.FragmentEditIncomeBinding
 import com.flyingjetski.budgeteer.models.*
 import com.flyingjetski.budgeteer.models.enums.Currency
+import java.util.*
+import kotlin.collections.ArrayList
 
 class EditIncomeFragment : Fragment() {
 
@@ -35,6 +35,15 @@ class EditIncomeFragment : Fragment() {
     private fun setupUI() {
         // Instantiation
         val incomeId = arguments?.getString("Id")
+
+        val calendar = Calendar.getInstance()
+        val dateListener =
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                calendar[Calendar.YEAR] = year
+                calendar[Calendar.MONTH] = monthOfYear
+                calendar[Calendar.DAY_OF_MONTH] = dayOfMonth
+                binding.dateEditText.setText(Common.dateToString(calendar.time))
+            }
 
         // Populate View
         Source.getSource(object: Callback {
@@ -56,6 +65,16 @@ class EditIncomeFragment : Fragment() {
         })
 
         // Set Listeners
+        binding.dateEditText.setOnClickListener{
+            DatePickerDialog(
+                this.requireContext(),
+                dateListener,
+                calendar[Calendar.YEAR],
+                calendar[Calendar.MONTH],
+                calendar[Calendar.DAY_OF_MONTH]
+            ).show()
+        }
+
         binding.sourceGridView.setOnItemClickListener{ adapterView: AdapterView<*>, _, position: Int, _ ->
             (adapterView.adapter as Adapters.SourceGridAdapter)
                 .selectIcon(position)
@@ -78,18 +97,25 @@ class EditIncomeFragment : Fragment() {
                 binding.amountEditText.text.toString().toDouble(),
                 binding.detailsEditText.text.toString(),
             )
-            requireActivity().finish()
+            (requireActivity() as BlankActivity).navigateToFragment(ViewIncomeFragment(), null)
         }
 
         binding.deleteButton.setOnClickListener{
             Income.deleteIncomeById(incomeId.toString())
-            requireActivity().finish()
+            (requireActivity() as BlankActivity).navigateToFragment(ViewIncomeFragment(), null)
         }
 
         // Actions
         Income.getIncomeById(incomeId.toString(), object: Callback {
             override fun onCallback(value: Any) {
                 val income = value as Income
+
+                calendar.set(
+                    income.date.year,
+                    income.date.month,
+                    income.date.date,
+                )
+
                 Source.getSourceById(income.sourceId, object: Callback {
                     override fun onCallback(value: Any) {
                         val source = value as Source

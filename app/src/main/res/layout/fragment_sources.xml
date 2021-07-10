@@ -4,82 +4,125 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui.main.SourcesFragment">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/walletLabel"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#1976D2"
-            android:paddingStart="8dp"
-            android:text="Wallet"
-            android:textColor="#FFFFFF"
-            android:textSize="34sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/walletListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/walletLabel">
+            <LinearLayout
+                android:id="@+id/walletLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        </ListView>
+                <TextView
+                    android:id="@+id/walletLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:text="Wallet"
+                    android:textColor="#000000"
+                    android:textSize="28dp" />
 
-        <TextView
-            android:id="@+id/budgetLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#1976D2"
-            android:paddingStart="8dp"
-            android:text="Budget"
-            android:textColor="#FFFFFF"
-            android:textSize="34sp"
-            app:layout_constraintTop_toBottomOf="@+id/walletListView"
-            tools:layout_editor_absoluteX="0dp" />
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
 
-        <ListView
-            android:id="@+id/budgetListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/budgetLabel">
+                <Button
+                    android:id="@+id/addWalletButton"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="8dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="Add" />
+            </LinearLayout>
 
-        </ListView>
+            <ListView
+                android:id="@+id/walletListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"/>
 
-        <TextView
-            android:id="@+id/savingLabel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="#1976D2"
-            android:paddingStart="8dp"
-            android:text="Saving"
-            android:textColor="#FFFFFF"
-            android:textSize="34sp"
-            app:layout_constraintTop_toBottomOf="@+id/budgetListView"
-            tools:layout_editor_absoluteX="0dp" />
+            <LinearLayout
+                android:id="@+id/savingLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-        <ListView
-            android:id="@+id/savingListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/savingLabel" />
+                <TextView
+                    android:id="@+id/savingLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:text="Saving"
+                    android:textColor="#000000"
+                    android:textSize="28dp" />
 
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/addSavingButton"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="8dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="Add" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/savingListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:id="@+id/budgetLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/budgetLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    android:text="Budget"
+                    android:textColor="#000000"
+                    android:textSize="28dp" />
+
+                <Space
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/addBudgetButton"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="8dp"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:text="Add" />
+            </LinearLayout>
+
+
+            <ListView
+                android:id="@+id/budgetListView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+            </ListView>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

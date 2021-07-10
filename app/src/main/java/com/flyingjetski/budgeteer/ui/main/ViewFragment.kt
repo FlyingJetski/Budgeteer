@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.flyingjetski.budgeteer.BlankActivity
+import com.flyingjetski.budgeteer.MainActivity
 import com.flyingjetski.budgeteer.R
 import com.flyingjetski.budgeteer.databinding.FragmentStatisticsBinding
 import com.flyingjetski.budgeteer.databinding.FragmentViewBinding
