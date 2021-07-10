@@ -111,22 +111,25 @@ class AddExpenseFragment : Fragment() {
         binding.dateEditText.setText(Common.dateToString(today.time))
     }
 
-    fun getSpeechInput(view: View) {
+    private fun getSpeechInput(view: View) {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
 
-        startActivityForResult(intent, 69)
+        startActivityForResult(intent, 1)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         when (requestCode) {
-            69 -> {
+            1 -> {
                 if (resultCode == RESULT_OK && data != null) {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     binding.labelEditText.setText(result?.get(0).toString())
+                    if (result?.get(0)?.toDoubleOrNull() != null) {
+                        binding.amountEditText.setText(result?.get(0).toString())
+                    }
                 }
             }
         }

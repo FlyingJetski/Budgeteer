@@ -33,7 +33,7 @@ class AddExpenseCategoryFragment : Fragment() {
 
     private fun setupUI() {
         // Instantiation
-        val drawablesFields: Array<Field> = R.mipmap::class.java.fields
+        val drawablesFields: Array<Field> = R.drawable::class.java.fields
         val icons: ArrayList<Int> = ArrayList()
 
         for (field in drawablesFields) {
